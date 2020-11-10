@@ -17,4 +17,9 @@ steps:
   displayName: 'composer install'
 - script: ./vendor/bin/phpunit --log-junit test-results.xml
   displayName: 'Run tests with phpunit'
-      
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'test-results.xml'
+    failTaskOnFailedTests: true
+    testRunTitle: 'Unit tests'      
