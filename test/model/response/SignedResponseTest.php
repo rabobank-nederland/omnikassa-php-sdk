@@ -18,7 +18,6 @@ class SignedResponseTest extends \PHPUnit_Framework_TestCase
         } catch (InvalidSignatureException $invalidSignatureException) {
             $trace = $invalidSignatureException->getTraceAsString();
             $this->assertNotContains('invalid_signature', $trace);
-            $this->assertContains('Object(nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey)', $trace);
         }
     }
 }
