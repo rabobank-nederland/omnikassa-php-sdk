@@ -15,9 +15,9 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\Announce
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderStatusResponseBuilder;
 use Phake;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ApiConnectorTest extends PHPUnit_Framework_TestCase
+class ApiConnectorTest extends TestCase
 {
     /** @var AccessToken */
     private $accessToken;

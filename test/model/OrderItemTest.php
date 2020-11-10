@@ -3,9 +3,9 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\OrderItemBuilder;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class OrderItemTest extends PHPUnit_Framework_TestCase
+class OrderItemTest extends TestCase
 {
     public function testConstructor()
     {

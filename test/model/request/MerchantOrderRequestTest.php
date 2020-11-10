@@ -6,9 +6,9 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\ProductType;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\VatCategory;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\request\MerchantOrderRequestBuilder;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class MerchantOrderRequestTest extends PHPUnit_Framework_TestCase
+class MerchantOrderRequestTest extends TestCase
 {
     public function testJsonEncoding_withoutOptionalFields()
     {
@@ -28,7 +28,7 @@ class MerchantOrderRequestTest extends PHPUnit_Framework_TestCase
 
     public function testExceptionIsThrownForInvalidProperty()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
 
         MerchantOrder::createFrom(['merchanOrderId' => 'test']);
     }

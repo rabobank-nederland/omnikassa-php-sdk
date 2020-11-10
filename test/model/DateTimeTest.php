@@ -1,9 +1,9 @@
 <?php namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
 use DateTime;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DateTimeTest extends PHPUnit_Framework_TestCase
+class DateTimeTest extends TestCase
 {
     public function testDateTimeConversions()
     {

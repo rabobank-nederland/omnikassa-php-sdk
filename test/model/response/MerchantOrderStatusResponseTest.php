@@ -4,9 +4,9 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderStatusResponseBuilder;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class MerchantOrderStatusResponseTest extends PHPUnit_Framework_TestCase
+class MerchantOrderStatusResponseTest extends TestCase
 {
     public function testThatObjectIsCorrectlyConstructed()
     {

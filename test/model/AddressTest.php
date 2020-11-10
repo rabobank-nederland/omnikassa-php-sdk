@@ -3,9 +3,9 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Address;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class AddressTest extends PHPUnit_Framework_TestCase
+class AddressTest extends TestCase
 {
     public function testConstruction()
     {

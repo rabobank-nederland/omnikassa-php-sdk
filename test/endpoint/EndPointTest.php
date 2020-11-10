@@ -11,8 +11,9 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\Merchant
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderStatusResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\PaymentBrandsResponseBuilder;
 use Phake;
+use PHPUnit\Framework\TestCase;
 
-class EndpointTest extends \PHPUnit_Framework_TestCase
+class EndpointTest extends TestCase
 {
     /** @var Endpoint */
     private $endpoint;

@@ -4,9 +4,9 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentCompletedResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PaymentCompletedResponseTest extends PHPUnit_Framework_TestCase
+class PaymentCompletedResponseTest extends TestCase
 {
     public function testThatIsValidReturnsTrueForAValidSignature()
     {

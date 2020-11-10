@@ -3,9 +3,9 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\signing;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SignableTest extends PHPUnit_Framework_TestCase
+class SignableTest extends TestCase
 {
     public function testCalculateSignatureNullIsEmptyString()
     {
