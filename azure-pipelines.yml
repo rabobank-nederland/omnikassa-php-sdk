@@ -15,7 +15,7 @@ steps:
   displayName: 'Use PHP version $(phpVersion)'
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install'
-- script: ./vendor/bin/phpunit --log-junit test-results.xml --coverage-html .\coverage-report
+- script: ./vendor/bin/phpunit --log-junit test-results.xml --whitelist src --coverage-html .\coverage-report
   displayName: 'Run tests with phpunit'
 - task: PublishTestResults@2
   inputs:
