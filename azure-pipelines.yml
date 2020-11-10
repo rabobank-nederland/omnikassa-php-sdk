@@ -15,6 +15,6 @@ steps:
   displayName: 'Use PHP version $(phpVersion)'
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install'
-- script: ./vendor/bin/phpunit
+- script: ./vendor/bin/phpunit --log-junit test-results.xml
   displayName: 'Run tests with phpunit'
       
