@@ -1,25 +1,42 @@
-pool:
-  vmImage: 'ubuntu-18.04'
-
-variables:
-  phpVersion: 7.4
-
-steps:
-- script: |
-    sudo update-alternatives --set php /usr/bin/php$(phpVersion)
-    sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
-    sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
-    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
-    sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
-    php -version
-  displayName: 'Use PHP version $(phpVersion)'
-- script: composer install --no-interaction --prefer-dist
-  displayName: 'composer install'
-- script: ./vendor/bin/phpunit --log-junit test-results.xml --whitelist src --coverage-html .\coverage-report
-  displayName: 'Run tests with phpunit'
-- task: PublishTestResults@2
-  inputs:
-    testResultsFormat: 'JUnit'
-    testResultsFiles: 'test-results.xml'
-    failTaskOnFailedTests: true
-    testRunTitle: 'Unit tests'      
+jobs:
+- job: "test"
+  displayName: 'Install and test'
+  pool:
+    vmImage: 'ubuntu-18.04'
+  variables:
+    phpVersion: 7.4
+  steps:
+  - script: |
+      sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+      sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+      sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+      sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+      sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+      php -version
+    displayName: 'Use PHP version $(phpVersion)'
+  - script: composer install --no-interaction --prefer-dist
+    displayName: 'composer install'
+  - script: ./vendor/bin/phpunit --log-junit test-results.xml --whitelist src --coverage-html .\coverage-report
+    displayName: 'Run tests with phpunit'
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'test-results.xml'
+      failTaskOnFailedTests: true
+      testRunTitle: 'Unit tests'
+- job: "quality"
+  displayName: 'Perform quality checks'
+  pool:
+    name: Rabo-Build-Azure-Linux
+  steps:
+  - task: fortifyvsts.hpe-security-fortify-vsts.build-task-fortify-sca.FortifySCA@5
+    displayName: 'Run Fortify'
+    inputs:
+      applicationType: php
+      buildSourceVersion: 1.8
+      fortifyBuildId: 'ps_omnikassa-sdk-php_fortify'
+      runFortifyUpload: true
+      fortifyServerName: 'Fortify SCC server endpoint'
+      fortifyApplicationName: 'ps_omnikassa-php-sdk_fortify'
+      fortifyApplicationVersion: 1.0
+      
