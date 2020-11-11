@@ -33,9 +33,11 @@ jobs:
     displayName: 'Prepare analysis on SonarQube'
     inputs:
       SonarQube: 'SonarQube Production on-premise'
-      projectKey: 'nl.rabobank.gict.payments_savings.omnikassa_frontend.sdk:php'
-      projectName: 'Rabobank OmniKassa - PHP SDK'
-      extraProperties: 'sonar.inclusions=src/**'
+      scannerMode: CLI
+      configMode: manual
+      cliProjectKey: 'nl.rabobank.gict.payments_savings.omnikassa_frontend.sdk:php'
+      cliProjectName: 'Rabobank OmniKassa - PHP SDK'
+      extraProperties: 'sonar.inclusions=src/**'      
   - task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
     displayName: 'Run Code Analysis'      
   - task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@4
