@@ -1,34 +1,16 @@
-jobs:
-- job: "test"
-  displayName: 'Install and test'
   pool:
-    vmImage: 'ubuntu-18.04'
-  variables:
-    phpVersion: 7.4
+    vmImage: 'Rabo-Windows-Production'
   steps:
-  - script: |
-      sudo update-alternatives --set php /usr/bin/php$(phpVersion)
-      sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
-      sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
-      sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
-      sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
-      php -version
-    displayName: 'Use PHP version $(phpVersion)'
   - script: composer install --no-interaction --prefer-dist
-    displayName: 'composer install'
+    displayName: 'Composer install'
   - script: ./vendor/bin/phpunit --log-junit test-results.xml --whitelist src --coverage-html .\coverage-report
-    displayName: 'Run tests with phpunit'
+    displayName: 'Run tests'
   - task: PublishTestResults@2
     inputs:
       testResultsFormat: 'JUnit'
       testResultsFiles: 'test-results.xml'
       failTaskOnFailedTests: true
       testRunTitle: 'Unit tests'
-- job: "quality"
-  displayName: 'Perform quality checks'
-  pool:
-    name: Rabo-Build-Azure-Linux
-  steps:
   - task: SonarSource.sonarqube.15B84CA1-B62F-4A2A-A403-89B77A063157.SonarQubePrepare@4
     displayName: 'Prepare analysis on SonarQube'
     inputs:
