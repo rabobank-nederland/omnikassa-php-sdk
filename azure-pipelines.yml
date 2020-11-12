@@ -22,7 +22,7 @@ steps:
     cliProjectName: 'Rabobank OmniKassa - PHP SDK'
     extraProperties: |
       sonar.inclusions=src/**
-      sonar.junit.reportPaths=test-results.xml
+      sonar.php.tests.reportPath=test-results.xml
       sonar.php.coverage.reportPaths=coverage-report
 - task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
   displayName: 'Run SonarQube Code Analysis'      
