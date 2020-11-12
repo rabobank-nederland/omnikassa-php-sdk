@@ -1,37 +1,36 @@
-  pool: 
-    name: 'Rabo-Windows-Production'
-  steps:
-  - script: composer install --no-interaction --prefer-dist
-    displayName: 'Composer install'
-  - script: ./vendor/bin/phpunit --log-junit test-results.xml --whitelist src --coverage-html .\coverage-report
-    displayName: 'Run tests'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: 'test-results.xml'
-      failTaskOnFailedTests: true
-      testRunTitle: 'Unit tests'
-  - task: SonarSource.sonarqube.15B84CA1-B62F-4A2A-A403-89B77A063157.SonarQubePrepare@4
-    displayName: 'Prepare analysis on SonarQube'
-    inputs:
-      SonarQube: 'SonarQube Production on-premise'
-      scannerMode: CLI
-      configMode: manual
-      cliProjectKey: 'nl.rabobank.gict.payments_savings.omnikassa_frontend.sdk:php'
-      cliProjectName: 'Rabobank OmniKassa - PHP SDK'
-      extraProperties: 'sonar.inclusions=src/**'      
-  - task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
-    displayName: 'Run Code Analysis'      
-  - task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@4
-    displayName: 'Publish Quality Gate Result'
-  - task: fortifyvsts.hpe-security-fortify-vsts.build-task-fortify-sca.FortifySCA@5
-    displayName: 'Run Fortify'
-    inputs:
-      applicationType: php
-      buildSourceVersion: 1.8
-      fortifyBuildId: 'ps_omnikassa-sdk-php_fortify'
-      runFortifyUpload: true
-      fortifyServerName: 'Fortify SCC server endpoint'
-      fortifyApplicationName: 'ps_omnikassa-php-sdk_fortify'
-      fortifyApplicationVersion: 1.0
- 
+pool:
+  name: Rabo-Build-Azure-Windows
+steps:
+- script: composer install --no-interaction --prefer-dist
+  displayName: 'Composer install'
+- script: .\vendor\bin\phpunit --log-junit test-results.xml --whitelist src --coverage-html .\coverage-report
+  displayName: 'Run tests'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'test-results.xml'
+    failTaskOnFailedTests: true
+    testRunTitle: 'Unit tests'
+- task: SonarSource.sonarqube.15B84CA1-B62F-4A2A-A403-89B77A063157.SonarQubePrepare@4
+  displayName: 'Prepare analysis on SonarQube'
+  inputs:
+    SonarQube: 'SonarQube Production on-premise'
+    scannerMode: CLI
+    configMode: manual
+    cliProjectKey: 'nl.rabobank.gict.payments_savings.omnikassa_frontend.sdk:php'
+    cliProjectName: 'Rabobank OmniKassa - PHP SDK'
+    extraProperties: 'sonar.inclusions=src/**'      
+- task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
+  displayName: 'Run Code Analysis'      
+- task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@4
+  displayName: 'Publish Quality Gate Result'
+- task: fortifyvsts.hpe-security-fortify-vsts.build-task-fortify-sca.FortifySCA@5
+  displayName: 'Run Fortify'
+  inputs:
+    applicationType: php
+    buildSourceVersion: 1.8
+    fortifyBuildId: 'ps_omnikassa-sdk-php_fortify'
+    runFortifyUpload: true
+    fortifyServerName: 'Fortify SCC server endpoint'
+    fortifyApplicationName: 'ps_omnikassa-php-sdk_fortify'
+    fortifyApplicationVersion: 1.0
