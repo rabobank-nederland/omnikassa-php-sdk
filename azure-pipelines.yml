@@ -20,7 +20,6 @@ steps:
     configMode: manual
     cliProjectKey: 'nl.rabobank.gict.payments_savings.omnikassa_frontend.sdk:php'
     cliProjectName: 'Rabobank OmniKassa - PHP SDK'
-    extraProperties: 'sonar.inclusions=src/**'   
     extraProperties: |
       sonar.inclusions=src/**
       sonar.junit.reportPaths=test-results.xml
