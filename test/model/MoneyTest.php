@@ -2,7 +2,9 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
-class MoneyTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class MoneyTest extends TestCase
 {
     public function testFromCents()
     {
