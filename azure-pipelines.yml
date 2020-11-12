@@ -1,5 +1,5 @@
-  pool:
-    vmImage: 'Rabo-Windows-Production'
+  pool: 
+    name: 'Rabo-Windows-Production'
   steps:
   - script: composer install --no-interaction --prefer-dist
     displayName: 'Composer install'
@@ -34,3 +34,4 @@
       fortifyServerName: 'Fortify SCC server endpoint'
       fortifyApplicationName: 'ps_omnikassa-php-sdk_fortify'
       fortifyApplicationVersion: 1.0
+ 
