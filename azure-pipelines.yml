@@ -15,7 +15,7 @@ steps:
   displayName: 'Use PHP version $(phpVersion)'
 - script: composer install --no-interaction --prefer-dist
   displayName: 'Composer install'
-- script: ./vendor/bin/phpunit --log-junit test-results.xml --whitelist src --coverage-clover coverage-report
+- script: php -d xdebug.profiler_enable=on /usr/bin/phpunit --log-junit test-results.xml --whitelist src --coverage-clover coverage-report
   displayName: 'Run tests'
 - task: PublishTestResults@2
   displayName: 'Publish test results'
