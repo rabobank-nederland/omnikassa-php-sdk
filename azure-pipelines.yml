@@ -31,6 +31,12 @@ steps:
   displayName: 'Run SonarQube Code Analysis'      
 - task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@4
   displayName: 'Publish SonarQube Quality Gate Result'
+- task: SonatypeIntegrations.nexus-iq-azure-extension.nexus-iq-azure-pipeline-task.NexusIqPipelineTask@1
+  displayName: 'Nexus IQ policy evaluation'
+  inputs:
+    nexusIqService: Nexus
+    applicationId: 'omnikassa-frontend-sdk-php'
+    stage: Develop  
 # - task: fortifyvsts.hpe-security-fortify-vsts.build-task-fortify-sca.FortifySCA@5
 #   displayName: 'Run Fortify'
 #   inputs:
