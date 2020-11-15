@@ -36,7 +36,8 @@ steps:
   inputs:
     nexusIqService: Nexus
     applicationId: 'omnikassa-frontend-sdk-php'
-    stage: Develop  
+    stage: Develop
+    scanTargets: 'composer.lock'  
 # - task: fortifyvsts.hpe-security-fortify-vsts.build-task-fortify-sca.FortifySCA@5
 #   displayName: 'Run Fortify'
 #   inputs:
