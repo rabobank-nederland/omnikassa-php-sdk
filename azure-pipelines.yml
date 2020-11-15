@@ -4,7 +4,7 @@ pool:
 steps:
 - script: composer install --no-interaction --prefer-dist
   displayName: 'Composer install'
-- script: script: .\vendor\bin\phpunit --log-junit test-results.xml --whitelist src --coverage-clover coverage-report
+- script: .\vendor\bin\phpunit --log-junit test-results.xml --whitelist src --coverage-clover coverage-report
   displayName: 'Run tests'
 - task: PublishTestResults@2
   displayName: 'Publish test results'
