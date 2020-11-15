@@ -2,6 +2,8 @@ pool:
   name: Rabo-Build-Azure-Windows
 
 steps:
+- task: ms-codeanalysis.vss-microsoft-security-code-analysis-devops.build-task-credscan.CredScan@2
+  displayName: 'Run Credential Scanner'
 - script: composer install --no-interaction --prefer-dist
   displayName: 'Composer install'
 - script: .\vendor\bin\phpunit --log-junit test-results.xml --whitelist src --coverage-clover coverage-report
@@ -39,3 +41,7 @@ steps:
 #     fortifyServerName: 'Fortify SCC server endpoint'
 #     fortifyApplicationName: 'ps_omnikassa-php-sdk_fortify'
 #     fortifyApplicationVersion: 1.0
+- task: ms-codeanalysis.vss-microsoft-security-code-analysis-devops.build-task-postanalysis.PostAnalysis@1
+  displayName: 'Post Analysis'
+  inputs:
+    CredScan: true
