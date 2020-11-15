@@ -31,6 +31,10 @@ steps:
   displayName: 'Run SonarQube Code Analysis'      
 - task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@4
   displayName: 'Publish SonarQube Quality Gate Result'
+- script: |
+   echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_11_X64)"
+   echo "##vso[task.setvariable variable=PATH]$(JAVA_HOME_11_X64)\bin;$(PATH)"
+  displayName: 'Set Java to Version 11'  
 - task: SonatypeIntegrations.nexus-iq-azure-extension.nexus-iq-azure-pipeline-task.NexusIqPipelineTask@1
   displayName: 'Nexus IQ policy evaluation'
   inputs:
