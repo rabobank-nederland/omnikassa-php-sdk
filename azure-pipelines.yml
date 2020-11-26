@@ -1,5 +1,5 @@
 pool:
-  name: Rabo-Build-Azure-Windows
+  name: Rabo-Windows-Production
 
 steps:
 - task: ms-codeanalysis.vss-microsoft-security-code-analysis-devops.build-task-credscan.CredScan@2
