@@ -8,7 +8,7 @@ pool:
   name: Rabo-Windows-Production
 
 steps:
-- task: ms-codeanalysis.vss-microsoft-security-code-analysis-devops.build-task-credscan.CredScan@2
+- task: CredScan@2
   displayName: 'Run Credential Scanner'
   
 - script: composer install --no-interaction --prefer-dist
