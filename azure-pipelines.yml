@@ -2,7 +2,7 @@ pool:
   name: Rabo-Windows-Production
 
 steps:
-- task: ms-codeanalysis.vss-microsoft-security-code-analysis-devops.build-task-credscan.CredScan@2
+- task: CredScan@2
   displayName: 'Run Credential Scanner'
   
 - script: composer install --no-interaction --prefer-dist
@@ -19,10 +19,10 @@ steps:
     failTaskOnFailedTests: true
     testRunTitle: 'Unit tests'
 
-- task: SonarSource.sonarqube.15B84CA1-B62F-4A2A-A403-89B77A063157.SonarQubePrepare@4
+- task: SonarQubePrepare@4
   displayName: 'Prepare analysis on SonarQube'
   inputs:
-    SonarQube: 'SonarQube Production on-premise'
+    SonarQube: $(sonarQubeServiceConnection)
     scannerMode: CLI
     configMode: manual
     cliProjectKey: 'nl.rabobank.gict.payments_savings.omnikassa_frontend.sdk:php'
@@ -32,10 +32,10 @@ steps:
       sonar.php.tests.reportPath=test-results.xml
       sonar.php.coverage.reportPaths=coverage-report
 
-- task: SonarSource.sonarqube.6D01813A-9589-4B15-8491-8164AEB38055.SonarQubeAnalyze@4
+- task: SonarQubeAnalyze@4
   displayName: 'Run SonarQube Code Analysis'      
 
-- task: SonarSource.sonarqube.291ed61f-1ee4-45d3-b1b0-bf822d9095ef.SonarQubePublish@4
+- task: SonarQubePublish@4
   displayName: 'Publish SonarQube Quality Gate Result'
 
 - script: |
@@ -43,26 +43,26 @@ steps:
    echo "##vso[task.setvariable variable=PATH]$(JAVA_HOME_11_X64)\bin;$(PATH)"
   displayName: 'Set Java to Version 11'
 
-- task: SonatypeIntegrations.nexus-iq-azure-extension.nexus-iq-azure-pipeline-task.NexusIqPipelineTask@1
+- task: NexusIqPipelineTask@1
   displayName: 'Nexus IQ policy evaluation'
   inputs:
-    nexusIqService: Nexus
+    nexusIqService: $(nexusServiceConnection)
     applicationId: 'omnikassa-frontend-sdk-php'
     stage: Develop
     scanTargets: 'composer.lock'
 
-- task: fortifyvsts.hpe-security-fortify-vsts.build-task-fortify-sca.FortifySCA@5
+- task: FortifySCA@5
   displayName: 'Run Fortify'
   inputs:
     applicationType: php
     buildSourceVersion: 1.8
     fortifyBuildId: 'ps_omnikassa-sdk-php_fortify'
     runFortifyUpload: true
-    fortifyServerName: 'Fortify SCC server endpoint'
+    fortifyServerName: $(fortifyServiceConnection)
     fortifyApplicationName: 'ps_omnikassa-php-sdk_fortify'
     fortifyApplicationVersion: 1.0
 
-- task: ms-codeanalysis.vss-microsoft-security-code-analysis-devops.build-task-postanalysis.PostAnalysis@1
+- task: PostAnalysis@1
   displayName: 'Post Analysis'
   inputs:
     CredScan: true
