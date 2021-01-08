@@ -1,3 +1,9 @@
+trigger:
+  branches:
+    include:
+      - master
+      - feature/*
+
 pool:
   name: Rabo-Windows-Production
 
