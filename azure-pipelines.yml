@@ -1,5 +1,5 @@
 pool:
-  name: Rabo-Windows-Production
+  name: Rabo-Linux-Production
 
 steps:
 - task: CredScan@2
