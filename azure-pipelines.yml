@@ -54,17 +54,6 @@ jobs:
       stage: Develop
       scanTargets: 'composer.lock'
 
-  - task: FortifySCA@5
-    displayName: 'Run Fortify'
-    inputs:
-      applicationType: php
-      buildSourceVersion: 1.8
-      fortifyBuildId: 'ps_omnikassa-sdk-php_fortify'
-      runFortifyUpload: true
-      fortifyServerName: $(fortifyServiceConnection)
-      fortifyApplicationName: 'ps_omnikassa-php-sdk_fortify'
-      fortifyApplicationVersion: 1.0
-
   - task: PostAnalysis@1
     displayName: 'Post Analysis'
     inputs:
