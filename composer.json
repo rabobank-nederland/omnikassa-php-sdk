@@ -1,13 +1,13 @@
 {
-    "name": "move4mobile/rabobank-omnikassa-sdk",
+    "name": "rabobank/omnikassa-sdk",
     "type": "library",
-    "license": "proprietary",
+    "license": "MIT",
     "description": "Rabobank OmniKassa SDK for PHP",
     "version": "1.7.0",
     "keywords": ["rabobank", "omni", "kassa"],
     "authors": [
         {
-            "name": "Move4Mobile BV"
+            "name": "Rabobank"
         }
     ],
     "config": {
@@ -39,5 +39,15 @@
         "psr-4": {
             "nl\\rabobank\\gict\\payments_savings\\omnikassa_sdk\\test\\": "test"
         }
+    },
+    "archive": {
+        "exclude": [
+            ".idea/*",
+            "azure-pipelines.yml",
+            ".git",
+            ".gitignore",
+            "rabobank-omnikassa-sdk-*.tar"
+        ]
     }
 }
+
