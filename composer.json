@@ -3,7 +3,6 @@
     "type": "library",
     "license": "MIT",
     "description": "Rabobank OmniKassa SDK for PHP",
-    "version": "1.7.0",
     "keywords": ["rabobank", "omni", "kassa"],
     "authors": [
         {
