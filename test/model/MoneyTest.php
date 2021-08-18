@@ -15,25 +15,13 @@ class MoneyTest extends TestCase
 
     public function testFromDecimal()
     {
-        $money = Money::fromDecimal('EUR', 5.00);
-
-        $this->assertEquals('EUR', $money->getCurrency());
-        $this->assertEquals(500, $money->getAmount());
-    }
-
-    public function testFromDecimal_CorrectRounding()
-    {
-        $noRoundingNeeded = Money::fromDecimal('EUR', 9.99);
-        $this->assertEquals(999, $noRoundingNeeded->getAmount(), 'Amount is incorrect for scenario: no rounding needed');
-
-        $roundCeilingNeeded = Money::fromDecimal('EUR', 9.999);
-        $this->assertEquals(1000, $roundCeilingNeeded->getAmount(), 'Amount is incorrect for scenario: round ceiling required');
-
-        $roundFloorNeeded = Money::fromDecimal('EUR', 9.991);
-        $this->assertEquals(999, $roundFloorNeeded->getAmount(), 'Amount is incorrect for scenario: round floor required');
-
-        $edgeCase = Money::fromDecimal('EUR', 9.995);
-        $this->assertEquals(1000, $edgeCase->getAmount(), 'Amount is incorrect for scenario: edge case (0.5)');
+        $this->assertMoneyFromDecimal(500, 5.00);
+        $this->assertMoneyFromDecimal(999, 9.99);
+        $this->assertMoneyFromDecimal(1000, 9.999);
+        $this->assertMoneyFromDecimal(999, 9.991);
+        $this->assertMoneyFromDecimal(1000, 9.995);
+        $this->assertMoneyFromDecimal(3791, 37.91);
+        $this->assertMoneyFromDecimal(6857, 68.57);
     }
 
     public function testSignature()
@@ -67,4 +55,12 @@ class MoneyTest extends TestCase
         $this->assertEquals('EUR', $money->getCurrency());
         $this->assertEquals(intval($amount), $money->getAmount());
     }
+
+    private function assertMoneyFromDecimal($expected, $amountInDecimal)
+    {
+        $money = Money::fromDecimal('EUR', $amountInDecimal);
+        $this->assertEquals($expected, $money->getAmount());
+        $this->assertEquals('EUR', $money->getCurrency());
+    }
+
 }
