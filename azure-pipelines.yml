@@ -51,7 +51,7 @@ jobs:
     inputs:
       nexusIqService: $(nexusServiceConnection)
       applicationId: 'omnikassa-frontend-sdk-php'
-      stage: Develop
+      stage: release
       scanTargets: 'composer.lock'
 
   - task: PostAnalysis@1
