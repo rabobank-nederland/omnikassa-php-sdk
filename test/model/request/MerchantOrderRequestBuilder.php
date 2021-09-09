@@ -39,4 +39,20 @@ class MerchantOrderRequestBuilder
     {
         return new MerchantOrderRequest(MerchantOrderBuilder::makeMinimalOrder());
     }
+
+    public static function makeMinimalRequestWithSkipHppResultPage(bool $value)
+    {
+        return new MerchantOrderRequest(MerchantOrderBuilder::makeMinimalOrderWithSkipHppResultPage($value));
+    }
+
+    public static function makeMinimalRequestWithCustomerInformationFullName()
+    {
+        return new MerchantOrderRequest(MerchantOrderBuilder::makeMinimalOrderWithCustomerInformationFullName());
+    }
+
+    public static function makeMinimalRequestWithMetaData(array $data)
+    {
+        return new MerchantOrderRequest(MerchantOrderBuilder::makeMinimalOrderWithMetaData($data));
+
+    }
 }

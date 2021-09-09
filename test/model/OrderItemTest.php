@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
+use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\OrderItemBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -21,11 +22,10 @@ class OrderItemTest extends TestCase
         $this->assertEquals(VatCategory::LOW, $orderItem->getVatCategory());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testExceptionIsThrownForInvalidProperty()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         OrderItem::createFrom(['ID' => 'test']);
     }
 

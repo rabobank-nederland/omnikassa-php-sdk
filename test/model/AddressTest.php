@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model;
 
+use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Address;
 use PHPUnit\Framework\TestCase;
 
@@ -22,11 +23,10 @@ class AddressTest extends TestCase
         $this->assertEquals('a', $address->getHouseNumberAddition());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testExceptionIsThrownForInvalidProperty()
     {
+        $this->expectException(InvalidArgumentException::class);
+        
         Address::createFrom(['firstname' => 'test']);
     }
 

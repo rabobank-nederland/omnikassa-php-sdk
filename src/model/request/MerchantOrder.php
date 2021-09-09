@@ -6,6 +6,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Address;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\CustomerInformation;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\OrderItem;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandMetaData;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
 /**
@@ -37,6 +38,10 @@ class MerchantOrder implements \JsonSerializable
     private $paymentBrandForce;
     /** @var string */
     private $initiatingParty;
+    /** @var bool */
+    private $skipHppResultPage = false;
+    /** @var PaymentBrandMetaData */
+    private $paymentBrandMetaData;
 
     /**
      * @param string $merchantOrderId
@@ -51,23 +56,27 @@ class MerchantOrder implements \JsonSerializable
      * @param CustomerInformation $customerInformation
      * @param Address $billingDetails
      * @param $initiatingParty
+     * @param bool $skipHppResultPage
      * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
      * createFrom method instead.
      * @see MerchantOrder::createFrom()
      */
-    public function __construct($merchantOrderId,
-                                $description,
-                                $orderItems,
-                                $amount,
-                                $shippingDetails,
-                                $language,
-                                $merchantReturnURL,
-                                $paymentBrand = null,
-                                $paymentBrandForce = null,
-                                $customerInformation = null,
-                                $billingDetails = null,
-                                $initiatingParty = null)
-    {
+    public function __construct(
+        $merchantOrderId,
+        $description,
+        $orderItems,
+        $amount,
+        $shippingDetails,
+        $language,
+        $merchantReturnURL,
+        $paymentBrand = null,
+        $paymentBrandForce = null,
+        $customerInformation = null,
+        $billingDetails = null,
+        $initiatingParty = null,
+        $skipHppResultPage = false,
+        $paymentBrandMetaData = null
+    ) {
         $this->merchantOrderId = $merchantOrderId;
         $this->description = $description;
         $this->orderItems = $orderItems;
@@ -80,11 +89,13 @@ class MerchantOrder implements \JsonSerializable
         $this->paymentBrand = $paymentBrand;
         $this->paymentBrandForce = $paymentBrandForce;
         $this->initiatingParty = $initiatingParty;
+        $this->skipHppResultPage = $skipHppResultPage;
+        $this->paymentBrandMetaData = $paymentBrandMetaData;
     }
 
     public static function createFrom(array $data)
     {
-        $merchantOrder = new MerchantOrder(null, null, null, null, null, null, null);
+        $merchantOrder = new MerchantOrder(null, null, null, null, null, null, null, null);
         foreach ($data as $key => $value) {
             if (property_exists($merchantOrder, $key)) {
                 $merchantOrder->$key = $data[(string) $key];
@@ -201,10 +212,24 @@ class MerchantOrder implements \JsonSerializable
         $json = [];
         foreach ($this as $key => $value) {
             if (null !== $value) {
+                if ('paymentBrandMetaData' === $key && !$value->hasProperties()) {
+                    continue;
+                }
+
                 $json[$key] = $value;
             }
         }
 
         return $json;
+    }
+
+    public function getSkipHppResultPage(): bool
+    {
+        return $this->skipHppResultPage;
+    }
+
+    public function getPaymentBrandMetaData(): ?PaymentBrandMetaData
+    {
+        return $this->paymentBrandMetaData;
     }
 }

@@ -107,6 +107,20 @@ class ApiConnector implements Connector
     }
 
     /**
+     * Retrieve the iDEAL issuers
+     *
+     * @return string json response body
+     */
+    public function getIDEALIssuers(): string
+    {
+        return $this->performAction(function () {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->get('ideal/server/api/v2/issuers');
+        });
+    }
+
+    /**
      * Perform a Rabobank OmniKassa related rest action.
      * This first checks the access token and retrieves one if it is invalid, expired or non existing.
      * Then it executes the action.

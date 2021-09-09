@@ -34,4 +34,9 @@ interface Connector
      * @return string json response body
      */
     public function getPaymentBrands();
+
+    /**
+     * Retrieve the iDEAL issuers.
+     */
+    public function getIDEALIssuers(): string;
 }

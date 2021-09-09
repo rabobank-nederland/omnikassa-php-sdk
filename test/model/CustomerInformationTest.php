@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model;
 
+use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\CustomerInformation;
 use PHPUnit\Framework\TestCase;
 
@@ -17,12 +18,11 @@ class CustomerInformationTest extends TestCase
         $this->assertEquals('J.M.', $customerInformation->getInitials());
         $this->assertEquals('0204971111', $customerInformation->getTelephoneNumber());
     }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
+    
     public function testExceptionIsThrownForInvalidProperty()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         CustomerInformation::createFrom(['emailAdress' => 'test']);
     }
 

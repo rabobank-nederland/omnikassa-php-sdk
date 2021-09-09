@@ -8,6 +8,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\TokenProvider;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrderRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\IdealIssuersResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandsResponse;
@@ -113,5 +114,15 @@ class Endpoint
         $responseAsJson = $this->connector->getPaymentBrands();
 
         return new PaymentBrandsResponse($responseAsJson);
+    }
+
+    /**
+     * Retrieve the iDEAL issuers.
+     */
+    public function retrieveIDEALIssuers(): IdealIssuersResponse
+    {
+        $responseAsJson = $this->connector->getIDEALIssuers();
+
+        return new IdealIssuersResponse($responseAsJson);
     }
 }

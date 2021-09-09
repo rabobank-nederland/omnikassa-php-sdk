@@ -1,6 +1,6 @@
 <?php
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setFinder(
         Symfony\Component\Finder\Finder::create()
             ->in(__DIR__.'/src')

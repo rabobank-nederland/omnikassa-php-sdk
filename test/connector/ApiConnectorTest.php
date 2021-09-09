@@ -36,7 +36,7 @@ class ApiConnectorTest extends TestCase
 
     private $signingKey;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->signingKey = new SigningKey('secret');
 

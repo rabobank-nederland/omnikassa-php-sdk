@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
+use ErrorException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\AnnouncementResponseBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -17,12 +18,11 @@ class AnnouncementResponseTest extends TestCase
         $this->assertEquals('merchant.order.status.changed', $response->getEventName());
     }
 
-    /**
-     * @expectedException \ErrorException
-     * @expectedExceptionMessage The signature validation of the response failed. Please contact the Rabobank service team.
-     */
     public function testThatInvalidSignatureExceptionIsThrownWhenTheSignaturesDoNotMatch()
     {
+        $this->expectException(ErrorException::class);
+        $this->expectExceptionMessage('The signature validation of the response failed. Please contact the Rabobank service team.');
+
         $response = AnnouncementResponseBuilder::invalidSignatureInstance();
     }
 }

@@ -18,7 +18,7 @@ class SignedResponseTest extends TestCase
             new MerchantOrderStatusResponse($json, new SigningKey('invalid_signature'));
         } catch (InvalidSignatureException $invalidSignatureException) {
             $trace = $invalidSignatureException->getTraceAsString();
-            $this->assertNotContains('invalid_signature', $trace);
+            $this->assertStringNotContainsString('invalid_signature', $trace);
         }
     }
 }
