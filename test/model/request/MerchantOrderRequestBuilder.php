@@ -5,7 +5,6 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\request;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrand;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandForce;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrderRequest;
-use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 
 class MerchantOrderRequestBuilder
 {
@@ -53,6 +52,5 @@ class MerchantOrderRequestBuilder
     public static function makeMinimalRequestWithMetaData(array $data)
     {
         return new MerchantOrderRequest(MerchantOrderBuilder::makeMinimalOrderWithMetaData($data));
-
     }
 }

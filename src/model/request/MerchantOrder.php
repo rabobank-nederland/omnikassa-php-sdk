@@ -7,7 +7,6 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\CustomerInformation;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\OrderItem;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandMetaData;
-use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
 /**
  * Class MerchantOrder.
@@ -44,19 +43,20 @@ class MerchantOrder implements \JsonSerializable
     private $paymentBrandMetaData;
 
     /**
-     * @param string $merchantOrderId
-     * @param string $description
-     * @param OrderItem[] $orderItems
-     * @param Money $amount
-     * @param Address $shippingDetails
-     * @param string $language
-     * @param string $merchantReturnURL
-     * @param string $paymentBrand
-     * @param string $paymentBrandForce
+     * @param string              $merchantOrderId
+     * @param string              $description
+     * @param OrderItem[]         $orderItems
+     * @param Money               $amount
+     * @param Address             $shippingDetails
+     * @param string              $language
+     * @param string              $merchantReturnURL
+     * @param string              $paymentBrand
+     * @param string              $paymentBrandForce
      * @param CustomerInformation $customerInformation
-     * @param Address $billingDetails
+     * @param Address             $billingDetails
      * @param $initiatingParty
      * @param bool $skipHppResultPage
+     *
      * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
      * createFrom method instead.
      * @see MerchantOrder::createFrom()

@@ -3,8 +3,8 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
-use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatureException;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 
 class AnnouncementResponseBuilder
 {

@@ -3,7 +3,6 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use InvalidArgumentException;
-use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentCompletedResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 use PHPUnit\Framework\TestCase;
 

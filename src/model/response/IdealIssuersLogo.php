@@ -5,7 +5,7 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 use JsonSerializable;
 
 /**
- * This class contains the iDEAL issuers logo details
+ * This class contains the iDEAL issuers logo details.
  */
 class IdealIssuersLogo implements JsonSerializable
 {

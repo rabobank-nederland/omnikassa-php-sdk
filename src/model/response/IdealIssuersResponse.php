@@ -1,12 +1,11 @@
 <?php
 
-
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use JsonSerializable;
 
 /**
- * This class contains a list of IDEALIssuersInfos
+ * This class contains a list of IDEALIssuersInfos.
  */
 class IdealIssuersResponse implements JsonSerializable
 {

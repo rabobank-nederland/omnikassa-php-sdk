@@ -12,9 +12,6 @@ class MerchantOrderRequest implements \JsonSerializable
     /** @var \DateTime */
     private $timestamp;
 
-    /**
-     * @param MerchantOrder $merchantOrder
-     */
     public function __construct(MerchantOrder $merchantOrder)
     {
         $this->merchantOrder = $merchantOrder;
@@ -46,8 +43,6 @@ class MerchantOrderRequest implements \JsonSerializable
 
     /**
      * This method should only be called from the tests.
-     *
-     * @param \DateTime $timestamp
      */
     public function setTimestamp(\DateTime $timestamp)
     {

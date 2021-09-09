@@ -46,10 +46,9 @@ class PaymentCompletedResponse extends SignedResponse
      * Creates a new PaymentCompletedResponse instance.
      * It sanitizes the input and validates the signature resulting in a valid instance or the value FALSE.
      *
-     * @param string     $orderID
-     * @param string     $status
-     * @param string     $signature
-     * @param SigningKey $signingKey
+     * @param string $orderID
+     * @param string $status
+     * @param string $signature
      *
      * @return bool|PaymentCompletedResponse returns FALSE if the signature is invalid, otherwise the instance is returned
      */

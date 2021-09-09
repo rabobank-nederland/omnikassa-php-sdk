@@ -10,7 +10,7 @@ final class PaymentBrandMetaData implements \JsonSerializable
     private $properties = [];
 
     /**
-     * Use the createFrom method to create this object
+     * Use the createFrom method to create this object.
      */
     private function __construct()
     {
@@ -47,7 +47,6 @@ final class PaymentBrandMetaData implements \JsonSerializable
                 $json[$key] = $value;
             }
         }
-
 
         return empty($json) ? null : $json;
     }

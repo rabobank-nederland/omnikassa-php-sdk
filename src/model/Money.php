@@ -14,8 +14,8 @@ class Money implements \JsonSerializable, SignatureDataProvider
     /**
      * Construct a Money object with the given currency and the amount in cents.
      *
-     * @param string $currency
-     * @param int|float $amount in cents
+     * @param string    $currency
+     * @param int|float $amount   in cents
      *
      * @return Money
      */

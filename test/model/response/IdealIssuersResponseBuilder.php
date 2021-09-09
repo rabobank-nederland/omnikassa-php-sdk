@@ -18,7 +18,7 @@ class IdealIssuersResponseBuilder
 
     private static function getTestData(): array
     {
-          return [
+        return [
             'issuers' => [
                 [
                     'id' => 'BANKNL2Y',
@@ -27,7 +27,7 @@ class IdealIssuersResponseBuilder
                         [
                             'url' => 'https://betalen-acpt3.rabobank.nl/omnikassa/static/issuers/BANKNL2Y.png',
                             'mimeType' => 'image/png',
-                        ]
+                        ],
                     ],
                     'countryNames' => 'Nederland',
                 ],
@@ -38,7 +38,7 @@ class IdealIssuersResponseBuilder
                         [
                             'url' => 'https://betalen-acpt3.rabobank.nl/omnikassa/static/issuers/RABONL2U.png',
                             'mimeType' => 'image/png',
-                        ]
+                        ],
                     ],
                     'countryNames' => 'Nederland',
                 ],

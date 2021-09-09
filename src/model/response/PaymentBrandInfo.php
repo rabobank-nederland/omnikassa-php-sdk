@@ -9,16 +9,16 @@ use JsonSerializable;
  */
 class PaymentBrandInfo implements JsonSerializable
 {
-
     /** @var string */
     protected $name;
-    /** @var boolean */
+    /** @var bool */
     protected $active;
 
     /**
      * Construct this response from the given json.
      *
      * @param array $data
+     *
      * @throws \JsonMapper_Exception
      */
     public function __construct($data)
@@ -44,7 +44,7 @@ class PaymentBrandInfo implements JsonSerializable
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {
@@ -53,7 +53,7 @@ class PaymentBrandInfo implements JsonSerializable
 
     private function setActive($status)
     {
-        if ($status === "Active") {
+        if ('Active' === $status) {
             $this->active = true;
         } else {
             $this->active = false;
@@ -82,5 +82,4 @@ class PaymentBrandInfo implements JsonSerializable
 
         return $json;
     }
-
 }

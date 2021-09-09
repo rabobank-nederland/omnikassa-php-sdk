@@ -1,16 +1,14 @@
 <?php
 
-
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use JsonSerializable;
 
 /**
- * This class contains a list of PaymentBrandInfos
+ * This class contains a list of PaymentBrandInfos.
  */
 class PaymentBrandsResponse implements JsonSerializable
 {
-
     /** @var PaymentBrandInfo[] */
     protected $paymentBrands;
 
@@ -18,6 +16,7 @@ class PaymentBrandsResponse implements JsonSerializable
      * Construct this response from the given json.
      *
      * @param string $json
+     *
      * @throws \JsonMapper_Exception
      */
     public function __construct($json)

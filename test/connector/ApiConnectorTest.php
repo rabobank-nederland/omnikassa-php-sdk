@@ -5,11 +5,11 @@
 
 namespace nl\rabobank\gict\payments_savings\test\omnikassa_sdk\connector;
 
-use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\connector\ApiConnectorWrapper;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\RESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\TokenProvider;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\AccessToken;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\connector\ApiConnectorWrapper;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\request\MerchantOrderRequestBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\AnnouncementResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderResponseBuilder;

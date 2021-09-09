@@ -18,7 +18,7 @@ class CustomerInformationTest extends TestCase
         $this->assertEquals('J.M.', $customerInformation->getInitials());
         $this->assertEquals('0204971111', $customerInformation->getTelephoneNumber());
     }
-    
+
     public function testExceptionIsThrownForInvalidProperty()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -41,7 +41,7 @@ class CustomerInformationTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonSerialize_withNullValues()
+    public function testJsonSerializeWithNullValues()
     {
         $expectedJson = [];
         $customerInformation = $this->makeCustomerInformationWithoutOptionals();

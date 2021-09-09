@@ -3,7 +3,6 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\ProductType;
-use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\VatCategory;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\request\MerchantOrderRequestBuilder;
 use PHPUnit\Framework\TestCase;
@@ -11,7 +10,7 @@ use stdClass;
 
 class MerchantOrderRequestTest extends TestCase
 {
-    public function testJsonEncoding_withoutOptionalFields()
+    public function testJsonEncodingWithoutOptionalFields()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeMinimalRequest();
         $merchantOrderRequest->setTimestamp($this->createTimestamp());
@@ -35,7 +34,7 @@ class MerchantOrderRequestTest extends TestCase
         MerchantOrder::createFrom(['merchanOrderId' => 'test']);
     }
 
-    public function testJsonEncoding_allFields()
+    public function testJsonEncodingAllFields()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeCompleteRequest();
         $merchantOrderRequest->setTimestamp($this->createTimestamp());
@@ -65,7 +64,7 @@ class MerchantOrderRequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonEncoding_withOrderItemsWithoutOptionalFields()
+    public function testJsonEncodingWithOrderItemsWithoutOptionalFields()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeWithOrderItemsWithoutOptionalFieldsRequest();
         $merchantOrderRequest->setTimestamp($this->createTimestamp());
@@ -85,7 +84,7 @@ class MerchantOrderRequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonEncoding_withShippingDetailsWithoutOptionalFields()
+    public function testJsonEncodingWithShippingDetailsWithoutOptionalFields()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeWithShippingDetailsWithoutOptionalFieldsRequest();
         $merchantOrderRequest->setTimestamp($this->createTimestamp());
@@ -103,7 +102,7 @@ class MerchantOrderRequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonEncoding_withPaymentBrandButWithoutOtherOptionalFields()
+    public function testJsonEncodingWithPaymentBrandButWithoutOtherOptionalFields()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeWithPaymentBrandButWithoutOtherOptionalFields();
         $merchantOrderRequest->setTimestamp($this->createTimestamp());
@@ -122,7 +121,7 @@ class MerchantOrderRequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonEncoding_withTrueSkipHppResultPage()
+    public function testJsonEncodingWithTrueSkipHppResultPage()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeMinimalRequestWithSkipHppResultPage(true);
         $merchantOrderRequest->setTimestamp($this->createTimestamp());
@@ -139,7 +138,7 @@ class MerchantOrderRequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonEncoding_withFalseSkipHppResultPage()
+    public function testJsonEncodingWithFalseSkipHppResultPage()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeMinimalRequestWithSkipHppResultPage(false);
         $merchantOrderRequest->setTimestamp($this->createTimestamp());
@@ -156,7 +155,7 @@ class MerchantOrderRequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonEncoding_withCustomerInformationFullName()
+    public function testJsonEncodingWithCustomerInformationFullName()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeMinimalRequestWithCustomerInformationFullName();
         $merchantOrderRequest->setTimestamp($this->createTimestamp());
@@ -176,7 +175,7 @@ class MerchantOrderRequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonEncoding_withInvalidMetaData()
+    public function testJsonEncodingWithInvalidMetaData()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeMinimalRequestWithMetaData([
             0 => 'Test', // Only string keys allowed
@@ -197,7 +196,7 @@ class MerchantOrderRequestTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonEncoding_withMultipleMetaDataEntries()
+    public function testJsonEncodingWithMultipleMetaDataEntries()
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeMinimalRequestWithMetaData([
             'test1' => 'Test1',
@@ -217,7 +216,7 @@ class MerchantOrderRequestTest extends TestCase
                 'test4' => 'Test4',
                 'test5' => 'Test5',
                 'test7' => 'Test7',
-            ]
+            ],
         ]);
 
         $actualJson = json_encode($merchantOrderRequest);

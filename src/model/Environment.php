@@ -7,6 +7,6 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
  */
 abstract class Environment
 {
-    const PRODUCTION = 'https://betalen.rabobank.nl/omnikassa-api/';
-    const SANDBOX = 'https://betalen.rabobank.nl/omnikassa-api-sandbox/';
+    public const PRODUCTION = 'https://betalen.rabobank.nl/omnikassa-api/';
+    public const SANDBOX = 'https://betalen.rabobank.nl/omnikassa-api-sandbox/';
 }

@@ -65,8 +65,8 @@ class EndpointTest extends TestCase
         $this->assertEquals($merchantOrderResponse, $result);
     }
 
-    public function testRetrievePaymentBrandsInfo() {
-
+    public function testRetrievePaymentBrandsInfo()
+    {
         Phake::when($this->connector)->getPaymentBrands()->thenReturn(PaymentBrandsResponseBuilder::newInstanceAsJson());
 
         $result = $this->endpoint->retrievePaymentBrands();

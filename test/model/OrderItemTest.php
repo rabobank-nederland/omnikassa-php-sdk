@@ -47,7 +47,7 @@ class OrderItemTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonSerialize_withoutOptionalFields()
+    public function testJsonSerializeWithoutOptionalFields()
     {
         $expectedJson = [
             'name' => 'Name',

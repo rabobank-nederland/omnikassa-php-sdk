@@ -14,8 +14,6 @@ class SignableSpy extends Signable
 
     /**
      * SignableSpy constructor.
-     *
-     * @param array $signatureData
      */
     public function __construct(array $signatureData)
     {

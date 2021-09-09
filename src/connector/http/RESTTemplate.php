@@ -18,7 +18,6 @@ interface RESTTemplate
      * Perform a GET call to the given path.
      *
      * @param string $path
-     * @param array  $parameters
      *
      * @return string Response body
      */

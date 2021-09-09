@@ -131,9 +131,6 @@ class MerchantOrderResult implements SignatureDataProvider
         return $this->paidAmount;
     }
 
-    /**
-     * @param Money $paidAmount
-     */
     public function setPaidAmount(Money $paidAmount)
     {
         $this->paidAmount = $paidAmount;
@@ -147,9 +144,6 @@ class MerchantOrderResult implements SignatureDataProvider
         return $this->totalAmount;
     }
 
-    /**
-     * @param Money $totalAmount
-     */
     public function setTotalAmount(Money $totalAmount)
     {
         $this->totalAmount = $totalAmount;

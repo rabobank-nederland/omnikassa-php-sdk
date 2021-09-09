@@ -121,7 +121,7 @@ class MerchantOrderBuilder
             'gender' => 'M',
             'initials' => 'J.M.',
             'telephoneNumber' => '0204971111',
-            'fullName' => 'Jan van Veen'
+            'fullName' => 'Jan van Veen',
         ]);
 
         $paymentBrandMetaData = PaymentBrandMetaData::createFrom([

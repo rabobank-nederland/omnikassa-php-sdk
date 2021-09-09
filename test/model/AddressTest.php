@@ -26,7 +26,7 @@ class AddressTest extends TestCase
     public function testExceptionIsThrownForInvalidProperty()
     {
         $this->expectException(InvalidArgumentException::class);
-        
+
         Address::createFrom(['firstname' => 'test']);
     }
 
@@ -49,7 +49,7 @@ class AddressTest extends TestCase
         $this->assertEquals($expectedJson, $actualJson);
     }
 
-    public function testJsonSerialize_withNullValues()
+    public function testJsonSerializeWithNullValues()
     {
         $expectedJson = [
             'firstName' => 'Jan',

@@ -1,4 +1,6 @@
-<?php namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
+<?php
+
+namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
 use DateTime;
 use PHPUnit\Framework\TestCase;

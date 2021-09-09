@@ -3,7 +3,6 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use ErrorException;
-use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderStatusResponseBuilder;
 use PHPUnit\Framework\TestCase;
