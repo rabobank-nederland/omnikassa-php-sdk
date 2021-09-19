@@ -20,6 +20,7 @@ class MerchantOrderResponse
      * Construct this response from the given json.
      *
      * @param string $json
+     *
      * @throws \JsonMapper_Exception
      */
     public function __construct($json)

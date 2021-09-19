@@ -21,9 +21,6 @@ class ApiConnector implements Connector
     private $accessToken;
 
     /**
-     * @param RESTTemplate  $restTemplate
-     * @param TokenProvider $tokenProvider
-     *
      * @internal
      */
     protected function __construct(RESTTemplate $restTemplate, TokenProvider $tokenProvider)
@@ -35,8 +32,7 @@ class ApiConnector implements Connector
     /**
      * Construct a Guzzle based ApiConnector.
      *
-     * @param string        $baseURL
-     * @param TokenProvider $tokenProvider
+     * @param string $baseURL
      *
      * @return ApiConnector
      */
@@ -50,8 +46,6 @@ class ApiConnector implements Connector
     /**
      * Announce an order.
      *
-     * @param MerchantOrderRequest $order
-     *
      * @return string json response body
      *
      * @deprecated use the new announce order method @see ApiConnector::announce()
@@ -64,8 +58,7 @@ class ApiConnector implements Connector
     /**
      * Announce an order.
      *
-     * @param MerchantOrderRequest $order
-     * @return string json response body.
+     * @return string json response body
      */
     public function announce(MerchantOrderRequest $order)
     {
@@ -79,8 +72,6 @@ class ApiConnector implements Connector
     /**
      * Retrieve the order details from an announcement.
      *
-     * @param AnnouncementResponse $announcement
-     *
      * @return string json response body
      */
     public function getAnnouncementData(AnnouncementResponse $announcement)
@@ -93,7 +84,7 @@ class ApiConnector implements Connector
     }
 
     /**
-     * Retrieve the payment brands with their corresponding status
+     * Retrieve the payment brands with their corresponding status.
      *
      * @return string json response body
      */
@@ -103,6 +94,20 @@ class ApiConnector implements Connector
             $this->restTemplate->setToken($this->accessToken->getToken());
 
             return $this->restTemplate->get('order/server/api/payment-brands');
+        });
+    }
+
+    /**
+     * Retrieve the iDEAL issuers.
+     *
+     * @return string json response body
+     */
+    public function getIDEALIssuers(): string
+    {
+        return $this->performAction(function () {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->get('ideal/server/api/v2/issuers');
         });
     }
 
@@ -138,8 +143,6 @@ class ApiConnector implements Connector
     }
 
     /**
-     * @param AccessToken $token
-     *
      * @return bool
      */
     private function isExpired(AccessToken $token)

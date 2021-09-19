@@ -62,5 +62,4 @@ class MoneyTest extends TestCase
         $this->assertEquals($expected, $money->getAmount());
         $this->assertEquals('EUR', $money->getCurrency());
     }
-
 }

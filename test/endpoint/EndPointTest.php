@@ -7,6 +7,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\endpoint\EndpointWrapper;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\request\MerchantOrderBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\AnnouncementResponseBuilder;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\IdealIssuersResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderStatusResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\PaymentBrandsResponseBuilder;
@@ -22,7 +23,7 @@ class EndpointTest extends TestCase
 
     private $signingKey;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->signingKey = new SigningKey('secret');
         $this->connector = Phake::mock(Connector::class);
@@ -64,12 +65,21 @@ class EndpointTest extends TestCase
         $this->assertEquals($merchantOrderResponse, $result);
     }
 
-    public function testRetrievePaymentBrandsInfo() {
-
+    public function testRetrievePaymentBrandsInfo()
+    {
         Phake::when($this->connector)->getPaymentBrands()->thenReturn(PaymentBrandsResponseBuilder::newInstanceAsJson());
 
         $result = $this->endpoint->retrievePaymentBrands();
 
         $this->assertEquals(PaymentBrandsResponseBuilder::newInstance(), $result);
+    }
+
+    public function testRetrieveIDEALIssuers(): void
+    {
+        Phake::when($this->connector)->getIDEALIssuers()->thenReturn(IdealIssuersResponseBuilder::newInstanceAsJson());
+
+        $result = $this->endpoint->retrieveIDEALIssuers();
+
+        $this->assertEquals(IdealIssuersResponseBuilder::newInstance(), $result);
     }
 }

@@ -17,6 +17,8 @@ class CustomerInformation implements \JsonSerializable
     private $initials;
     /** @var string */
     private $telephoneNumber;
+    /** @var string */
+    private $fullName;
 
     /**
      * @param string $emailAddress
@@ -29,18 +31,19 @@ class CustomerInformation implements \JsonSerializable
      * createFrom method instead.
      * @see CustomerInformation::createFrom()
      */
-    public function __construct($emailAddress, $dateOfBirth, $gender, $initials, $telephoneNumber)
+    public function __construct($emailAddress, $dateOfBirth, $gender, $initials, $telephoneNumber, $fullName = null)
     {
         $this->emailAddress = $emailAddress;
         $this->dateOfBirth = $dateOfBirth;
         $this->gender = $gender;
         $this->initials = $initials;
         $this->telephoneNumber = $telephoneNumber;
+        $this->fullName = $fullName;
     }
 
     public static function createFrom(array $data)
     {
-        $customerInformation = new CustomerInformation(null, null, null, null, null);
+        $customerInformation = new CustomerInformation(null, null, null, null, null, null);
         foreach ($data as $key => $value) {
             if (property_exists($customerInformation, $key)) {
                 $customerInformation->$key = $data[(string) $key];
@@ -91,6 +94,14 @@ class CustomerInformation implements \JsonSerializable
     public function getTelephoneNumber()
     {
         return $this->telephoneNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->fullName;
     }
 
     /**

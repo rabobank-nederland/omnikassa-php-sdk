@@ -2,7 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
-use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentCompletedResponse;
+use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 use PHPUnit\Framework\TestCase;
 
@@ -40,5 +40,32 @@ class PaymentCompletedResponseTest extends TestCase
         $this->assertNotFalse($paymentCompletedResponse);
         $this->assertEquals('Test1234', $paymentCompletedResponse->getOrderID());
         $this->assertEquals('COMPLETED', $paymentCompletedResponse->getStatus());
+    }
+
+    public function testThatItThrowsAnExceptionOnABadOrderIdFormat()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('One or more parameters in the merchantReturnUrl did not match the required format.');
+
+        $signingKey = new SigningKey('secret');
+        PaymentCompletedResponse::createInstance('!Invalid', 'COMPLETED', 'bf4f5b787d954296b9c2e15028c2311df5e31a3d94c540e361faf1d0951b7858041089d430e17730f1efd3a308881c094355f55e09b993ca53f2063859d1eb4b', $signingKey);
+    }
+
+    public function testThatItThrowsAnExceptionOnABadStatusFormat()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('One or more parameters in the merchantReturnUrl did not match the required format.');
+
+        $signingKey = new SigningKey('secret');
+        PaymentCompletedResponse::createInstance('Test1234', '!Invalid', 'bf4f5b787d954296b9c2e15028c2311df5e31a3d94c540e361faf1d0951b7858041089d430e17730f1efd3a308881c094355f55e09b993ca53f2063859d1eb4b', $signingKey);
+    }
+
+    public function testThatItThrowsAnExceptionOnABadSignatureFormat()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('One or more parameters in the merchantReturnUrl did not match the required format.');
+
+        $signingKey = new SigningKey('secret');
+        PaymentCompletedResponse::createInstance('Test1234', 'COMPLETED', '!Invalid', $signingKey);
     }
 }

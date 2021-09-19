@@ -9,10 +9,10 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\AccessToken;
  */
 abstract class TokenProvider
 {
-    const REFRESH_TOKEN = 'REFRESH_TOKEN';
-    const ACCESS_TOKEN = 'ACCESS_TOKEN';
-    const ACCESS_TOKEN_VALID_UNTIL = 'ACCESS_TOKEN_VALID_UNTIL';
-    const ACCESS_TOKEN_DURATION = 'ACCESS_TOKEN_DURATION';
+    public const REFRESH_TOKEN = 'REFRESH_TOKEN';
+    public const ACCESS_TOKEN = 'ACCESS_TOKEN';
+    public const ACCESS_TOKEN_VALID_UNTIL = 'ACCESS_TOKEN_VALID_UNTIL';
+    public const ACCESS_TOKEN_DURATION = 'ACCESS_TOKEN_DURATION';
 
     /**
      * @return string
@@ -36,9 +36,6 @@ abstract class TokenProvider
         return new AccessToken($token, new \DateTime($validUntil), $durationInMillis);
     }
 
-    /**
-     * @param AccessToken $accessToken
-     */
     final public function setAccessToken(AccessToken $accessToken)
     {
         $this->setValue(static::ACCESS_TOKEN, $accessToken->getToken());

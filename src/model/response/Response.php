@@ -17,8 +17,7 @@ abstract class Response extends SignedResponse
      * Construct this response from the given json.
      * Also validates the signature with the given signing key.
      *
-     * @param string     $json
-     * @param SigningKey $signingKey
+     * @param string $json
      *
      * @throws \JsonMapper_Exception
      * @throws InvalidSignatureException

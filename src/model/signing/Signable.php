@@ -7,7 +7,7 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing;
  */
 abstract class Signable implements SignatureDataProvider
 {
-    const HASH_ALGORITHM = 'sha512';
+    public const HASH_ALGORITHM = 'sha512';
 
     /** @var string */
     private $signature;
@@ -30,8 +30,6 @@ abstract class Signable implements SignatureDataProvider
 
     /**
      * Calculate the signature with the given data and signing key.
-     *
-     * @param SigningKey $signingKey
      *
      * @return string hex string representation of the calculated signature
      */

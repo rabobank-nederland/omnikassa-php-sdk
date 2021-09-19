@@ -4,7 +4,6 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatureException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
-use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderStatusResponseBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +17,7 @@ class SignedResponseTest extends TestCase
             new MerchantOrderStatusResponse($json, new SigningKey('invalid_signature'));
         } catch (InvalidSignatureException $invalidSignatureException) {
             $trace = $invalidSignatureException->getTraceAsString();
-            $this->assertNotContains('invalid_signature', $trace);
+            $this->assertStringNotContainsString('invalid_signature', $trace);
         }
     }
 }

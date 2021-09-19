@@ -7,8 +7,8 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
  */
 class VatCategory
 {
-    const HIGH = '1';
-    const LOW = '2';
-    const ZERO = '3';
-    const NONE = '4';
+    public const HIGH = '1';
+    public const LOW = '2';
+    public const ZERO = '3';
+    public const NONE = '4';
 }

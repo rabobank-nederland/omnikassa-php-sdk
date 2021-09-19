@@ -8,6 +8,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\TokenProvider;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrderRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\IdealIssuersResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandsResponse;
@@ -27,9 +28,6 @@ class Endpoint
     private $signingKey;
 
     /**
-     * @param Connector  $connector
-     * @param SigningKey $signingKey
-     *
      * @internal
      */
     protected function __construct(Connector $connector, SigningKey $signingKey)
@@ -55,13 +53,11 @@ class Endpoint
     /**
      * Announce an order.
      *
-     * @param MerchantOrder $merchantOrder
-     *
      * @return string an URL the customer shall be redirected to
      *
      * @throws \JsonMapper_Exception
      *
-     * @deprecated use announce($merchantOrder) instead.
+     * @deprecated use announce($merchantOrder) instead
      */
     public function announceMerchantOrder(MerchantOrder $merchantOrder)
     {
@@ -70,9 +66,12 @@ class Endpoint
 
     /**
      * Announce an order.
+     *
      * @param MerchantOrder $merchantOrder the order to announce
+     *
      * @return MerchantOrderResponse response object containing the URL the customer shall be redirected to
-     * as well as a unique ID that Rabo Omnikassa assigned to the order.
+     *                               as well as a unique ID that Rabo Omnikassa assigned to the order
+     *
      * @throws \JsonMapper_Exception
      */
     public function announce(MerchantOrder $merchantOrder)
@@ -86,8 +85,6 @@ class Endpoint
 
     /**
      * Retrieve the merchant order status from the given announcement.
-     *
-     * @param AnnouncementResponse $announcementResponse
      *
      * @return MerchantOrderStatusResponse
      *
@@ -104,14 +101,26 @@ class Endpoint
     }
 
     /**
-     * Retrieve the payment brands name and status
+     * Retrieve the payment brands name and status.
      *
      * @return PaymentBrandsResponse
+     *
      * @throws \JsonMapper_Exception
      */
-    public function retrievePaymentBrands() {
+    public function retrievePaymentBrands()
+    {
         $responseAsJson = $this->connector->getPaymentBrands();
 
         return new PaymentBrandsResponse($responseAsJson);
+    }
+
+    /**
+     * Retrieve the iDEAL issuers.
+     */
+    public function retrieveIDEALIssuers(): IdealIssuersResponse
+    {
+        $responseAsJson = $this->connector->getIDEALIssuers();
+
+        return new IdealIssuersResponse($responseAsJson);
     }
 }

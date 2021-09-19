@@ -7,6 +7,6 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
  */
 class ProductType
 {
-    const PHYSICAL = 'PHYSICAL';
-    const DIGITAL = 'DIGITAL';
+    public const PHYSICAL = 'PHYSICAL';
+    public const DIGITAL = 'DIGITAL';
 }

@@ -1,16 +1,14 @@
 <?php
 
-
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response;
-
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandsResponse;
 
 class PaymentBrandsResponseBuilder
 {
-
     /**
      * @return PaymentBrandsResponse
+     *
      * @throws \JsonMapper_Exception
      */
     public static function newInstance()
@@ -20,6 +18,7 @@ class PaymentBrandsResponseBuilder
 
     /**
      * @return PaymentBrandsResponse
+     *
      * @throws \JsonMapper_Exception
      */
     public static function newInstanceAsJson()
@@ -29,7 +28,7 @@ class PaymentBrandsResponseBuilder
 
     private static function getTestData()
     {
-          return [
+        return [
             'paymentBrands' => [
                 ['name' => 'IDEAL', 'status' => 'Active'],
                 ['name' => 'PAYPAL', 'status' => 'Active'],

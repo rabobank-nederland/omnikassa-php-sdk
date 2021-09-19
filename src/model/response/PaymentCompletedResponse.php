@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
+use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatureException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignedResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
@@ -45,19 +46,22 @@ class PaymentCompletedResponse extends SignedResponse
      * Creates a new PaymentCompletedResponse instance.
      * It sanitizes the input and validates the signature resulting in a valid instance or the value FALSE.
      *
-     * @param string     $orderID
-     * @param string     $status
-     * @param string     $signature
-     * @param SigningKey $signingKey
+     * @param string $orderID
+     * @param string $status
+     * @param string $signature
      *
      * @return bool|PaymentCompletedResponse returns FALSE if the signature is invalid, otherwise the instance is returned
      */
     public static function createInstance($orderID, $status, $signature, SigningKey $signingKey)
     {
         //Sanitize input
-        $orderID = preg_replace('/[^0-9A-Za-z]/', '', $orderID);
-        $status = preg_replace('/[^A-Z_]/', '', $status);
-        $signature = preg_replace('/[^0-9a-f]/', '', $signature);
+        $sanitizedOrderID = preg_replace('/[^0-9A-Za-z]/', '', $orderID);
+        $sanitizedStatus = preg_replace('/[^A-Z_]/', '', $status);
+        $sanitizedSignature = preg_replace('/[^0-9a-f]/', '', $signature);
+
+        if ($sanitizedOrderID !== $orderID || $sanitizedStatus !== $status || $sanitizedSignature !== $signature) {
+            throw new InvalidArgumentException('One or more parameters in the merchantReturnUrl did not match the required format.');
+        }
 
         $instance = new PaymentCompletedResponse($orderID, $status, $signature);
         try {

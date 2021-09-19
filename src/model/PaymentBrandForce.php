@@ -13,6 +13,6 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
  */
 class PaymentBrandForce
 {
-    const FORCE_ONCE = 'FORCE_ONCE';
-    const FORCE_ALWAYS = 'FORCE_ALWAYS';
+    public const FORCE_ONCE = 'FORCE_ONCE';
+    public const FORCE_ALWAYS = 'FORCE_ALWAYS';
 }

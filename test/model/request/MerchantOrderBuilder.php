@@ -7,6 +7,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\CustomerInformation;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrand;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandForce;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandMetaData;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\OrderItemBuilder;
 
@@ -18,6 +19,30 @@ class MerchantOrderBuilder
             'merchantOrderId' => '100',
             'amount' => Money::fromDecimal('EUR', 99.99),
             'merchantReturnURL' => 'http://localhost/',
+        ]);
+    }
+
+    public static function makeMinimalOrderWithSkipHppResultPage(bool $value)
+    {
+        return MerchantOrder::createFrom([
+            'merchantOrderId' => '100',
+            'amount' => Money::fromDecimal('EUR', 99.99),
+            'merchantReturnURL' => 'http://localhost/',
+            'skipHppResultPage' => $value,
+        ]);
+    }
+
+    public static function makeMinimalOrderWithCustomerInformationFullName()
+    {
+        $customerInformation = CustomerInformation::createFrom([
+            'fullName' => 'Jan van Veen',
+        ]);
+
+        return MerchantOrder::createFrom([
+            'merchantOrderId' => '100',
+            'amount' => Money::fromDecimal('EUR', 99.99),
+            'merchantReturnURL' => 'http://localhost/',
+            'customerInformation' => $customerInformation,
         ]);
     }
 
@@ -96,6 +121,11 @@ class MerchantOrderBuilder
             'gender' => 'M',
             'initials' => 'J.M.',
             'telephoneNumber' => '0204971111',
+            'fullName' => 'Jan van Veen',
+        ]);
+
+        $paymentBrandMetaData = PaymentBrandMetaData::createFrom([
+            'issuerId' => 'RABONL2U',
         ]);
 
         return MerchantOrder::createFrom([
@@ -110,6 +140,20 @@ class MerchantOrderBuilder
             'merchantReturnURL' => 'http://localhost/',
             'paymentBrand' => PaymentBrand::IDEAL,
             'paymentBrandForce' => PaymentBrandForce::FORCE_ONCE,
+            'skipHppResultPage' => false,
+            'paymentBrandMetaData' => $paymentBrandMetaData,
+        ]);
+    }
+
+    public static function makeMinimalOrderWithMetaData(array $data)
+    {
+        $paymentBrandMetaData = PaymentBrandMetaData::createFrom($data);
+
+        return MerchantOrder::createFrom([
+            'merchantOrderId' => '100',
+            'amount' => Money::fromDecimal('EUR', 99.99),
+            'merchantReturnURL' => 'http://localhost/',
+            'paymentBrandMetaData' => $paymentBrandMetaData,
         ]);
     }
 }
