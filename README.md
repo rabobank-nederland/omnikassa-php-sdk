@@ -8,3 +8,19 @@ Developer documentation including code examples and cofor this SDK can be found 
 The PHP SDK allows PHP developers to integrate their web shop with Rabo OmniKassa to handle online payments. Note that besides using an SDK Rabo OmniKassa also provides other ways to integrate that may require less effort. More information on this topic can be found on the [Developer Portal](https://developer.rabobank.nl/overview/rabo-omnikassa) of Rabobank.
 
 Detailed developer documentation on how to use the PHP SDK as well as contact information can be found in the [SDK manual](https://github.com/rabobank-nederland/omnikassa-sdk-doc/blob/main/README.md).
+
+## Release notes
+
+### Version 1.12.1
+* Fixed rounding problem (ROFE-4592).
+
+### Version 1.12.0
+* First release via Packagist.
+* Updated some dependencies.
+
+### Version 1.11.0
+* Extended SDK to retrieve a list of configured payment brands.
+* Allow the initiating party to be passed in the order announcement.
+
+### Version 1.9.0
+* Fixes in the documentation.
