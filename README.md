@@ -11,6 +11,14 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 
 ## Release notes
 
+### Version 1.13.0
+* Extended SDK to retrieve a list of iDEAL issuers.
+* Extended SDK to allow the iDEAL issuer to be passed in the order announcement.
+* Extended SDK to allow the payment result page (also known as the 'thank-you' oage) to be skipped in the payment process.
+* Extended SDK to allow the name of the customer to be passed in the order announcement.
+* Added support for PHP 8.0.
+* Updated some dependencies to recent versions.
+
 ### Version 1.12.1
 * Fixed rounding problem (ROFE-4592).
 
