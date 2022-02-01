@@ -16,6 +16,7 @@ class PaymentBrand
     public const BANCONTACT = 'BANCONTACT';
     public const MAESTRO = 'MAESTRO';
     public const V_PAY = 'V_PAY';
+    public const SOFORT = "SOFORT";
 
     /**
      * The CARDS type comprises MASTERCARD, VISA, BANCONTACT, MAESTRO and V_PAY.
