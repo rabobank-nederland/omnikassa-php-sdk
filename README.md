@@ -10,6 +10,9 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 
 ## Release notes
 
+### Version 1.14.0
+* Extended SDK to support Sofort as a payment brand.
+
 ### Version 1.13.0
 * Extended SDK to retrieve a list of iDEAL issuers.
 * Extended SDK to allow the iDEAL issuer to be passed in the order announcement.
