@@ -14,7 +14,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\PaymentB
 use Phake;
 use PHPUnit\Framework\TestCase;
 
-class EndpointTest extends TestCase
+class EndPointTest extends TestCase
 {
     /** @var Endpoint */
     private $endpoint;
