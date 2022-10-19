@@ -177,7 +177,7 @@ class MerchantOrderResult implements SignatureDataProvider
         $data = [
             $this->merchantOrderId,
             $this->omnikassaOrderId,
-            $this->pointOfInteractionId,
+            $this->poiId,
             $this->orderStatus,
             $this->orderStatusDateTime,
             $this->errorCode,
