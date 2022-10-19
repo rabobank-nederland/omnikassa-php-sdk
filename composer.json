@@ -43,10 +43,14 @@
     "archive": {
         "exclude": [
             ".idea/*",
+            ".github/*",
+            "coverage/*",
+            "test/HOWTO.md",
             "azure-pipelines.yml",
             ".git",
             ".gitignore",
-            "rabobank-omnikassa-sdk-*.tar"
+            "rabobank-omnikassa-sdk-*.tar",
+            "rabobank-omnikassa-sdk-*.zip"
         ]
     }
 }
