@@ -10,7 +10,7 @@ class MerchantOrderResultTest extends TestCase
     public function testObjectMethods()
     {
         $merchantOrderResult = new MerchantOrderResult();
-        $merchantOrderResult->setPointOfInteractionId(2004);
+        $merchantOrderResult->setPoiId(2004);
         $merchantOrderResult->setMerchantOrderId('order123');
         $merchantOrderResult->setOmnikassaOrderId('1d0a95f4-2589-439b-9562-c50aa19f9caf');
         $merchantOrderResult->setOrderStatus('COMPLETED');
@@ -19,7 +19,7 @@ class MerchantOrderResultTest extends TestCase
         $merchantOrderResult->setPaidAmount(Money::fromDecimal('EUR', 109.96));
         $merchantOrderResult->setTotalAmount(Money::fromDecimal('EUR', 109.97));
 
-        $this->assertEquals(2004, $merchantOrderResult->getPointOfInteractionId());
+        $this->assertEquals(2004, $merchantOrderResult->getPoiId());
         $this->assertEquals('order123', $merchantOrderResult->getMerchantOrderId());
         $this->assertEquals('1d0a95f4-2589-439b-9562-c50aa19f9caf', $merchantOrderResult->getOmnikassaOrderId());
         $this->assertEquals('COMPLETED', $merchantOrderResult->getOrderStatus());
@@ -57,7 +57,7 @@ class MerchantOrderResultTest extends TestCase
     public function testSignature()
     {
         $instance = new MerchantOrderResult();
-        $instance->setPointOfInteractionId(1);
+        $instance->setPoiId(1);
         $instance->setMerchantOrderId('SHOP1');
         $instance->setOmnikassaOrderId('ORDER1');
         $instance->setOrderStatus('COMPLETED');
@@ -109,12 +109,6 @@ class MerchantOrderResultTest extends TestCase
         );
     }
 
-    public function testInvalidInstantiate()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        MerchantOrderResult::createFromJsonData(null);
-    }
-
     /**
      * Checks cross compatibility.
      *
@@ -126,10 +120,8 @@ class MerchantOrderResultTest extends TestCase
 
         $merchantOrderResult->setPoiId(12345);
         $this->assertEquals(12345, $merchantOrderResult->getPoiId());
-        $this->assertEquals(12345, $merchantOrderResult->getPointOfInteractionId());
 
-        $merchantOrderResult->setPointOfInteractionId(67890);
-        $this->assertEquals(67890, $merchantOrderResult->getPointOfInteractionId());
+        $merchantOrderResult->setPoiId(67890);
         $this->assertEquals(67890, $merchantOrderResult->getPoiId());
     }
 }
