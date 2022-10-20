@@ -9,6 +9,10 @@ The PHP SDK allows PHP developers to integrate their web shop with Rabo OmniKass
 Detailed developer documentation on how to use the PHP SDK as well as contact information can be found in the [SDK manual](https://github.com/rabobank-nederland/omnikassa-sdk-doc/blob/main/README.md).
 
 ## Release notes
+
+### Version 1.16.0
+* Extended SDK to support refunds.
+
 ### Version 1.15.0
 * Extended SDK to support refunds.
 * Extended SDK to support transactions in order announcement result.
