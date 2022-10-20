@@ -26,6 +26,8 @@ class MerchantOrderResult implements SignatureDataProvider
     private $paidAmount;
     /** @var Money */
     private $totalAmount;
+    /** @var TransactionInfo[] */
+    private $transactionInfo = [];
 
     /**
      * @return int
@@ -150,11 +152,29 @@ class MerchantOrderResult implements SignatureDataProvider
     }
 
     /**
-     * @return array
+     * @return TransactionInfo[]
      */
+    public function getTransactionInfo()
+    {
+        return $this->transactionInfo;
+    }
+
+    /**
+     * @param TransactionInfo[] $transactionInfo
+     *
+     * @internal for testing only
+     *
+     * @deprecated for testing only
+     */
+    public function setTransactionInfo(array $transactionInfo)
+    {
+        $this->transactionInfo = $transactionInfo;
+    }
+
+    /** {@inheritDoc} */
     public function getSignatureData()
     {
-        return [
+        $data = [
             $this->merchantOrderId,
             $this->omnikassaOrderId,
             $this->poiId,
@@ -164,5 +184,64 @@ class MerchantOrderResult implements SignatureDataProvider
             $this->paidAmount->getSignatureData(),
             $this->totalAmount->getSignatureData(),
         ];
+
+        foreach ($this->getTransactionInfo() as $current) {
+            $data[] = $current->getSignatureData();
+        }
+
+        return $data;
+    }
+
+        /**
+     * @param $data \stdClass
+     */
+    public static function createFromJsonData($data): self
+    {
+        if (empty($data)) {
+            throw new \InvalidArgumentException('Data expected but missing');
+        }
+
+        $instance = new self();
+
+        if (!empty($data->poiId)) {
+            // Warning: field differs from internal name
+            $instance->poiId = (int) $data->poiId;
+        }
+
+        if (!empty($data->merchantOrderId)) {
+            $instance->merchantOrderId = $data->merchantOrderId;
+        }
+
+        if (!empty($data->omnikassaOrderId)) {
+            $instance->omnikassaOrderId = $data->omnikassaOrderId;
+        }
+
+        if (!empty($data->orderStatus)) {
+            $instance->orderStatus = $data->orderStatus;
+        }
+
+        if (!empty($data->orderStatusDateTime)) {
+            $instance->orderStatusDateTime = $data->orderStatusDateTime;
+        }
+
+        if (!empty($data->errorCode)) {
+            $instance->errorCode = $data->errorCode;
+        }
+
+        if (!empty($data->paidAmount)) {
+            $instance->paidAmount = Money::fromCents($data->paidAmount->currency, $data->paidAmount->amount);
+        }
+
+        if (!empty($data->totalAmount)) {
+            $instance->totalAmount = Money::fromCents($data->totalAmount->currency, $data->totalAmount->amount);
+        }
+
+        if (!empty($data->transactions) && is_array($data->transactions)) {
+            foreach ($data->transactions as $current) {
+                $instance->transactionInfo[] = new TransactionInfo($current);
+            }
+        }
+
+        return $instance;
     }
 }

@@ -10,6 +10,13 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 
 ## Release notes
 
+### Version 1.16.0
+* Extended SDK to support refunds.
+
+### Version 1.15.0
+* Extended SDK to support refunds.
+* Extended SDK to support transactions in order announcement result.
+
 ### Version 1.14.0
 * Extended SDK to support Sofort as a payment brand.
 
