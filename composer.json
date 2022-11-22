@@ -15,12 +15,12 @@
         },
         "sort-packages": true,
         "platform": {
-            "php": "7.3"
+            "php": "7.2"
         }
     },
     "minimum-stability": "stable",
     "require": {
-        "php": ">= 7.3",
+        "php": ">= 7.2",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^6.3",
         "netresearch/jsonmapper": "^4.0"
