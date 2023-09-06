@@ -83,7 +83,7 @@ class Money implements \JsonSerializable, SignatureDataProvider
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return ['currency' => $this->currency, 'amount' => $this->amount];
     }

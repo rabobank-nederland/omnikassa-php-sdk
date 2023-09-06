@@ -14,6 +14,9 @@ class PaymentBrandInfo implements JsonSerializable
     /** @var bool */
     protected $active;
 
+    /** @var string */
+    protected $status;
+
     /**
      * Construct this response from the given json.
      *
@@ -71,7 +74,7 @@ class PaymentBrandInfo implements JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this as $key => $value) {

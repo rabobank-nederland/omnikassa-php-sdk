@@ -126,10 +126,9 @@ class OrderItem implements \JsonSerializable
     }
 
     /**
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     *               which is a value of any type other than a resource
+     * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this as $key => $value) {
