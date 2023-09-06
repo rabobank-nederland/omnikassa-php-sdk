@@ -68,10 +68,7 @@ class PaymentBrandInfo implements JsonSerializable
         $this->status = $status;
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this as $key => $value) {
