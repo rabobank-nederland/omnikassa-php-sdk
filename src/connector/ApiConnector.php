@@ -5,6 +5,7 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\connector;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\GuzzleRESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\RESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\AccessToken;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\InitiateRefundRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrderRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
 
@@ -80,6 +81,38 @@ class ApiConnector implements Connector
             $this->restTemplate->setToken($announcement->getAuthentication());
 
             return $this->restTemplate->get('order/server/api/events/results/'.$announcement->getEventName());
+        });
+    }
+
+
+    /** {@inheritDoc} */
+    public function postRefundRequest(InitiateRefundRequest $refundRequest, string $transactionId, string $requestId): string
+    {
+        return $this->performAction(function () use ($refundRequest, $transactionId, $requestId) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+            $this->restTemplate->setHeader('request-id', $requestId);
+
+            return $this->restTemplate->post('order/server/api/v2/refund/transactions/'.$transactionId.'/refunds', $refundRequest);
+        });
+    }
+
+    /** {@inheritDoc} */
+    public function getRefundRequest(string $transactionId, string $refundId): string
+    {
+        return $this->performAction(function () use (&$transactionId, $refundId) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->get('order/server/api/v2/refund/transactions/'.$transactionId.'/refundable-details/'.$refundId);
+        });
+    }
+
+    /** {@inheritDoc} */
+    public function getRefundableDetails(string $transactionId): string
+    {
+        return $this->performAction(function () use (&$transactionId) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->get('order/server/api/v2/refund/transactions/'.$transactionId.'/refundable-details');
         });
     }
 
