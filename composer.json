@@ -22,7 +22,7 @@
     "require": {
         "php": ">= 7.3",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^7.8",
+        "guzzlehttp/guzzle": "^7.5",
         "netresearch/jsonmapper": "^4.0"
     },
     "require-dev": {
