@@ -30,7 +30,8 @@ abstract class TokenProvider
     final public function getAccessToken()
     {
         $token = $this->getValue(static::ACCESS_TOKEN);
-        $validUntil = $this->getValue(static::ACCESS_TOKEN_VALID_UNTIL);
+        // Passing null to parameter #1 for DateTime is deprecated.
+        $validUntil = $this->getValue(static::ACCESS_TOKEN_VALID_UNTIL) ?: 'now';
         $durationInMillis = $this->getValue(static::ACCESS_TOKEN_DURATION);
 
         return new AccessToken($token, new \DateTime($validUntil), $durationInMillis);
