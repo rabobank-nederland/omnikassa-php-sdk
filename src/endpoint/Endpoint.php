@@ -39,15 +39,16 @@ class Endpoint
     /**
      * Create an instance of the endpoint to connect to the Rabobank OmniKassa.
      *
-     * @param string        $baseURL       the base URL pointing towards the Rabobank OmniKassa environment
-     * @param SigningKey    $signingKey    the secret key used to sign messages
-     * @param TokenProvider $tokenProvider used to store and retrieve token related information to/from
+     * @param string        $baseURL          the base URL pointing towards the Rabobank OmniKassa environment
+     * @param SigningKey    $signingKey       the secret key used to sign messages
+     * @param TokenProvider $tokenProvider    used to store and retrieve token related information to/from
+     * @param ?string       $partnerReference an optional partner reference
      *
      * @return Endpoint
      */
-    public static function createInstance($baseURL, SigningKey $signingKey, TokenProvider $tokenProvider)
+    public static function createInstance($baseURL, SigningKey $signingKey, TokenProvider $tokenProvider, $partnerReference = null)
     {
-        return new Endpoint(ApiConnector::withGuzzle($baseURL, $tokenProvider), $signingKey);
+        return new Endpoint(ApiConnector::withGuzzle($baseURL, $tokenProvider, $partnerReference), $signingKey);
     }
 
     /**

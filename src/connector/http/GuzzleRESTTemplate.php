@@ -14,6 +14,8 @@ class GuzzleRESTTemplate implements RESTTemplate
     private $client;
     /** @var string */
     private $token;
+    /** @var string */
+    private $userAgent;
 
     /**
      * GuzzleRESTTemplate constructor.
@@ -49,6 +51,16 @@ class GuzzleRESTTemplate implements RESTTemplate
     public function setToken($token)
     {
         $this->token = $token;
+    }
+
+    /**
+     * Set the full user agent.
+     *
+     * @param $userAgent
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->userAgent = $userAgent;
     }
 
     /**
@@ -103,6 +115,13 @@ class GuzzleRESTTemplate implements RESTTemplate
      */
     private function makeRequestHeaders()
     {
-        return ['Authorization' => 'Bearer '.$this->token];
+        $headers = [];
+        if (!empty($this->token)) {
+            $headers['Authorization'] = 'Bearer '.$this->token;
+        }
+        if (!empty($this->userAgent)) {
+            $headers['X-Api-User-Agent'] = $this->userAgent;
+        }
+        return $headers;
     }
 }

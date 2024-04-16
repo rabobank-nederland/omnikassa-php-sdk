@@ -10,6 +10,10 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 
 ## Release notes
 
+### Version 1.17.0
+* Added support for setting the partnerReference id and user agent in the `X-Api-User-Agent` header.
+* Added new optional `shopperBankstatementReference` field to order announcement
+
 ### Version 1.16.0
 * Extended SDK to support refunds.
 

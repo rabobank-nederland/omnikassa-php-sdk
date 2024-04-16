@@ -13,12 +13,19 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementR
  */
 class ApiConnector implements Connector
 {
+    const VERSION = '1.17.0';
+    const SMARTPAY_USER_AGENT = 'RabobankOmnikassaPHPSDK'.'/'.self::VERSION;
+
     /** @var RESTTemplate */
     private $restTemplate;
     /** @var TokenProvider */
     private $tokenProvider;
     /** @var AccessToken */
     private $accessToken;
+    /** @var string */
+    private $partnerReference;
+    /** @var string */
+    private $userAgent;
 
     /**
      * @internal
@@ -36,11 +43,13 @@ class ApiConnector implements Connector
      *
      * @return ApiConnector
      */
-    public static function withGuzzle($baseURL, TokenProvider $tokenProvider)
+    public static function withGuzzle($baseURL, TokenProvider $tokenProvider, $partnerReference = null)
     {
         $curlTemplate = new GuzzleRESTTemplate($baseURL);
 
-        return new ApiConnector($curlTemplate, $tokenProvider);
+        $apiConnector = new ApiConnector($curlTemplate, $tokenProvider);
+        $apiConnector->setPartnerReference($partnerReference);
+        return $apiConnector;
     }
 
     /**
@@ -64,6 +73,7 @@ class ApiConnector implements Connector
     {
         return $this->performAction(function () use (&$order) {
             $this->restTemplate->setToken($this->accessToken->getToken());
+            $this->restTemplate->setUserAgent($this->getUserAgentString());
 
             return $this->restTemplate->post('order/server/api/v2/order', $order);
         });
@@ -172,5 +182,37 @@ class ApiConnector implements Connector
         $accessTokenJson = $this->restTemplate->get('gatekeeper/refresh');
 
         return AccessToken::fromJson($accessTokenJson);
+    }
+
+    public function setUserAgent($userAgent)
+    {
+        $this->userAgent = $userAgent;
+    }
+
+    public function getUserAgent()
+    {
+        return $this->userAgent;
+    }
+
+    public function setPartnerReference($partnerReference)
+    {
+        $this->partnerReference = $partnerReference;
+    }
+
+    public function getPartnerReference()
+    {
+        return $this->partnerReference;
+    }
+
+    private function getUserAgentString()
+    {
+        $userAgentHeader = self::SMARTPAY_USER_AGENT;
+        if (!empty($this->userAgent)) {
+            $userAgentHeader .= ' '.$this->userAgent;
+        }
+        if (!empty($this->partnerReference)) {
+            $userAgentHeader .= ' (pr: '.$this->partnerReference.')';
+        }
+        return $userAgentHeader;
     }
 }
