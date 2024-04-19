@@ -40,14 +40,18 @@ class ApiConnector implements Connector
      * Construct a Guzzle based ApiConnector.
      *
      * @param string $baseURL
+     * @param TokenProvider $tokenProvider
+     * @param ?string $userAgent
+     * @param ?string $partnerReference
      *
      * @return ApiConnector
      */
-    public static function withGuzzle($baseURL, TokenProvider $tokenProvider, $partnerReference = null)
+    public static function withGuzzle($baseURL, TokenProvider $tokenProvider, $userAgent, $partnerReference)
     {
         $curlTemplate = new GuzzleRESTTemplate($baseURL);
 
         $apiConnector = new ApiConnector($curlTemplate, $tokenProvider);
+        $apiConnector->setUserAgent($userAgent);
         $apiConnector->setPartnerReference($partnerReference);
         return $apiConnector;
     }
@@ -199,11 +203,17 @@ class ApiConnector implements Connector
         $this->partnerReference = $partnerReference;
     }
 
+    /**
+     * @return ?string
+     */
     public function getPartnerReference()
     {
         return $this->partnerReference;
     }
 
+    /**
+     * @return ?string
+     */
     private function getUserAgentString()
     {
         $userAgentHeader = self::SMARTPAY_USER_AGENT;
