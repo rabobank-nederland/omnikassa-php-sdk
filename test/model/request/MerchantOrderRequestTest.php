@@ -57,6 +57,7 @@ class MerchantOrderRequestTest extends TestCase
             'paymentBrandMetaData' => [
                 'issuerId' => 'RABONL2U',
             ],
+            'shopperBankstatementReference' => 'bankstatementReference',
         ]);
 
         $actualJson = json_encode($merchantOrderRequest);

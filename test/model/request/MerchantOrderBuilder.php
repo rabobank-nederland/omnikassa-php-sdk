@@ -142,6 +142,7 @@ class MerchantOrderBuilder
             'paymentBrandForce' => PaymentBrandForce::FORCE_ONCE,
             'skipHppResultPage' => false,
             'paymentBrandMetaData' => $paymentBrandMetaData,
+            'shopperBankstatementReference' => 'bankstatementReference'
         ]);
     }
 
@@ -154,16 +155,6 @@ class MerchantOrderBuilder
             'amount' => Money::fromDecimal('EUR', 99.99),
             'merchantReturnURL' => 'http://localhost/',
             'paymentBrandMetaData' => $paymentBrandMetaData,
-        ]);
-    }
-
-    public static function makeMinimalWithShopperBankstementReference()
-    {
-        return MerchantOrder::createFrom([
-            'merchantOrderId' => '100',
-            'amount' => Money::fromDecimal('EUR', 99.99),
-            'merchantReturnURL' => 'http://localhost/',
-            'shopperBankstatementReference' => 'bankstatementReference',
         ]);
     }
 }
