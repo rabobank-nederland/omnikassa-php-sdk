@@ -141,10 +141,7 @@ class Address implements \JsonSerializable
         return $this->countryCode;
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this as $key => $value) {
