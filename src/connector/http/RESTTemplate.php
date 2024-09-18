@@ -15,6 +15,13 @@ interface RESTTemplate
     public function setToken($token);
 
     /**
+     * Set the user agent with the partner reference.
+     *
+     * @param $userAgent
+     */
+    public function setUserAgent($userAgent);
+
+    /**
      * Perform a GET call to the given path.
      *
      * @param string $path

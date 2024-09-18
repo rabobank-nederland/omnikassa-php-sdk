@@ -142,6 +142,7 @@ class MerchantOrderBuilder
             'paymentBrandForce' => PaymentBrandForce::FORCE_ONCE,
             'skipHppResultPage' => false,
             'paymentBrandMetaData' => $paymentBrandMetaData,
+            'shopperBankstatementReference' => 'bankstatementReference'
         ]);
     }
 
