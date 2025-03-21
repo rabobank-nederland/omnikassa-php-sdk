@@ -33,10 +33,10 @@ interface RESTTemplate
     /**
      * Perform a POST call to the given path.
      *
-     * @param string            $path
-     * @param \JsonSerializable $body
+     * @param string                 $path
+     * @param \JsonSerializable|null $body
      *
      * @return string Response body
      */
-    public function post($path, \JsonSerializable $body = null);
+    public function post($path, ?\JsonSerializable $body = null);
 }
