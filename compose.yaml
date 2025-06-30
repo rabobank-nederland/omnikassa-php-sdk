@@ -1,0 +1,13 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: container/Containerfile
+      args:
+        PHP_TAG: '7.4-cli'
+    volumes:
+      - .:/sdk
+    working_dir: /sdk
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1
+
