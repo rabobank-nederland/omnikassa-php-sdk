@@ -1,16 +1,10 @@
 ARG PHP_TAG=7.4-cli
 
-FROM php:${PHP_TAG} AS base
+FROM docker.io/library/php:${PHP_TAG} AS base
 
 RUN apt-get -y update && \
     apt-get -y install wget git unzip && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /tmp/php-install && \
-    cd /tmp/php-install && \
-    wget https://raw.githubusercontent.com/composer/getcomposer.org/fe96bbefbdb83fa3ca6504c8edea4018528a5e66/web/installer -O - -q | php -- --quiet && \
-    mv composer.phar /usr/local/bin/composer && \
-    chmod +x /usr/local/bin/composer && \
-    rm -rf /tmp/php-install
-
+COPY --from=docker.io/library/composer:latest /usr/bin/composer /usr/bin/composer
