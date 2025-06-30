@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
+use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
@@ -171,7 +172,6 @@ class MerchantOrderResult implements SignatureDataProvider
         $this->transactionInfo = $transactionInfo;
     }
 
-    /** {@inheritDoc} */
     public function getSignatureData()
     {
         $data = [
@@ -192,13 +192,13 @@ class MerchantOrderResult implements SignatureDataProvider
         return $data;
     }
 
-        /**
+    /**
      * @param $data \stdClass
      */
     public static function createFromJsonData($data): self
     {
         if (empty($data)) {
-            throw new \InvalidArgumentException('Data expected but missing');
+            throw new InvalidArgumentException('Data expected but missing');
         }
 
         $instance = new self();

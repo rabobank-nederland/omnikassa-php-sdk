@@ -2,32 +2,36 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
-class AccessToken implements \JsonSerializable
+use DateTime;
+use InvalidArgumentException;
+use JsonSerializable;
+
+class AccessToken implements JsonSerializable
 {
     /** @var string */
     private $token;
-    /** @var \DateTime */
+    /** @var DateTime */
     private $validUntil;
     /** @var int */
     private $durationInMillis;
 
     /**
-     * @param string    $token
-     * @param \DateTime $validUntil
-     * @param int       $durationInMillis
+     * @param string   $token
+     * @param DateTime $validUntil
+     * @param int      $durationInMillis
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($token, $validUntil, $durationInMillis)
     {
         if (null === $token) {
-            throw new \InvalidArgumentException('Token cannot be empty');
+            throw new InvalidArgumentException('Token cannot be empty');
         }
         if (null === $validUntil) {
-            throw new \InvalidArgumentException('Valid until cannot be empty');
+            throw new InvalidArgumentException('Valid until cannot be empty');
         }
         if (null === $durationInMillis) {
-            throw new \InvalidArgumentException('Duration in milliseconds cannot be empty');
+            throw new InvalidArgumentException('Duration in milliseconds cannot be empty');
         }
         $this->token = $token;
         $this->validUntil = $validUntil;
@@ -45,7 +49,7 @@ class AccessToken implements \JsonSerializable
     {
         $result = json_decode($json, true);
 
-        return new AccessToken($result['token'], new \DateTime($result['validUntil']), $result['durationInMillis']);
+        return new AccessToken($result['token'], new DateTime($result['validUntil']), $result['durationInMillis']);
     }
 
     /**
@@ -57,7 +61,7 @@ class AccessToken implements \JsonSerializable
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     public function getValidUntil()
     {
@@ -94,7 +98,7 @@ class AccessToken implements \JsonSerializable
     {
         return [
             'token' => $this->token,
-            'validUntil' => $this->validUntil->format(\DateTime::ATOM),
+            'validUntil' => $this->validUntil->format(DateTime::ATOM),
             'durationInMillis' => $this->durationInMillis,
         ];
     }

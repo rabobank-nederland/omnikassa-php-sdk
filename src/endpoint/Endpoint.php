@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\endpoint;
 
+use JsonMapper_Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\ApiConnector;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\Connector;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\TokenProvider;
@@ -55,7 +56,7 @@ class Endpoint
      *
      * @return string an URL the customer shall be redirected to
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      *
      * @deprecated use announce($merchantOrder) instead
      */
@@ -72,7 +73,7 @@ class Endpoint
      * @return MerchantOrderResponse response object containing the URL the customer shall be redirected to
      *                               as well as a unique ID that Rabo Omnikassa assigned to the order
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public function announce(MerchantOrder $merchantOrder)
     {
@@ -88,7 +89,7 @@ class Endpoint
      *
      * @return MerchantOrderStatusResponse
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      * @throws InvalidSignatureException
      */
     public function retrieveAnnouncement(AnnouncementResponse $announcementResponse)
@@ -105,7 +106,7 @@ class Endpoint
      *
      * @return PaymentBrandsResponse
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public function retrievePaymentBrands()
     {

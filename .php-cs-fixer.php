@@ -9,5 +9,8 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
         'array_syntax' => ['syntax' => 'short'],
+        'global_namespace_import' => [
+            'import_classes' => true,
+        ],
     ])
 ;

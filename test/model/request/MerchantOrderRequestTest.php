@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
+use DateTime;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\ProductType;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\VatCategory;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\request\MerchantOrderRequestBuilder;
@@ -225,10 +226,10 @@ class MerchantOrderRequestTest extends TestCase
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     private function createTimestamp()
     {
-        return new \DateTime('2016-12-21T14:13:56+01:00');
+        return new DateTime('2016-12-21T14:13:56+01:00');
     }
 }

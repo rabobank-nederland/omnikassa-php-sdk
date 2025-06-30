@@ -3,6 +3,7 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use JsonMapper;
+use JsonMapper_Exception;
 
 /**
  * Once an order is announced, an instance of this object will be returned.
@@ -21,7 +22,7 @@ class MerchantOrderResponse
      *
      * @param string $json
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public function __construct($json)
     {

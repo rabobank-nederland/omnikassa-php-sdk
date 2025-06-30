@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
+use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\VatCategory;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\request\InitiateRefundRequestBuilder;
@@ -70,7 +71,7 @@ class InitiateRefundRequestTest extends TestCase
      */
     public function testVatCategoryValidation()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         new InitiateRefundRequest(
             Money::fromCents('EUR', 10),

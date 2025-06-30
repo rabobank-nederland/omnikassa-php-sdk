@@ -2,6 +2,8 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
+use InvalidArgumentException;
+use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Address;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\CustomerInformation;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
@@ -11,7 +13,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandMetaData;
 /**
  * Class MerchantOrder.
  */
-class MerchantOrder implements \JsonSerializable
+class MerchantOrder implements JsonSerializable
 {
     /** @var string */
     private $merchantOrderId;
@@ -54,8 +56,7 @@ class MerchantOrder implements \JsonSerializable
      * @param string              $paymentBrandForce
      * @param CustomerInformation $customerInformation
      * @param Address             $billingDetails
-     * @param $initiatingParty
-     * @param bool $skipHppResultPage
+     * @param bool                $skipHppResultPage
      *
      * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
      * createFrom method instead.
@@ -101,7 +102,7 @@ class MerchantOrder implements \JsonSerializable
                 $merchantOrder->$key = $data[(string) $key];
             } else {
                 $properties = implode(', ', array_keys(get_object_vars($merchantOrder)));
-                throw new \InvalidArgumentException("Invalid property {$key} supplied. Valid properties for MerchantOrder are: {$properties}");
+                throw new InvalidArgumentException("Invalid property {$key} supplied. Valid properties for MerchantOrder are: {$properties}");
             }
         }
 
