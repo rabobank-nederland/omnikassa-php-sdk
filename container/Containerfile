@@ -1,0 +1,17 @@
+ARG PHP_TAG=7.4-cli
+ARG PHP_IMAGE_HASH=sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5
+
+FROM php:${PHP_TAG}@${PHP_IMAGE_HASH} AS base
+
+RUN apt-get -y update && \
+    apt-get -y install wget git unzip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /tmp/php-install && \
+    cd /tmp/php-install && \
+    wget https://raw.githubusercontent.com/composer/getcomposer.org/fe96bbefbdb83fa3ca6504c8edea4018528a5e66/web/installer -O - -q | php -- --quiet && \
+    mv composer.phar /usr/local/bin/composer && \
+    chmod +x /usr/local/bin/composer && \
+    rm -rf /tmp/php-install
+

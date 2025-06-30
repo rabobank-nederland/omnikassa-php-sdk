@@ -1,0 +1,14 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: container/Containerfile
+      args:
+        PHP_TAG: '7.4'
+        PHP_IMAGE_HASH: 'sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5'
+    volumes:
+      - .:/sdk
+    working_dir: /sdk
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1
+
