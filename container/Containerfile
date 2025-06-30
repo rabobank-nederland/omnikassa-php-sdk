@@ -1,7 +1,6 @@
 ARG PHP_TAG=7.4-cli
-ARG PHP_IMAGE_HASH=sha256:620a6b9f4d4feef2210026172570465e9d0c1de79766418d3affd09190a7fda5
 
-FROM php:${PHP_TAG}@${PHP_IMAGE_HASH} AS base
+FROM php:${PHP_TAG} AS base
 
 RUN apt-get -y update && \
     apt-get -y install wget git unzip && \
