@@ -12,6 +12,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementR
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\IdealIssuersResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\OrderDetails;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandsResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatureException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
@@ -123,5 +124,17 @@ class Endpoint
         $responseAsJson = $this->connector->getIDEALIssuers();
 
         return new IdealIssuersResponse($responseAsJson);
+    }
+
+    /**
+     * Retrieve order details by orderId.
+     *
+     * @param string $orderId
+     */
+    public function getOrderById($orderId): OrderDetails
+    {
+        $responseAsJson = $this->connector->getOrderById($orderId);
+
+        return new OrderDetails($responseAsJson);
     }
 }

@@ -115,6 +115,22 @@ class ApiConnector implements Connector
     }
 
     /**
+     * Retrieve order details by orderId (v2/orders/{orderId}).
+     *
+     * @param non-empty-string $orderId
+     *
+     * @return string json response body
+     */
+    public function getOrderById($orderId): string
+    {
+        return $this->performAction(function () use ($orderId) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->get('/v2/orders/'.$orderId);
+        });
+    }
+
+    /**
      * Perform a Rabobank OmniKassa related rest action.
      * This first checks the access token and retrieves one if it is invalid, expired or non existing.
      * Then it executes the action.
