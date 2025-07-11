@@ -37,9 +37,9 @@ class Endpoint
     }
 
     /**
-     * Create an instance of the endpoint to connect to the Rabobank OmniKassa.
+     * Create an instance of the endpoint to connect to the Rabo Smart Pay.
      *
-     * @param string        $baseURL          the base URL pointing towards the Rabobank OmniKassa environment
+     * @param string        $baseURL          the base URL pointing towards the Rabo Smart Pay environment
      * @param SigningKey    $signingKey       the secret key used to sign messages
      * @param TokenProvider $tokenProvider    used to store and retrieve token related information to/from
      * @param ?string       $userAgent        an optional user agent value

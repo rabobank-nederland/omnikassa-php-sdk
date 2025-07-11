@@ -126,7 +126,7 @@ class ApiConnector implements Connector
     }
 
     /**
-     * Perform a Rabobank OmniKassa related rest action.
+     * Perform a Rabo Smart Pay related rest action.
      * This first checks the access token and retrieves one if it is invalid, expired or non existing.
      * Then it executes the action.
      *
