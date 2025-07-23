@@ -9,6 +9,8 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
         'array_syntax' => ['syntax' => 'short'],
+        // Needed for PHP 7 compatibility
+        'trailing_comma_in_multiline' => false,
         'global_namespace_import' => [
             'import_classes' => true,
         ],
