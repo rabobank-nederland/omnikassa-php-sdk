@@ -4,6 +4,8 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use PHPUnit\Framework\TestCase;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 
 class MerchantOrderResultTest extends TestCase
 {
@@ -42,7 +44,7 @@ class MerchantOrderResultTest extends TestCase
          * @see Signable::flattenAndJoin()
          */
         $signatureData = $instance->getSignatureData();
-        $signatureData = iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($signatureData)), false);
+        $signatureData = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($signatureData)), false);
         $signatureData = implode(',', $signatureData);
 
         $expectedData = 'order123,1d0a95f4-2589-439b-9562-c50aa19f9caf,2004,COMPLETED,2018-11-25T12:20:03.157+00:00,sigriulhocekme,EUR,10997,EUR,10997,22b36073-57a3-4c3d-9585-87f2e55275a5,IDEAL,AUTHORIZE,SUCCESS,EUR,10997,EUR,10997,2018-03-20T09:12:28Z,2018-03-20T09:12:28Z';
@@ -75,7 +77,7 @@ class MerchantOrderResultTest extends TestCase
          * @see Signable::flattenAndJoin()
          */
         $signatureData = $instance->getSignatureData();
-        $signatureData = iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($signatureData)), false);
+        $signatureData = iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($signatureData)), false);
         $signatureData = implode(',', $signatureData);
 
         $expectedData = 'SHOP1,ORDER1,1,COMPLETED,2000-01-01T00:00:00.000-0200,NONE,EUR,100,EUR,100,1,IDEAL,PAYMENT,SUCCESS,EUR,100,EUR,100,2016-07-28T12:51:15.574+02:00,2016-07-28T12:51:15.574+02:00,2,IDEAL,PAYMENT,SUCCESS,EUR,200,EUR,200,2016-07-28T12:51:15.574+02:00,2016-07-28T12:51:15.574+02:00,3,IDEAL,PAYMENT,SUCCESS,EUR,300,,,2016-07-28T12:51:15.574+02:00,2016-07-28T12:51:15.574+02:00';

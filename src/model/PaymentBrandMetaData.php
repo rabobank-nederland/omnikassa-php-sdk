@@ -2,10 +2,12 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
+use JsonSerializable;
+
 /**
  * This class houses custom data that for example is used to pick a bank using issuerId.
  */
-final class PaymentBrandMetaData implements \JsonSerializable
+final class PaymentBrandMetaData implements JsonSerializable
 {
     private $properties = [];
 

@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
+use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use PHPUnit\Framework\TestCase;
 
@@ -42,7 +43,7 @@ class TransactionInfoTest extends TestCase
 
     public function testInvalidInstantiate()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         new TransactionInfo(null);
     }
 }

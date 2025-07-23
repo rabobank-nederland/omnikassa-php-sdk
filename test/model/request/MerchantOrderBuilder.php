@@ -130,7 +130,7 @@ class MerchantOrderBuilder
 
         return MerchantOrder::createFrom([
             'merchantOrderId' => '100',
-            'description' => 'Order ID: '.'100',
+            'description' => 'Order ID: 100',
             'orderItems' => [OrderItemBuilder::makeCompleteOrderItem()],
             'amount' => Money::fromDecimal('EUR', 99.99),
             'shippingDetail' => $shippingDetail,

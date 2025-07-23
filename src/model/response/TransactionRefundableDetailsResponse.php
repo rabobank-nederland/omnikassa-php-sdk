@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
+use DateTime;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 
 class TransactionRefundableDetailsResponse
@@ -10,7 +11,7 @@ class TransactionRefundableDetailsResponse
     protected $transactionId;
     /** @var Money */
     private $refundableMoney;
-    /** @var \DateTime */
+    /** @var DateTime */
     private $expiryDatetime;
 
     /**
@@ -38,7 +39,7 @@ class TransactionRefundableDetailsResponse
         }
 
         if (isset($data->expiryDatetime)) {
-            $this->expiryDatetime = new \DateTime($data->expiryDatetime);
+            $this->expiryDatetime = new DateTime($data->expiryDatetime);
         }
     }
 
@@ -58,7 +59,7 @@ class TransactionRefundableDetailsResponse
     /**
      * When expired, a refund is no longer possible.
      */
-    public function getExpiryDatetime(): \DateTime
+    public function getExpiryDatetime(): DateTime
     {
         return $this->expiryDatetime;
     }

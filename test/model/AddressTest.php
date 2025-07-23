@@ -71,15 +71,15 @@ class AddressTest extends TestCase
     private function makeFullAddress()
     {
         return Address::createFrom([
-           'firstName' => 'Jan',
-           'middleName' => 'van',
-           'lastName' => 'Veen',
-           'street' => 'Voorbeeldstraat',
-           'postalCode' => '1234AB',
-           'city' => 'Haarlem',
-           'countryCode' => 'NL',
-           'houseNumber' => '5',
-           'houseNumberAddition' => 'a',
+            'firstName' => 'Jan',
+            'middleName' => 'van',
+            'lastName' => 'Veen',
+            'street' => 'Voorbeeldstraat',
+            'postalCode' => '1234AB',
+            'city' => 'Haarlem',
+            'countryCode' => 'NL',
+            'houseNumber' => '5',
+            'houseNumberAddition' => 'a',
         ]);
     }
 

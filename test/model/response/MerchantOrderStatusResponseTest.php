@@ -3,6 +3,7 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use ErrorException;
+use JsonMapper_Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderStatusResponseBuilder;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +33,7 @@ class MerchantOrderStatusResponseTest extends TestCase
     }
 
     /**
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public function testThatInvalidSignatureExceptionIsThrownWhenTheSignaturesDoNotMatch()
     {

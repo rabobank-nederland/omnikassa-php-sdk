@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response;
 
+use JsonMapper_Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderResponse;
 
 class MerchantOrderResponseBuilder
@@ -9,7 +10,7 @@ class MerchantOrderResponseBuilder
     /**
      * @return MerchantOrderResponse
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public static function newInstance()
     {

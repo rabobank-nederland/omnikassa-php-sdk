@@ -2,6 +2,9 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\connector;
 
+use DateTime;
+use DateTimeZone;
+use Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\GuzzleRESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\RESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\AccessToken;
@@ -137,7 +140,7 @@ class ApiConnector implements Connector
             if (null === $this->accessToken || $this->isExpired($this->accessToken)) {
                 $this->updateToken();
             }
-        } catch (\Exception $invalidAccessTokenException) {
+        } catch (Exception $invalidAccessTokenException) {
             $this->updateToken();
         }
     }
@@ -148,8 +151,8 @@ class ApiConnector implements Connector
     private function isExpired(AccessToken $token)
     {
         $validUntil = $token->getValidUntil();
-        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
-        //Difference in seconds
+        $currentDate = new DateTime('now', new DateTimeZone('UTC'));
+        // Difference in seconds
         $difference = $validUntil->getTimestamp() - $currentDate->getTimestamp();
 
         return ($difference / $token->getDurationInSeconds()) < 0.05;
