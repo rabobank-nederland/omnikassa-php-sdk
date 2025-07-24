@@ -35,4 +35,11 @@ interface Connector
      * Retrieve the iDEAL issuers.
      */
     public function getIDEALIssuers(): string;
+
+    /**
+     * Retrieve order details by orderId.
+     *
+     * @return string json response body
+     */
+    public function getOrderById($orderId): string;
 }

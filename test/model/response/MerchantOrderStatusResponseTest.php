@@ -40,6 +40,6 @@ class MerchantOrderStatusResponseTest extends TestCase
         $this->expectException(ErrorException::class);
         $this->expectExceptionMessage('The signature validation of the response failed. Please contact the Rabobank service team.');
 
-        $response = MerchantOrderStatusResponseBuilder::invalidSignatureInstance();
+        MerchantOrderStatusResponseBuilder::invalidSignatureInstance();
     }
 }
