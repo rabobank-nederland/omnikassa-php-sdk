@@ -22,7 +22,7 @@ final class PaymentBrandMetaData implements JsonSerializable
     {
         $object = new self();
         foreach ($data as $key => $value) {
-            if (!is_string($key) || is_array($value) || is_object($value)) {
+            if (!is_string($key) || is_object($value)) {
                 continue;
             }
 
