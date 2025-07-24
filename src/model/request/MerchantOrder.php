@@ -9,6 +9,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\CustomerInformation;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\OrderItem;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandMetaData;
+use PHPUnit\Framework\Assert;
 
 /**
  * Class MerchantOrder.
@@ -43,6 +44,10 @@ class MerchantOrder implements JsonSerializable
     private $skipHppResultPage = false;
     /** @var PaymentBrandMetaData */
     private $paymentBrandMetaData;
+    /** @var bool|null */
+    private $enableCardOnFile = null;
+    /** @var string|null */
+    private $shopperRef = null;
 
     /**
      * @param string              $merchantOrderId
@@ -57,6 +62,8 @@ class MerchantOrder implements JsonSerializable
      * @param CustomerInformation $customerInformation
      * @param Address             $billingDetails
      * @param bool                $skipHppResultPage
+     * @param bool|null           $enableCardOnFile
+     * @param string|null         $shopperRef
      *
      * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
      * createFrom method instead.
@@ -76,7 +83,9 @@ class MerchantOrder implements JsonSerializable
         $billingDetails = null,
         $initiatingParty = null,
         $skipHppResultPage = false,
-        $paymentBrandMetaData = null
+        $paymentBrandMetaData = null,
+        $enableCardOnFile = null,
+        $shopperRef = null
     ) {
         $this->merchantOrderId = $merchantOrderId;
         $this->description = $description;
@@ -92,6 +101,12 @@ class MerchantOrder implements JsonSerializable
         $this->initiatingParty = $initiatingParty;
         $this->skipHppResultPage = $skipHppResultPage;
         $this->paymentBrandMetaData = $paymentBrandMetaData;
+        $this->enableCardOnFile = $enableCardOnFile;
+        $this->shopperRef = $shopperRef;
+
+        if ($this->enableCardOnFile === true){
+            Assert::assertNotEmpty($this->customerInformation->getEmailAddress(),'E-mail address is required for CoF transactions');
+        }
     }
 
     public static function createFrom(array $data)
@@ -232,5 +247,15 @@ class MerchantOrder implements JsonSerializable
     public function getPaymentBrandMetaData(): ?PaymentBrandMetaData
     {
         return $this->paymentBrandMetaData;
+    }
+
+    public function getEnableCardOnFile()
+    {
+        return $this->enableCardOnFile;
+    }
+
+    public function getShopperRef()
+    {
+        return $this->shopperRef;
     }
 }

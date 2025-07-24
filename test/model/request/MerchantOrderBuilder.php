@@ -142,6 +142,8 @@ class MerchantOrderBuilder
             'paymentBrandForce' => PaymentBrandForce::FORCE_ONCE,
             'skipHppResultPage' => false,
             'paymentBrandMetaData' => $paymentBrandMetaData,
+            'enableCardOnFile' => true,
+            'shopperRef' => 'ShopperRef100'
         ]);
     }
 
