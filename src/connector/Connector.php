@@ -42,4 +42,11 @@ interface Connector
      * @return string json response body
      */
     public function getOrderById($orderId): string;
+
+    /**
+     * Retrieve the stored cards of a shopper.
+     *
+     * @return string json response body
+     */
+    public function getStoredCards(string $shopperRef): string;
 }
