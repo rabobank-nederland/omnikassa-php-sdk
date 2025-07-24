@@ -19,22 +19,24 @@ final class StoredCardsBuilder
     private static function getData(): array
     {
         return [
-            new StoredCard([
-                'reference' => '12345677',
-                'last4Digits' => '9853',
-                'brand' => 'MAESTRO',
-                'cardExpiry' => '3261-78',
-                'tokenExpiry' => '4570-45',
-                'status' => 'ACTIVE',
-            ]),
-            new StoredCard([
-                'reference' => '12345688',
-                'last4Digits' => '9800',
-                'brand' => 'MAESTRO',
-                'cardExpiry' => '3261-00',
-                'tokenExpiry' => '4570-11',
-                'status' => 'ACTIVE',
-            ]),
+            'cardOnFileList' => [
+                new StoredCard([
+                    'reference' => '12345677',
+                    'last4Digits' => '9853',
+                    'brand' => 'MAESTRO',
+                    'cardExpiry' => '3261-78',
+                    'tokenExpiry' => '4570-45',
+                    'status' => 'ACTIVE',
+                ]),
+                new StoredCard([
+                    'reference' => '12345688',
+                    'last4Digits' => '9800',
+                    'brand' => 'MAESTRO',
+                    'cardExpiry' => '3261-00',
+                    'tokenExpiry' => '4570-11',
+                    'status' => 'ACTIVE',
+                ]),
+            ],
         ];
     }
 }

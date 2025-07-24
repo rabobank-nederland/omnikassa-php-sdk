@@ -152,6 +152,6 @@ class Endpoint
 
         return array_map(function ($storedCardData) {
             return new StoredCard($storedCardData);
-        }, $data);
+        }, $data['cardOnFileList']);
     }
 }

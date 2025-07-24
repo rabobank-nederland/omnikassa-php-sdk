@@ -104,6 +104,6 @@ class EndPointTest extends TestCase
 
         $result = $this->endpoint->getStoredCards($shopperRef);
 
-        $this->assertEquals(StoredCardsBuilder::newInstance(), $result);
+        $this->assertEquals(StoredCardsBuilder::newInstance()['cardOnFileList'], $result);
     }
 }
