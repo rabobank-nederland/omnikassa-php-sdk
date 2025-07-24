@@ -106,4 +106,12 @@ class EndPointTest extends TestCase
 
         $this->assertEquals(StoredCardsBuilder::newInstance()['cardOnFileList'], $result);
     }
+
+    public function testDeleteStoredCard(): void
+    {
+        $shopperRef = 'ShopperRef123';
+        $storedCardRef = 'StoredCardRef123';
+
+        $this->endpoint->deleteStoredCard($shopperRef, $storedCardRef);
+    }
 }

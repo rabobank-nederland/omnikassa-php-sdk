@@ -141,6 +141,17 @@ class ApiConnector implements Connector
         });
     }
 
+    public function deleteStoredCard(string $shopperRef, string $storedCardRef): void
+    {
+        $this->performAction(function () use ($shopperRef, $storedCardRef) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->delete(sprintf('v1/shopper-payment-details/%s', $storedCardRef), [
+                'shopper reference' => $shopperRef,
+            ]);
+        });
+    }
+
     /**
      * Perform a Rabobank OmniKassa related rest action.
      * This first checks the access token and retrieves one if it is invalid, expired or non existing.

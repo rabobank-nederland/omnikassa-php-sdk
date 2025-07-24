@@ -98,6 +98,22 @@ class GuzzleRESTTemplate implements RESTTemplate
         return $response->getBody()->getContents();
     }
 
+    public function delete($path, array $parameters = [])
+    {
+        try {
+            $response = $this->client->delete($path, [
+                'headers' => $this->makeRequestHeaders(),
+                'query' => $parameters,
+            ]);
+        } catch (ClientException $e) {
+            $response = $e->getResponse()->getBody()->getContents();
+            $message = sprintf('%s [body] %s', $e->getMessage(), $response);
+            throw new ClientException($message, $e->getRequest(), $e->getResponse());
+        }
+
+        return $response->getBody()->getContents();
+    }
+
     /**
      * @return array
      */

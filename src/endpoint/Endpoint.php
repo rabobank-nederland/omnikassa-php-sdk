@@ -154,4 +154,9 @@ class Endpoint
             return new StoredCard($storedCardData);
         }, $data['cardOnFileList']);
     }
+
+    public function deleteStoredCard(string $shopperRef, string $storedCardRef): void
+    {
+        $this->connector->deleteStoredCard($shopperRef, $storedCardRef);
+    }
 }

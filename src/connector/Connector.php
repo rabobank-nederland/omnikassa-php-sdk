@@ -49,4 +49,9 @@ interface Connector
      * @return string json response body
      */
     public function getStoredCards(string $shopperRef): string;
+
+    /**
+     * Delete a stored card of a shopper.
+     */
+    public function deleteStoredCard(string $shopperRef, string $storedCardRef): void;
 }
