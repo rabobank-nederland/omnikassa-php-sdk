@@ -104,8 +104,8 @@ class MerchantOrder implements JsonSerializable
         $this->enableCardOnFile = $enableCardOnFile;
         $this->shopperRef = $shopperRef;
 
-        if ($this->enableCardOnFile === true){
-            Assert::assertNotEmpty($this->customerInformation->getEmailAddress(),'E-mail address is required for CoF transactions');
+        if ($this->enableCardOnFile === true && ($this->customerInformation === null || empty($this->customerInformation->getEmailAddress() === true))) {
+            throw new \Exception('E-mail address is required for CoF transactions');
         }
     }
 
