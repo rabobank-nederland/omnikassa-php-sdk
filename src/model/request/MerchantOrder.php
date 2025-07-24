@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
+use Exception;
 use InvalidArgumentException;
 use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Address;
@@ -9,7 +10,6 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\CustomerInformation;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\OrderItem;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandMetaData;
-use PHPUnit\Framework\Assert;
 
 /**
  * Class MerchantOrder.
@@ -45,9 +45,9 @@ class MerchantOrder implements JsonSerializable
     /** @var PaymentBrandMetaData */
     private $paymentBrandMetaData;
     /** @var bool|null */
-    private $enableCardOnFile = null;
+    private $enableCardOnFile;
     /** @var string|null */
-    private $shopperRef = null;
+    private $shopperRef;
 
     /**
      * @param string              $merchantOrderId
@@ -104,8 +104,8 @@ class MerchantOrder implements JsonSerializable
         $this->enableCardOnFile = $enableCardOnFile;
         $this->shopperRef = $shopperRef;
 
-        if ($this->enableCardOnFile === true && ($this->customerInformation === null || empty($this->customerInformation->getEmailAddress() === true))) {
-            throw new \Exception('E-mail address is required for CoF transactions');
+        if (true === $this->enableCardOnFile && (null === $this->customerInformation || true === empty($this->customerInformation->getEmailAddress()))) {
+            throw new Exception('E-mail address is required for CoF transactions');
         }
     }
 
