@@ -21,7 +21,7 @@ final class StoredCardsBuilder
         return [
             'cardOnFileList' => [
                 new StoredCard([
-                    'reference' => '12345677',
+                    'id' => '12345677',
                     'last4Digits' => '9853',
                     'brand' => 'MAESTRO',
                     'cardExpiry' => '3261-78',
@@ -29,7 +29,7 @@ final class StoredCardsBuilder
                     'status' => 'ACTIVE',
                 ]),
                 new StoredCard([
-                    'reference' => '12345688',
+                    'id' => '12345688',
                     'last4Digits' => '9800',
                     'brand' => 'MAESTRO',
                     'cardExpiry' => '3261-00',

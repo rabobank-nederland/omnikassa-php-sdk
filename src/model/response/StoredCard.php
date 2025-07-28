@@ -9,7 +9,7 @@ use JsonSerializable;
  */
 final class StoredCard implements JsonSerializable
 {
-    private string $reference;
+    private string $id;
     private string $last4Digits;
     private string $brand;
     private string $cardExpiry;
@@ -18,7 +18,7 @@ final class StoredCard implements JsonSerializable
 
     public function __construct(array $data)
     {
-        $this->reference = $data['reference'];
+        $this->id = $data['id'];
         $this->last4Digits = $data['last4Digits'];
         $this->brand = $data['brand'];
         $this->cardExpiry = $data['cardExpiry'];
@@ -26,9 +26,9 @@ final class StoredCard implements JsonSerializable
         $this->status = $data['status'];
     }
 
-    public function getReference(): string
+    public function getId(): string
     {
-        return $this->reference;
+        return $this->id;
     }
 
     public function getLast4Digits(): string
@@ -62,7 +62,7 @@ final class StoredCard implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'reference' => $this->reference,
+            'id' => $this->id,
             'last4Digits' => $this->last4Digits,
             'brand' => $this->brand,
             'cardExpiry' => $this->cardExpiry,

@@ -136,7 +136,7 @@ class ApiConnector implements Connector
             $this->restTemplate->setToken($this->accessToken->getToken());
 
             return $this->restTemplate->get('/v1/shopper-payment-details', [
-                'shopper reference' => $shopperRef,
+                'shopper-ref' => $shopperRef,
             ]);
         });
     }
@@ -147,7 +147,7 @@ class ApiConnector implements Connector
             $this->restTemplate->setToken($this->accessToken->getToken());
 
             return $this->restTemplate->delete(sprintf('v1/shopper-payment-details/%s', $storedCardRef), [
-                'shopper reference' => $shopperRef,
+                'shopper-ref' => $shopperRef,
             ]);
         });
     }
