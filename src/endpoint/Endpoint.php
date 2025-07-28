@@ -14,6 +14,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrder
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\OrderDetails;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandsResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\StoredCard;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatureException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 
@@ -136,5 +137,26 @@ class Endpoint
         $responseAsJson = $this->connector->getOrderById($orderId);
 
         return new OrderDetails($responseAsJson);
+    }
+
+    /**
+     * Retrieve all stored cards of a shopper.
+     *
+     * @return array<StoredCard>
+     */
+    public function getStoredCards(string $shopperRef): array
+    {
+        $responseAsJson = $this->connector->getStoredCards($shopperRef);
+
+        $data = json_decode($responseAsJson, true, JSON_THROW_ON_ERROR);
+
+        return array_map(function ($storedCardData) {
+            return new StoredCard($storedCardData);
+        }, $data['cardOnFileList']);
+    }
+
+    public function deleteStoredCard(string $shopperRef, string $storedCardRef): void
+    {
+        $this->connector->deleteStoredCard($shopperRef, $storedCardRef);
     }
 }

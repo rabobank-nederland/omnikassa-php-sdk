@@ -65,6 +65,8 @@ class MerchantOrderRequestTest extends TestCase
                     ],
                 ],
             ],
+            'enableCardOnFile' => true,
+            'shopperRef' => 'ShopperRef100'
         ]);
 
         $actualJson = json_encode($merchantOrderRequest);

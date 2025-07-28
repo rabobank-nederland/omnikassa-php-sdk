@@ -33,4 +33,13 @@ interface RESTTemplate
      * @return string Response body
      */
     public function post($path, ?JsonSerializable $body = null);
+
+    /**
+     * Perform a DELETE call to the given path.
+     *
+     * @param string $path
+     *
+     * @return string Response body
+     */
+    public function delete($path, array $parameters = []);
 }
