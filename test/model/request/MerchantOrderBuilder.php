@@ -150,7 +150,8 @@ class MerchantOrderBuilder
             'skipHppResultPage' => false,
             'paymentBrandMetaData' => $paymentBrandMetaData,
             'enableCardOnFile' => true,
-            'shopperRef' => 'ShopperRef100'
+            'shopperRef' => 'ShopperRef100',
+            'shopperBankstatementReference' => 'bankstatementReference'
         ]);
     }
 

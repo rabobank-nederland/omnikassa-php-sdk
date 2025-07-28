@@ -6,7 +6,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrderR
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
 
 /**
- * This interface describes the abstract calls you can make to the Rabobank OmniKassa.
+ * This interface describes the abstract calls you can make to the Rabo Smart Pay.
  */
 interface Connector
 {

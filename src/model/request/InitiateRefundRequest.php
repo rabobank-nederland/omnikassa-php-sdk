@@ -52,7 +52,7 @@ class InitiateRefundRequest implements JsonSerializable
         $this->vatCategory = $vatCategoryValue;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'money' => $this->money,

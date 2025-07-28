@@ -5,7 +5,7 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\endpoint\Endpoint;
 
 /**
- * With an instance of this class you can retrieve the order statuses at the Rabobank OmniKassa.
+ * With an instance of this class you can retrieve the order statuses at the Rabo Smart Pay.
  *
  * @see Endpoint::retrieveAnnouncement() To retrieve the order statuses.
  */

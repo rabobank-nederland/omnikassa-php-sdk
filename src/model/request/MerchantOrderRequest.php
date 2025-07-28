@@ -21,10 +21,7 @@ class MerchantOrderRequest implements JsonSerializable
         $this->timestamp = new DateTime('now');
     }
 
-    /**
-     * @return string
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json['timestamp'] = $this->getFormattedTimestamp();
         foreach ($this->merchantOrder->jsonSerialize() as $key => $value) {
