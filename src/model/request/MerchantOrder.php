@@ -23,6 +23,9 @@ class MerchantOrder implements JsonSerializable
     private $orderItems;
     /** @var Money */
     private $amount;
+    /** @var Money|null */
+    private $shippingCost;
+
     /** @var Address */
     private $shippingDetail;
     /** @var Address */
@@ -57,6 +60,7 @@ class MerchantOrder implements JsonSerializable
      * @param CustomerInformation $customerInformation
      * @param Address             $billingDetails
      * @param bool                $skipHppResultPage
+     * @param Money|null          $shippingCost
      *
      * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
      * createFrom method instead.
@@ -76,7 +80,8 @@ class MerchantOrder implements JsonSerializable
         $billingDetails = null,
         $initiatingParty = null,
         $skipHppResultPage = false,
-        $paymentBrandMetaData = null
+        $paymentBrandMetaData = null,
+        $shippingCost = null
     ) {
         $this->merchantOrderId = $merchantOrderId;
         $this->description = $description;
@@ -92,6 +97,7 @@ class MerchantOrder implements JsonSerializable
         $this->initiatingParty = $initiatingParty;
         $this->skipHppResultPage = $skipHppResultPage;
         $this->paymentBrandMetaData = $paymentBrandMetaData;
+        $this->shippingCost = $shippingCost;
     }
 
     public static function createFrom(array $data)
@@ -232,5 +238,10 @@ class MerchantOrder implements JsonSerializable
     public function getPaymentBrandMetaData(): ?PaymentBrandMetaData
     {
         return $this->paymentBrandMetaData;
+    }
+
+    public function getShippingCost(): ?Money
+    {
+        return $this->shippingCost;
     }
 }

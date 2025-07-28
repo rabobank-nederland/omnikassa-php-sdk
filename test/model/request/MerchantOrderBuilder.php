@@ -126,6 +126,12 @@ class MerchantOrderBuilder
 
         $paymentBrandMetaData = PaymentBrandMetaData::createFrom([
             'issuerId' => 'RABONL2U',
+            'fastCheckout' => [
+                'requiredCheckoutFields' => [
+                    'CUSTOMER_INFORMATION',
+                    'BILLING_ADDRESS',
+                ],
+            ],
         ]);
 
         return MerchantOrder::createFrom([
@@ -133,6 +139,7 @@ class MerchantOrderBuilder
             'description' => 'Order ID: 100',
             'orderItems' => [OrderItemBuilder::makeCompleteOrderItem()],
             'amount' => Money::fromDecimal('EUR', 99.99),
+            'shippingCost' => Money::fromDecimal('EUR', 13.37),
             'shippingDetail' => $shippingDetail,
             'billingDetail' => $billingDetail,
             'customerInformation' => $customerInformation,
