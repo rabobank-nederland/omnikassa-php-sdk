@@ -2,13 +2,15 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
+use InvalidArgumentException;
+use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\VatCategory;
 
 /**
  * Class for initiating refund.
  */
-class InitiateRefundRequest implements \JsonSerializable
+class InitiateRefundRequest implements JsonSerializable
 {
     /** @var Money */
     private $money;
@@ -26,11 +28,15 @@ class InitiateRefundRequest implements \JsonSerializable
     {
         switch ($vatCategory) {
             // Aliases.
-            case VatCategory::HIGH: $vatCategoryValue = 'HIGH'; break;
-            case VatCategory::LOW: $vatCategoryValue = 'LOW'; break;
-            case VatCategory::ZERO: $vatCategoryValue = 'ZERO'; break;
-            case VatCategory::NONE: $vatCategoryValue = null; break;
-            // As-is.
+            case VatCategory::HIGH: $vatCategoryValue = 'HIGH';
+                break;
+            case VatCategory::LOW: $vatCategoryValue = 'LOW';
+                break;
+            case VatCategory::ZERO: $vatCategoryValue = 'ZERO';
+                break;
+            case VatCategory::NONE: $vatCategoryValue = null;
+                break;
+                // As-is.
             case 'HIGH':
             case 'LOW':
             case 'ZERO':
@@ -38,7 +44,7 @@ class InitiateRefundRequest implements \JsonSerializable
                 $vatCategoryValue = $vatCategory;
                 break;
             default:
-                throw new \InvalidArgumentException('Invalid $vatCategory given. Either use one of the static values in VatCategory or pass one of: "HIGH", "LOW", "ZERO", null');
+                throw new InvalidArgumentException('Invalid $vatCategory given. Either use one of the static values in VatCategory or pass one of: "HIGH", "LOW", "ZERO", null');
         }
 
         $this->money = $money;

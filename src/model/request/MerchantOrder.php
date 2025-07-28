@@ -2,6 +2,9 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
+use Exception;
+use InvalidArgumentException;
+use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Address;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\CustomerInformation;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
@@ -11,7 +14,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandMetaData;
 /**
  * Class MerchantOrder.
  */
-class MerchantOrder implements \JsonSerializable
+class MerchantOrder implements JsonSerializable
 {
     /** @var string */
     private $merchantOrderId;
@@ -21,6 +24,9 @@ class MerchantOrder implements \JsonSerializable
     private $orderItems;
     /** @var Money */
     private $amount;
+    /** @var Money|null */
+    private $shippingCost;
+
     /** @var Address */
     private $shippingDetail;
     /** @var Address */
@@ -41,6 +47,12 @@ class MerchantOrder implements \JsonSerializable
     private $skipHppResultPage = false;
     /** @var PaymentBrandMetaData */
     private $paymentBrandMetaData;
+
+    /** @var bool|null */
+    private $enableCardOnFile;
+    /** @var string|null */
+    private $shopperRef;
+
     /** @var ?string */
     private $shopperBankstatementReference;
 
@@ -56,9 +68,11 @@ class MerchantOrder implements \JsonSerializable
      * @param string              $paymentBrandForce
      * @param CustomerInformation $customerInformation
      * @param Address             $billingDetails
-     * @param                     $initiatingParty
      * @param bool                $skipHppResultPage
-     * @param                     $paymentBrandMetaData
+     * @param bool|null           $enableCardOnFile
+     * @param string|null         $shopperRef
+     * @param Money|null          $shippingCost
+     * @param bool                $skipHppResultPage
      * @param ?string             $shopperBankstatementReference
      *
      * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
@@ -80,6 +94,9 @@ class MerchantOrder implements \JsonSerializable
         $initiatingParty = null,
         $skipHppResultPage = false,
         $paymentBrandMetaData = null,
+        $enableCardOnFile = null,
+        $shopperRef = null,
+        $shippingCost = null,
         $shopperBankstatementReference = null
     ) {
         $this->merchantOrderId = $merchantOrderId;
@@ -96,7 +113,14 @@ class MerchantOrder implements \JsonSerializable
         $this->initiatingParty = $initiatingParty;
         $this->skipHppResultPage = $skipHppResultPage;
         $this->paymentBrandMetaData = $paymentBrandMetaData;
+        $this->enableCardOnFile = $enableCardOnFile;
+        $this->shopperRef = $shopperRef;
+        $this->shippingCost = $shippingCost;
         $this->shopperBankstatementReference = $shopperBankstatementReference;
+
+        if (true === $this->enableCardOnFile && (null === $this->customerInformation || true === empty($this->customerInformation->getEmailAddress()))) {
+            throw new Exception('E-mail address is required for CoF transactions');
+        }
     }
 
     public static function createFrom(array $data)
@@ -107,7 +131,7 @@ class MerchantOrder implements \JsonSerializable
                 $merchantOrder->$key = $data[(string) $key];
             } else {
                 $properties = implode(', ', array_keys(get_object_vars($merchantOrder)));
-                throw new \InvalidArgumentException("Invalid property {$key} supplied. Valid properties for MerchantOrder are: {$properties}");
+                throw new InvalidArgumentException("Invalid property {$key} supplied. Valid properties for MerchantOrder are: {$properties}");
             }
         }
 
@@ -234,6 +258,21 @@ class MerchantOrder implements \JsonSerializable
     public function getPaymentBrandMetaData(): ?PaymentBrandMetaData
     {
         return $this->paymentBrandMetaData;
+    }
+
+    public function getEnableCardOnFile()
+    {
+        return $this->enableCardOnFile;
+    }
+
+    public function getShopperRef()
+    {
+        return $this->shopperRef;
+    }
+
+    public function getShippingCost(): ?Money
+    {
+        return $this->shippingCost;
     }
 
     public function getShopperBankstatementReference(): ?string

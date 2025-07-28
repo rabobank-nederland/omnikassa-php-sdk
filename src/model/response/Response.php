@@ -3,6 +3,7 @@
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
 use JsonMapper;
+use JsonMapper_Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatureException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignedResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
@@ -19,7 +20,7 @@ abstract class Response extends SignedResponse
      *
      * @param string $json
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      * @throws InvalidSignatureException
      */
     public function __construct($json, SigningKey $signingKey)

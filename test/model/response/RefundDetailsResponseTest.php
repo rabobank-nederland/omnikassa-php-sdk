@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
+use DateTime;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\RefundDetailsResponseBuilder;
 use PHPUnit\Framework\TestCase;
@@ -16,10 +17,10 @@ class RefundDetailsResponseTest extends TestCase
         $this->assertEquals('6fa74559-b95d-4d40-9fa9-e866e3c8e2d2', $responseInstance->getRefundId());
         $this->assertEquals('1e9bf154-e128-42a1-be8d-10f0174b4c3d', $responseInstance->getRefundTransactionId());
 
-        $this->assertInstanceOf(\DateTime::class, $responseInstance->getCreatedAt());
+        $this->assertInstanceOf(DateTime::class, $responseInstance->getCreatedAt());
         $this->assertEquals('2022-06-20T12:37:37+00:00', $responseInstance->getCreatedAt()->format(DATE_ATOM));
 
-        $this->assertInstanceOf(\DateTime::class, $responseInstance->getUpdatedAt());
+        $this->assertInstanceOf(DateTime::class, $responseInstance->getUpdatedAt());
         $this->assertEquals('2022-01-15T12:34:56+00:00', $responseInstance->getUpdatedAt()->format(DATE_ATOM));
 
         $this->assertEquals('LOW', $responseInstance->getVatCategory());

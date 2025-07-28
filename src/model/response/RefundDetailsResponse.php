@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
+use DateTime;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 
 /**
@@ -12,15 +13,15 @@ class RefundDetailsResponse
     /** @var string UUID */
     private $refundId;
     /** @var string|null UUID */
-    private $refundTransactionId = null;
-    /** @var \DateTime */
+    private $refundTransactionId;
+    /** @var DateTime */
     private $createdAt;
-    /** @var \DateTime|null */
-    private $updatedAt = null;
+    /** @var DateTime|null */
+    private $updatedAt;
     /** @var Money */
     private $refundMoney;
     /** @var string|null */
-    private $vatCategory = null;
+    private $vatCategory;
     /** @var string */
     private $paymentBrand;
     /** @var string */
@@ -52,11 +53,11 @@ class RefundDetailsResponse
         }
 
         if (!empty($data->createdAt)) {
-            $this->createdAt = new \DateTime($data->createdAt);
+            $this->createdAt = new DateTime($data->createdAt);
         }
 
         if (!empty($data->updatedAt)) {  // Nullable
-            $this->updatedAt = new \DateTime($data->updatedAt);
+            $this->updatedAt = new DateTime($data->updatedAt);
         }
 
         if (!empty($data->refundMoney)) {
@@ -105,12 +106,12 @@ class RefundDetailsResponse
         return $this->refundTransactionId;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }

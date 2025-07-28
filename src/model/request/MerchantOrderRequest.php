@@ -2,20 +2,23 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
+use DateTime;
+use JsonSerializable;
+
 /**
  * Envelope for the MerchantOrder.
  */
-class MerchantOrderRequest implements \JsonSerializable
+class MerchantOrderRequest implements JsonSerializable
 {
     /** @var MerchantOrder */
     private $merchantOrder;
-    /** @var \DateTime */
+    /** @var DateTime */
     private $timestamp;
 
     public function __construct(MerchantOrder $merchantOrder)
     {
         $this->merchantOrder = $merchantOrder;
-        $this->timestamp = new \DateTime('now');
+        $this->timestamp = new DateTime('now');
     }
 
     public function jsonSerialize(): array
@@ -35,13 +38,13 @@ class MerchantOrderRequest implements \JsonSerializable
      */
     private function getFormattedTimestamp()
     {
-        return $this->timestamp->format(\DateTime::ATOM);
+        return $this->timestamp->format(DateTime::ATOM);
     }
 
     /**
      * This method should only be called from the tests.
      */
-    public function setTimestamp(\DateTime $timestamp)
+    public function setTimestamp(DateTime $timestamp)
     {
         $this->timestamp = $timestamp;
     }

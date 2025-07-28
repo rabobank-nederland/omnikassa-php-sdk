@@ -2,7 +2,9 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing;
 
-class InvalidSignatureException extends \ErrorException
+use ErrorException;
+
+class InvalidSignatureException extends ErrorException
 {
     public function __construct()
     {

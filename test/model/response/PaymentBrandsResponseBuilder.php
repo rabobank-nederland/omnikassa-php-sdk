@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response;
 
+use JsonMapper_Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandsResponse;
 
 class PaymentBrandsResponseBuilder
@@ -9,7 +10,7 @@ class PaymentBrandsResponseBuilder
     /**
      * @return PaymentBrandsResponse
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public static function newInstance()
     {
@@ -19,7 +20,7 @@ class PaymentBrandsResponseBuilder
     /**
      * @return PaymentBrandsResponse
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public static function newInstanceAsJson()
     {

@@ -2,10 +2,13 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
+use InvalidArgumentException;
+use JsonSerializable;
+
 /**
  * Class CustomerInformation.
  */
-class CustomerInformation implements \JsonSerializable
+class CustomerInformation implements JsonSerializable
 {
     /** @var string */
     private $emailAddress;
@@ -49,7 +52,7 @@ class CustomerInformation implements \JsonSerializable
                 $customerInformation->$key = $data[(string) $key];
             } else {
                 $properties = implode(', ', array_keys(get_object_vars($customerInformation)));
-                throw new \InvalidArgumentException("Invalid property {$key} supplied. Valid properties for CustomerInformation are: {$properties}");
+                throw new InvalidArgumentException("Invalid property {$key} supplied. Valid properties for CustomerInformation are: {$properties}");
             }
         }
 

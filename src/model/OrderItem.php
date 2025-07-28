@@ -2,10 +2,13 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
+use InvalidArgumentException;
+use JsonSerializable;
+
 /**
  * Class OrderItem.
  */
-class OrderItem implements \JsonSerializable
+class OrderItem implements JsonSerializable
 {
     /** @var string */
     private $id;
@@ -54,7 +57,7 @@ class OrderItem implements \JsonSerializable
                 $orderItem->$key = $data[(string) $key];
             } else {
                 $properties = implode(', ', array_keys(get_object_vars($orderItem)));
-                throw new \InvalidArgumentException("Invalid property {$key} supplied. Valid properties for OrderItem are: {$properties}");
+                throw new InvalidArgumentException("Invalid property {$key} supplied. Valid properties for OrderItem are: {$properties}");
             }
         }
 
