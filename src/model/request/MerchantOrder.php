@@ -60,7 +60,7 @@ class MerchantOrder implements JsonSerializable
      * @param CustomerInformation $customerInformation
      * @param Address             $billingDetails
      * @param bool                $skipHppResultPage
-     * @param Money               $shippingCost
+     * @param Money|null          $shippingCost
      *
      * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
      * createFrom method instead.
