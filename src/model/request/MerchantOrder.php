@@ -47,10 +47,14 @@ class MerchantOrder implements JsonSerializable
     private $skipHppResultPage = false;
     /** @var PaymentBrandMetaData */
     private $paymentBrandMetaData;
+
     /** @var bool|null */
     private $enableCardOnFile;
     /** @var string|null */
     private $shopperRef;
+
+    /** @var ?string */
+    private $shopperBankstatementReference;
 
     /**
      * @param string              $merchantOrderId
@@ -68,6 +72,8 @@ class MerchantOrder implements JsonSerializable
      * @param bool|null           $enableCardOnFile
      * @param string|null         $shopperRef
      * @param Money|null          $shippingCost
+     * @param bool                $skipHppResultPage
+     * @param ?string             $shopperBankstatementReference
      *
      * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
      * createFrom method instead.
@@ -90,7 +96,8 @@ class MerchantOrder implements JsonSerializable
         $paymentBrandMetaData = null,
         $enableCardOnFile = null,
         $shopperRef = null,
-        $shippingCost = null
+        $shippingCost = null,
+        $shopperBankstatementReference = null
     ) {
         $this->merchantOrderId = $merchantOrderId;
         $this->description = $description;
@@ -109,6 +116,7 @@ class MerchantOrder implements JsonSerializable
         $this->enableCardOnFile = $enableCardOnFile;
         $this->shopperRef = $shopperRef;
         $this->shippingCost = $shippingCost;
+        $this->shopperBankstatementReference = $shopperBankstatementReference;
 
         if (true === $this->enableCardOnFile && (null === $this->customerInformation || true === empty($this->customerInformation->getEmailAddress()))) {
             throw new Exception('E-mail address is required for CoF transactions');
@@ -226,10 +234,7 @@ class MerchantOrder implements JsonSerializable
         return $this->initiatingParty;
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this as $key => $value) {
@@ -268,5 +273,10 @@ class MerchantOrder implements JsonSerializable
     public function getShippingCost(): ?Money
     {
         return $this->shippingCost;
+    }
+
+    public function getShopperBankstatementReference(): ?string
+    {
+        return $this->shopperBankstatementReference;
     }
 }

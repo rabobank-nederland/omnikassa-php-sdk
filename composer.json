@@ -2,7 +2,7 @@
     "name": "rabobank/omnikassa-sdk",
     "type": "library",
     "license": "MIT",
-    "description": "Rabobank OmniKassa SDK for PHP",
+    "description": "Rabobank Smart Pay SDK for PHP",
     "keywords": ["rabobank", "omni", "kassa"],
     "authors": [
         {

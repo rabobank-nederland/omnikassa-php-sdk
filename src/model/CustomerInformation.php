@@ -107,10 +107,7 @@ class CustomerInformation implements JsonSerializable
         return $this->fullName;
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this as $key => $value) {

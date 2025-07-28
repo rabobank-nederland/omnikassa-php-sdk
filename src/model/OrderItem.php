@@ -128,11 +128,7 @@ class OrderItem implements JsonSerializable
         return $this->vatCategory;
     }
 
-    /**
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     *               which is a value of any type other than a resource
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this as $key => $value) {
