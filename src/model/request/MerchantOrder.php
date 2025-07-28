@@ -24,6 +24,9 @@ class MerchantOrder implements JsonSerializable
     private $orderItems;
     /** @var Money */
     private $amount;
+    /** @var Money|null */
+    private $shippingCost;
+
     /** @var Address */
     private $shippingDetail;
     /** @var Address */
@@ -64,6 +67,7 @@ class MerchantOrder implements JsonSerializable
      * @param bool                $skipHppResultPage
      * @param bool|null           $enableCardOnFile
      * @param string|null         $shopperRef
+     * @param Money|null          $shippingCost
      *
      * @deprecated This constructor is deprecated but remains available for backwards compatibility. Use the static
      * createFrom method instead.
@@ -85,7 +89,8 @@ class MerchantOrder implements JsonSerializable
         $skipHppResultPage = false,
         $paymentBrandMetaData = null,
         $enableCardOnFile = null,
-        $shopperRef = null
+        $shopperRef = null,
+        $shippingCost = null
     ) {
         $this->merchantOrderId = $merchantOrderId;
         $this->description = $description;
@@ -103,6 +108,7 @@ class MerchantOrder implements JsonSerializable
         $this->paymentBrandMetaData = $paymentBrandMetaData;
         $this->enableCardOnFile = $enableCardOnFile;
         $this->shopperRef = $shopperRef;
+        $this->shippingCost = $shippingCost;
 
         if (true === $this->enableCardOnFile && (null === $this->customerInformation || true === empty($this->customerInformation->getEmailAddress()))) {
             throw new Exception('E-mail address is required for CoF transactions');
@@ -257,5 +263,10 @@ class MerchantOrder implements JsonSerializable
     public function getShopperRef()
     {
         return $this->shopperRef;
+    }
+
+    public function getShippingCost(): ?Money
+    {
+        return $this->shippingCost;
     }
 }
