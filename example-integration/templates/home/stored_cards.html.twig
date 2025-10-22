@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stored Cards - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="cards-container">
+    <div class="cards-header">
+        <h1>Stored Cards</h1>
+        <p>Retrieve stored payment cards for a shopper reference</p>
+        {% if not getStoredCardsAvailable %}
+        <div style="background-color: #fff3cd; color: #856404; padding: 1em; border: 1px solid #ffeaa7; border-radius: 0.5em; margin-top: 1em;">
+            <strong>Warning:</strong> The getStoredCards function is not available on the current git branch/SDK version.
+        </div>
+        {% endif %}
+        {% if not deleteStoredCardAvailable %}
+        <div style="background-color: #f8d7da; color: #721c24; padding: 1em; border: 1px solid #f5c6cb; border-radius: 0.5em; margin-top: 1em;">
+            <strong>Warning:</strong> The deleteStoredCard function is not available on the current git branch/SDK version.
+        </div>
+        {% endif %}
+    </div>
+
+    {% if error is defined and error %}
+    <div style="background-color: #f8d7da; color: #721c24; padding: 1em; border: 1px solid #f5c6cb; border-radius: 0.5em; margin-bottom: 2em;">
+        <strong>Error:</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    {% if success is defined and success %}
+    <div style="background-color: #d4edda; color: #155724; padding: 1em; border: 1px solid #c3e6cb; border-radius: 0.5em; margin-bottom: 2em;">
+        <strong>Success:</strong> {{ success }}
+    </div>
+    {% endif %}
+
+    <div class="form-section">
+        <form method="post">
+            <div class="form-group">
+                <label for="shopperRef" class="form-label">Shopper Reference</label>
+                <input type="text" id="shopperRef" name="shopperRef" class="form-input" placeholder="Enter shopper reference" required>
+            </div>
+            <button type="submit" class="btn-submit">Retrieve Stored Cards</button>
+        </form>
+    </div>
+
+    {% if cards is not empty %}
+        <div class="cards-summary">
+            <h3>Stored Cards Found</h3>
+            <div class="cards-count">{{ cards|length }}</div>
+            <p style="margin-top: 1em; color: #6c757d;">Payment cards stored for this shopper</p>
+        </div>
+
+        <div class="cards-grid">
+        {% for card in cards %}
+            <div class="card-item">
+                <div class="card-type">{{ card.getCardType() }}</div>
+                <div class="card-details">
+                    <div class="card-detail"><strong>Number:</strong> **** **** **** {{ card.getLastFourDigits() }}</div>
+                    <div class="card-detail"><strong>Expiry:</strong> {{ card.getExpiryMonth() }}/{{ card.getExpiryYear() }}</div>
+                    <div class="card-detail"><strong>Reference:</strong> {{ card.getStoredCardRef() }}</div>
+                </div>
+                <form method="post" style="margin-top: 1em;">
+                    <input type="hidden" name="shopperRef" value="{{ shopperRef }}">
+                    <input type="hidden" name="storedCardRef" value="{{ card.getStoredCardRef() }}">
+                    <input type="hidden" name="action" value="delete">
+                    <button type="submit" class="btn" style="background-color: #dc3545; color: white; border-color: #dc3545; padding: 0.5em 1em; font-size: 0.9em;">Delete Card</button>
+                </form>
+            </div>
+        {% endfor %}
+        </div>
+    {% elseif cards is not null %}
+        <div class="no-cards">
+            <h3>No Stored Cards Found</h3>
+            <p>No payment cards are stored for the provided shopper reference.</p>
+        </div>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

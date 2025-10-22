@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Callback - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="callback-container">
+    <div class="callback-header">
+        <h1>OmniKassa Callback</h1>
+        <p>Handling payment status callback</p>
+    </div>
+
+    {% if error %}
+        <div class="error-message">
+            <strong>Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+
+{#    <div class="callback-details">#}
+{#        <div class="callback-header-section">#}
+{#            <div class="callback-title">Callback Parameters</div>#}
+{#        </div>#}
+
+{#        <div class="callback-info">#}
+{#            <div class="info-item">#}
+{#                <div class="info-label">Order ID (from callback)</div>#}
+{#                <div class="info-value">{{ orderId ?: 'Not provided' }}</div>#}
+{#            </div>#}
+{#            <div class="info-item">#}
+{#                <div class="info-label">Order ID (from session)</div>#}
+{#                <div class="info-value">#}
+{#                    {% if sessionOrderId %}#}
+{#                        <a href="{{ path('order_status') }}?orderId={{ sessionOrderId }}" style="color: #007bff; text-decoration: none;">#}
+{#                            {{ sessionOrderId }}#}
+{#                        </a>#}
+{#                    {% else %}#}
+{#                        Not stored#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="info-item">#}
+{#                <div class="info-label">Status</div>#}
+{#                <div class="info-value">{{ status ?: 'Not provided' }}</div>#}
+{#            </div>#}
+{#            <div class="info-item">#}
+{#                <div class="info-label">Signature</div>#}
+{#                <div class="info-value">{{ signature ?: 'Not provided' }}</div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+    {% if orderDetails %}
+        <div class="order-details">
+            <div class="order-header">
+                <div class="order-title">Order #{{ orderDetails.merchantOrderId }}</div>
+                <div class="order-status status-{{ orderDetails.status|lower }}">
+                    {{ orderDetails.status|replace({'_': ' '})|title }}
+                </div>
+            </div>
+
+            <div class="order-info">
+                <div class="info-item">
+                    <div class="info-label">Order ID</div>
+                    <div class="info-value">{{ orderDetails.id }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Merchant Order ID</div>
+                    <div class="info-value">{{ orderDetails.merchantOrderId }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value">{{ orderDetails.status|replace({'_': ' '})|title }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Amount</div>
+                    <div class="info-value">&euro; {{ (orderDetails.totalAmount.amount / 100)|number_format(2) }}</div>
+                </div>
+            </div>
+
+            {% if orderDetails.transactions %}
+                <div class="transactions-section">
+                    <div class="transactions-title">Transactions</div>
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Payment Brand</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Created</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for transaction in orderDetails.transactions %}
+                            <tr>
+                                <td>{{ transaction.id }}</td>
+                                <td>{{ transaction.paymentBrand }}</td>
+                                <td>{{ transaction.type|replace({'_': ' '})|title }}</td>
+                                <td>
+                                    <span class="transaction-status status-{{ transaction.status|lower }}">
+                                        {{ transaction.status|replace({'_': ' '})|title }}
+                                    </span>
+                                </td>
+                                <td>&euro; {{ (transaction.amount.amount / 100)|number_format(2) }}</td>
+                                <td>{{ transaction.createdAt|date('Y-m-d H:i:s') }}</td>
+                                <td>{{ transaction.lastUpdatedAt|date('Y-m-d H:i:s') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    {% elseif announcementResponse %}
+        <div class="callback-details">
+            <div class="callback-header-section">
+                <div class="callback-title">Retrieved Announcement for Order #{{ announcementResponse.orderId }}</div>
+                <div class="callback-status status-{{ announcementResponse.status|lower }}">
+                    {{ announcementResponse.status|replace({'_': ' '})|title }}
+                </div>
+            </div>
+
+            <div class="callback-info">
+                <div class="info-item">
+                    <div class="info-label">Order ID</div>
+                    <div class="info-value">{{ announcementResponse.orderId }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value">{{ announcementResponse.status|replace({'_': ' '})|title }}</div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{{ path('home') }}" class="btn">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

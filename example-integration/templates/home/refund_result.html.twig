@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Refund Result - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="result-container">
+    <div class="result-header">
+        <h1>Refund Initiated</h1>
+        <p>The refund request has been created successfully</p>
+    </div>
+
+    <div class="result-section">
+        <h2>Refund Summary</h2>
+        <div class="order-info">
+            <p><strong>Order ID:</strong> {{ orderId }}</p>
+            <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">Request Created</span></p>
+        </div>
+    </div>
+
+    <div class="result-section">
+        <h2>Refund Request Details</h2>
+        <div class="json-display">
+            <h3>InitiateRefundRequest JSON</h3>
+            <pre>{{ refundRequest }}</pre>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
+        <a href="{{ path('refund') }}" class="btn btn-secondary">Create Another Refund</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Order Status - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="status-container">
+    <div class="status-header">
+        <h1>Order Status</h1>
+        <p>Check the status of your orders</p>
+    </div>
+
+    <div class="status-form">
+        <h2>Check Order Status by ID</h2>
+        <form method="post">
+            <div class="form-group">
+                <label for="orderId">Order ID</label>
+                <input type="text" id="orderId" name="orderId" value="{{ orderId ?: '' }}" placeholder="Enter order ID (e.g., a1b2c3d4e5f6789a)" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Check Status</button>
+        </form>
+    </div>
+
+    {% if cachedOrders %}
+        <div class="section">
+            <h2>Recent Orders</h2>
+            <div class="recent-orders-table-container">
+                <table class="recent-orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Order Total</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in cachedOrders %}
+                        <tr>
+                            <td>{{ order.omnikassaOrderId }}</td>
+                            <td>&euro; {{ (order.orderTotal / 100)|number_format(2) }}</td>
+                            <td>{{ order.timestamp|date('Y-m-d H:i:s') }}</td>
+                            <td>
+                                <a href="{{ path('order_status', {'orderId': order.omnikassaOrderId}) }}" class="btn btn-secondary">Check Status</a>
+                                <a href="{{ path('refund', {'orderId': order.omnikassaOrderId}) }}" class="btn btn-warning">Refund</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <div class="error-message">
+            <strong>Error:</strong> {{ error }}
+        </div>
+    {% endif %}
+
+    {% if orderDetails %}
+        <div class="order-details">
+            <div class="order-header">
+                <div class="order-title">Order #{{ orderDetails.merchantOrderId }}</div>
+                <div class="order-status status-{{ orderDetails.status|lower }}">
+                    {{ orderDetails.status|replace({'_': ' '})|title }}
+                </div>
+            </div>
+
+            <div class="order-info">
+                <div class="info-item">
+                    <div class="info-label">Order ID</div>
+                    <div class="info-value">{{ orderDetails.id }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Merchant Order ID</div>
+                    <div class="info-value">{{ orderDetails.merchantOrderId }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value">{{ orderDetails.status|replace({'_': ' '})|title }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Amount</div>
+                    <div class="info-value">&euro; {{ (orderDetails.totalAmount.amount / 100)|number_format(2) }}</div>
+                </div>
+            </div>
+
+            {% if orderDetails.transactions %}
+                <div class="transactions-section">
+                    <div class="transactions-title">Transactions</div>
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Payment Brand</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Created</th>
+                                <th>Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for transaction in orderDetails.transactions %}
+                            <tr>
+                                <td>{{ transaction.id }}</td>
+                                <td>{{ transaction.paymentBrand }}</td>
+                                <td>{{ transaction.type|replace({'_': ' '})|title }}</td>
+                                <td>
+                                    <span class="transaction-status status-{{ transaction.status|lower }}">
+                                        {{ transaction.status|replace({'_': ' '})|title }}
+                                    </span>
+                                </td>
+                                <td>&euro; {{ (transaction.amount.amount / 100)|number_format(2) }}</td>
+                                <td>{{ transaction.createdAt|date('Y-m-d H:i:s') }}</td>
+                                <td>{{ transaction.lastUpdatedAt|date('Y-m-d H:i:s') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    {% elseif not error %}
+        <div class="no-order">
+            <h3>Enter an Order ID</h3>
+            <p>Use the form above to check the status of an order by entering its ID.</p>
+        </div>
+    {% endif %}
+
+    {% if announcementResponse %}
+        <div class="order-details">
+            <div class="order-header">
+                <div class="order-title">Announcement for Order #{{ announcementResponse.orderId }}</div>
+                <div class="order-status status-{{ announcementResponse.status|lower }}">
+                    {{ announcementResponse.status|replace({'_': ' '})|title }}
+                </div>
+            </div>
+
+            <div class="order-info">
+                <div class="info-item">
+                    <div class="info-label">Order ID</div>
+                    <div class="info-value">{{ announcementResponse.orderId }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Status</div>
+                    <div class="info-value">{{ announcementResponse.status|replace({'_': ' '})|title }}</div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

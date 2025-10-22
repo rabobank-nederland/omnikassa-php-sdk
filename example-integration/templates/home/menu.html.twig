@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% block title %}Menu{% endblock %}
+{% block body %}
+    <h1>SDK Example Menu</h1>
+    <div class="menu-buttons">
+        <a href="{{ path('order_status') }}" class="btn btn-danger">Order Status</a>
+        <a href="{{ path('sample_checkout') }}" class="btn btn-success">Sample Checkout</a>
+        <a href="{{ path('manual_checkout') }}" class="btn btn-success">Manual Checkout</a>
+        <a href="{{ path('payment_brands') }}" class="btn btn-info">Payment Brands</a>
+        <a href="{{ path('ideal_issuers') }}" class="btn" style="background-color: #c2185b; color: white; border-color: #c2185b;">Show iDEAL Issuers</a>
+        <a href="{{ path('callback') }}" class="btn btn-warning">Callback</a>
+        <a href="{{ path('stored_cards') }}" class="btn btn-info">Stored Cards</a>
+        <a href="{{ path('refund') }}" class="btn btn-warning">Refund</a>
+    </div>
+{% endblock %}

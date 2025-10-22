@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}iDEAL Issuers - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="issuers-container">
+    <div class="issuers-header">
+        <h1>iDEAL Issuers</h1>
+        <p>Available banks and payment providers for iDEAL payments</p>
+    </div>
+
+    {% if error is defined and error %}
+    <div style="background-color: #f8d7da; color: #721c24; padding: 1em; border: 1px solid #f5c6cb; border-radius: 0.5em; margin-bottom: 2em;">
+        <strong>Error:</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    {% if issuers is not empty %}
+        <div class="issuers-summary">
+            <h3>Available Payment Providers</h3>
+            <div class="issuers-count">{{ issuers|length }}</div>
+            <p style="margin-top: 1em; color: #6c757d;">Choose from these trusted iDEAL issuers for secure payments</p>
+        </div>
+
+        <div class="issuers-grid">
+        {% for issuer in issuers %}
+            <div class="issuer-card">
+                {% if issuer.logos is not empty and issuer.logos[0] is defined and issuer.logos[0].url is defined and issuer.logos[0].url %}
+                    <img src="{{ issuer.logos[0].url }}" alt="{{ issuer.name }} logo" class="issuer-logo">
+                {% endif %}
+                <div class="issuer-name">{{ issuer.name }}</div>
+                <div class="issuer-id">ID: {{ issuer.id }}</div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-issuers">
+            <h3>No iDEAL Issuers Found</h3>
+            <p>Unable to retrieve the list of available iDEAL issuers at this time. Please try again later.</p>
+        </div>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}
