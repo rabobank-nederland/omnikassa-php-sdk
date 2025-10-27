@@ -2,6 +2,9 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing;
 
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
+
 /**
  * This class is responsible for providing sub classes with signature related functionality like calculating a signature, setting the calculated signature and retrieving the signature related data.
  */
@@ -50,7 +53,7 @@ abstract class Signable implements SignatureDataProvider
 
     private function flatten($input)
     {
-        return iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveArrayIterator($input)), false);
+        return iterator_to_array(new RecursiveIteratorIterator(new RecursiveArrayIterator($input)), false);
     }
 
     private function join($input)

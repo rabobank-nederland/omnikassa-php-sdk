@@ -2,6 +2,9 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\connector;
 
+use DateTime;
+use DateTimeZone;
+use Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\GuzzleRESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\RESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\AccessToken;
@@ -14,12 +17,19 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementR
  */
 class ApiConnector implements Connector
 {
+    public const VERSION = '1.17.0';
+    public const SMARTPAY_USER_AGENT = 'RabobankOmnikassaPHPSDK/'.self::VERSION;
+
     /** @var RESTTemplate */
     private $restTemplate;
     /** @var TokenProvider */
     private $tokenProvider;
     /** @var AccessToken */
     private $accessToken;
+    /** @var string */
+    private $partnerReference;
+    /** @var string */
+    private $userAgent;
 
     /**
      * @internal
@@ -33,15 +43,21 @@ class ApiConnector implements Connector
     /**
      * Construct a Guzzle based ApiConnector.
      *
-     * @param string $baseURL
+     * @param string  $baseURL
+     * @param ?string $userAgent
+     * @param ?string $partnerReference
      *
      * @return ApiConnector
      */
-    public static function withGuzzle($baseURL, TokenProvider $tokenProvider)
+    public static function withGuzzle($baseURL, TokenProvider $tokenProvider, $userAgent, $partnerReference)
     {
         $curlTemplate = new GuzzleRESTTemplate($baseURL);
 
-        return new ApiConnector($curlTemplate, $tokenProvider);
+        $apiConnector = new ApiConnector($curlTemplate, $tokenProvider);
+        $apiConnector->setUserAgent($userAgent);
+        $apiConnector->setPartnerReference($partnerReference);
+
+        return $apiConnector;
     }
 
     /**
@@ -65,6 +81,7 @@ class ApiConnector implements Connector
     {
         return $this->performAction(function () use (&$order) {
             $this->restTemplate->setToken($this->accessToken->getToken());
+            $this->restTemplate->setUserAgent($this->getUserAgentString());
 
             return $this->restTemplate->post('order/server/api/v2/order', $order);
         });
@@ -145,7 +162,45 @@ class ApiConnector implements Connector
     }
 
     /**
-     * Perform a Rabobank OmniKassa related rest action.
+     * Retrieve order details by orderId (v2/orders/{orderId}).
+     *
+     * @param non-empty-string $orderId
+     *
+     * @return string json response body
+     */
+    public function getOrderById($orderId): string
+    {
+        return $this->performAction(function () use ($orderId) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->get('/v2/orders/'.$orderId);
+        });
+    }
+
+    public function getStoredCards(string $shopperRef): string
+    {
+        return $this->performAction(function () use ($shopperRef) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->get('/v1/shopper-payment-details', [
+                'shopper-ref' => $shopperRef,
+            ]);
+        });
+    }
+
+    public function deleteStoredCard(string $shopperRef, string $storedCardRef): void
+    {
+        $this->performAction(function () use ($shopperRef, $storedCardRef) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->delete(sprintf('v1/shopper-payment-details/%s', $storedCardRef), [
+                'shopper-ref' => $shopperRef,
+            ]);
+        });
+    }
+
+    /**
+     * Perform a Rabo Smart Pay related rest action.
      * This first checks the access token and retrieves one if it is invalid, expired or non existing.
      * Then it executes the action.
      *
@@ -170,7 +225,7 @@ class ApiConnector implements Connector
             if (null === $this->accessToken || $this->isExpired($this->accessToken)) {
                 $this->updateToken();
             }
-        } catch (\Exception $invalidAccessTokenException) {
+        } catch (Exception $invalidAccessTokenException) {
             $this->updateToken();
         }
     }
@@ -181,8 +236,8 @@ class ApiConnector implements Connector
     private function isExpired(AccessToken $token)
     {
         $validUntil = $token->getValidUntil();
-        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
-        //Difference in seconds
+        $currentDate = new DateTime('now', new DateTimeZone('UTC'));
+        // Difference in seconds
         $difference = $validUntil->getTimestamp() - $currentDate->getTimestamp();
 
         return ($difference / $token->getDurationInSeconds()) < 0.05;
@@ -205,5 +260,44 @@ class ApiConnector implements Connector
         $accessTokenJson = $this->restTemplate->get('gatekeeper/refresh');
 
         return AccessToken::fromJson($accessTokenJson);
+    }
+
+    public function setUserAgent($userAgent)
+    {
+        $this->userAgent = $userAgent;
+    }
+
+    public function getUserAgent()
+    {
+        return $this->userAgent;
+    }
+
+    public function setPartnerReference($partnerReference)
+    {
+        $this->partnerReference = $partnerReference;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getPartnerReference()
+    {
+        return $this->partnerReference;
+    }
+
+    /**
+     * @return ?string
+     */
+    private function getUserAgentString()
+    {
+        $userAgentHeader = self::SMARTPAY_USER_AGENT;
+        if (!empty($this->userAgent)) {
+            $userAgentHeader .= ' '.$this->userAgent;
+        }
+        if (!empty($this->partnerReference)) {
+            $userAgentHeader .= ' (pr: '.$this->partnerReference.')';
+        }
+
+        return $userAgentHeader;
     }
 }

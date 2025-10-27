@@ -3,6 +3,8 @@
 namespace nl\rabobank\gict\payments_savings\test\omnikassa_sdk\connector;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\ApiConnector;
+use DateTime;
+use DateTimeZone;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\RESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\TokenProvider;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\AccessToken;
@@ -19,6 +21,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\RefundDe
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\TransactionRefundableDetailsResponseBuilder;
 use Phake;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class ApiConnectorTest extends TestCase
 {
@@ -47,10 +50,10 @@ class ApiConnectorTest extends TestCase
         $this->tokenProvider = Phake::mock(TokenProvider::class);
         $this->connector = new ApiConnectorWrapper($this->restTemplate, $this->tokenProvider);
 
-        $utc = new \DateTimeZone('UTC');
-        $this->accessToken = new AccessToken('accessToken1', new \DateTime('+1 day', $utc), 1000);
-        $this->expiredAccessToken = new AccessToken('expiredAccessToken', new \DateTime('-1 day', $utc), 1000);
-        $this->secondAccessToken = new AccessToken('accessToken2', new \DateTime('+30 day', $utc), 1000);
+        $utc = new DateTimeZone('UTC');
+        $this->accessToken = new AccessToken('accessToken1', new DateTime('+1 day', $utc), 1000);
+        $this->expiredAccessToken = new AccessToken('expiredAccessToken', new DateTime('-1 day', $utc), 1000);
+        $this->secondAccessToken = new AccessToken('accessToken2', new DateTime('+30 day', $utc), 1000);
         $this->refreshToken = 'refreshToken';
     }
 
@@ -121,16 +124,16 @@ class ApiConnectorTest extends TestCase
 
         $this->connector->announceMerchantOrder($order);
 
-        //Verify that a new access token is retrieved
+        // Verify that a new access token is retrieved
         Phake::verify($this->restTemplate)->get('gatekeeper/refresh');
 
-        //Verify that the correct token is used to call the API
+        // Verify that the correct token is used to call the API
         Phake::verify($this->restTemplate, Phake::never())->setToken($this->expiredAccessToken->getToken());
         Phake::verify($this->restTemplate)->setToken($this->secondAccessToken->getToken());
 
-        //Verify that the new access token is stored in the token provider
+        // Verify that the new access token is stored in the token provider
         Phake::verify($this->tokenProvider)->setValue(TokenProvider::ACCESS_TOKEN, $this->secondAccessToken->getToken());
-        Phake::verify($this->tokenProvider)->setValue(TokenProvider::ACCESS_TOKEN_VALID_UNTIL, $this->secondAccessToken->getValidUntil()->format(\DateTime::ATOM));
+        Phake::verify($this->tokenProvider)->setValue(TokenProvider::ACCESS_TOKEN_VALID_UNTIL, $this->secondAccessToken->getValidUntil()->format(DateTime::ATOM));
         Phake::verify($this->tokenProvider)->setValue(TokenProvider::ACCESS_TOKEN_DURATION, $this->secondAccessToken->getDurationInMillis());
     }
 
@@ -168,15 +171,15 @@ class ApiConnectorTest extends TestCase
 
         $this->connector->announceMerchantOrder($order);
 
-        //Verify that a new access token is retrieved
+        // Verify that a new access token is retrieved
         Phake::verify($this->restTemplate)->get('gatekeeper/refresh');
 
-        //Verify that the correct token is used to call the API
+        // Verify that the correct token is used to call the API
         Phake::verify($this->restTemplate)->setToken($this->secondAccessToken->getToken());
 
-        //Verify that the new access token is stored in the token provider
+        // Verify that the new access token is stored in the token provider
         Phake::verify($this->tokenProvider)->setValue(TokenProvider::ACCESS_TOKEN, $this->secondAccessToken->getToken());
-        Phake::verify($this->tokenProvider)->setValue(TokenProvider::ACCESS_TOKEN_VALID_UNTIL, $this->secondAccessToken->getValidUntil()->format(\DateTime::ATOM));
+        Phake::verify($this->tokenProvider)->setValue(TokenProvider::ACCESS_TOKEN_VALID_UNTIL, $this->secondAccessToken->getValidUntil()->format(DateTime::ATOM));
         Phake::verify($this->tokenProvider)->setValue(TokenProvider::ACCESS_TOKEN_DURATION, $this->secondAccessToken->getDurationInMillis());
     }
 
@@ -278,7 +281,7 @@ class ApiConnectorTest extends TestCase
 
         if (null !== $accessToken) {
             $token = $accessToken->getToken();
-            $validUntil = $accessToken->getValidUntil()->format(\DateTime::ATOM);
+            $validUntil = $accessToken->getValidUntil()->format(DateTime::ATOM);
             $durationInMillis = $accessToken->getDurationInMillis();
         }
 
@@ -297,6 +300,6 @@ class ApiConnectorTest extends TestCase
         if ('merchant.order.status.changed' === $eventName) {
             return MerchantOrderStatusResponseBuilder::newInstanceAsJson();
         }
-        throw new \RuntimeException('Unknown announcement type');
+        throw new RuntimeException('Unknown announcement type');
     }
 }

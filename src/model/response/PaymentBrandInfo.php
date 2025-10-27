@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response;
 
+use JsonMapper_Exception;
 use JsonSerializable;
 
 /**
@@ -19,7 +20,7 @@ class PaymentBrandInfo implements JsonSerializable
      *
      * @param array $data
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public function __construct($data)
     {
@@ -68,10 +69,7 @@ class PaymentBrandInfo implements JsonSerializable
         $this->status = $status;
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this as $key => $value) {

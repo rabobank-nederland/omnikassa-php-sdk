@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\endpoint;
 
+use JsonMapper_Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\ApiConnector;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\Connector;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\TokenProvider;
@@ -12,9 +13,11 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementR
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\IdealIssuersResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\OrderDetails;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandsResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\RefundDetailsResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\TransactionRefundableDetailsResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\StoredCard;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatureException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 
@@ -40,17 +43,19 @@ class Endpoint
     }
 
     /**
-     * Create an instance of the endpoint to connect to the Rabobank OmniKassa.
+     * Create an instance of the endpoint to connect to the Rabo Smart Pay.
      *
-     * @param string        $baseURL       the base URL pointing towards the Rabobank OmniKassa environment
-     * @param SigningKey    $signingKey    the secret key used to sign messages
-     * @param TokenProvider $tokenProvider used to store and retrieve token related information to/from
+     * @param string        $baseURL          the base URL pointing towards the Rabo Smart Pay environment
+     * @param SigningKey    $signingKey       the secret key used to sign messages
+     * @param TokenProvider $tokenProvider    used to store and retrieve token related information to/from
+     * @param ?string       $userAgent        an optional user agent value
+     * @param ?string       $partnerReference an optional partner reference
      *
      * @return Endpoint
      */
-    public static function createInstance($baseURL, SigningKey $signingKey, TokenProvider $tokenProvider)
+    public static function createInstance($baseURL, SigningKey $signingKey, TokenProvider $tokenProvider, $userAgent = null, $partnerReference = null)
     {
-        return new Endpoint(ApiConnector::withGuzzle($baseURL, $tokenProvider), $signingKey);
+        return new Endpoint(ApiConnector::withGuzzle($baseURL, $tokenProvider, $userAgent, $partnerReference), $signingKey);
     }
 
     /**
@@ -58,7 +63,7 @@ class Endpoint
      *
      * @return string an URL the customer shall be redirected to
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      *
      * @deprecated use announce($merchantOrder) instead
      */
@@ -75,7 +80,7 @@ class Endpoint
      * @return MerchantOrderResponse response object containing the URL the customer shall be redirected to
      *                               as well as a unique ID that Rabo Omnikassa assigned to the order
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public function announce(MerchantOrder $merchantOrder)
     {
@@ -91,7 +96,7 @@ class Endpoint
      *
      * @return MerchantOrderStatusResponse
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      * @throws InvalidSignatureException
      */
     public function retrieveAnnouncement(AnnouncementResponse $announcementResponse)
@@ -153,7 +158,7 @@ class Endpoint
      *
      * @return PaymentBrandsResponse
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public function retrievePaymentBrands()
     {
@@ -170,5 +175,38 @@ class Endpoint
         $responseAsJson = $this->connector->getIDEALIssuers();
 
         return new IdealIssuersResponse($responseAsJson);
+    }
+
+    /**
+     * Retrieve order details by orderId.
+     *
+     * @param string $orderId
+     */
+    public function getOrderById($orderId): OrderDetails
+    {
+        $responseAsJson = $this->connector->getOrderById($orderId);
+
+        return new OrderDetails($responseAsJson);
+    }
+
+    /**
+     * Retrieve all stored cards of a shopper.
+     *
+     * @return array<StoredCard>
+     */
+    public function getStoredCards(string $shopperRef): array
+    {
+        $responseAsJson = $this->connector->getStoredCards($shopperRef);
+
+        $data = json_decode($responseAsJson, true, JSON_THROW_ON_ERROR);
+
+        return array_map(function ($storedCardData) {
+            return new StoredCard($storedCardData);
+        }, $data['cardOnFileList']);
+    }
+
+    public function deleteStoredCard(string $shopperRef, string $storedCardRef): void
+    {
+        $this->connector->deleteStoredCard($shopperRef, $storedCardRef);
     }
 }

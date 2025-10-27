@@ -2,10 +2,12 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
+use JsonSerializable;
+
 /**
  * This class houses custom data that for example is used to pick a bank using issuerId.
  */
-final class PaymentBrandMetaData implements \JsonSerializable
+final class PaymentBrandMetaData implements JsonSerializable
 {
     private $properties = [];
 
@@ -20,7 +22,7 @@ final class PaymentBrandMetaData implements \JsonSerializable
     {
         $object = new self();
         foreach ($data as $key => $value) {
-            if (!is_string($key) || is_array($value) || is_object($value)) {
+            if (!is_string($key) || is_object($value)) {
                 continue;
             }
 
@@ -35,11 +37,7 @@ final class PaymentBrandMetaData implements \JsonSerializable
         return !empty($this->properties);
     }
 
-    /**
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     *               which is a value of any type other than a resource
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this->properties as $key => $value) {

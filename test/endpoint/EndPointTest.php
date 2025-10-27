@@ -14,7 +14,9 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\Announce
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\IdealIssuersResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderStatusResponseBuilder;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\OrderDetailsBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\PaymentBrandsResponseBuilder;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\StoredCardsBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\RefundDetailsResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\TransactionRefundableDetailsResponseBuilder;
 use Phake;
@@ -149,5 +151,35 @@ class EndPointTest extends TestCase
         $result = $this->endpoint->retrieveIDEALIssuers();
 
         $this->assertEquals(IdealIssuersResponseBuilder::newInstance(), $result);
+    }
+
+    public function testGetOrderById(): void
+    {
+        $orderId = 'order123';
+
+        Phake::when($this->connector)->getOrderById($orderId)->thenReturn(OrderDetailsBuilder::newInstanceAsJson());
+
+        $result = $this->endpoint->getOrderById($orderId);
+
+        $this->assertEquals(OrderDetailsBuilder::newInstance(), $result);
+    }
+
+    public function testGetStoredCards(): void
+    {
+        $shopperRef = 'ShopperRef123';
+
+        Phake::when($this->connector)->getStoredCards($shopperRef)->thenReturn(StoredCardsBuilder::newInstanceAsJson());
+
+        $result = $this->endpoint->getStoredCards($shopperRef);
+
+        $this->assertEquals(StoredCardsBuilder::newInstance()['cardOnFileList'], $result);
+    }
+
+    public function testDeleteStoredCard(): void
+    {
+        $shopperRef = 'ShopperRef123';
+        $storedCardRef = 'StoredCardRef123';
+
+        $this->endpoint->deleteStoredCard($shopperRef, $storedCardRef);
     }
 }

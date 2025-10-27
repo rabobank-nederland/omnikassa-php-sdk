@@ -4,6 +4,7 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use JsonSerializable;
 
 /**
  * Guzzle implementation of the RESTTemplate.
@@ -14,6 +15,8 @@ class GuzzleRESTTemplate implements RESTTemplate
     private $client;
     /** @var string */
     private $token;
+    /** @var string */
+    private $userAgent;
 
     /**
      * GuzzleRESTTemplate constructor.
@@ -52,6 +55,14 @@ class GuzzleRESTTemplate implements RESTTemplate
     }
 
     /**
+     * Set the full user agent.
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->userAgent = $userAgent;
+    }
+
+    /**
      * Perform a GET call to the given path.
      *
      * @param string $path
@@ -66,9 +77,13 @@ class GuzzleRESTTemplate implements RESTTemplate
                 'query' => $parameters,
             ]);
         } catch (ClientException $e) {
-            $response = $e->getResponse()->getBody()->getContents();
-            $message = sprintf('%s [body] %s', $e->getMessage(), $response);
-            throw new ClientException($message, $e->getRequest(), $e->getResponse());
+            $response = $e->getResponse();
+            if (null === $response) {
+                throw $e;
+            }
+            $responseBody = $response->getBody()->getContents();
+            $message = sprintf('%s [body] %s', $e->getMessage(), $responseBody);
+            throw new ClientException($message, $e->getRequest(), $response);
         }
 
         return $response->getBody()->getContents();
@@ -77,17 +92,36 @@ class GuzzleRESTTemplate implements RESTTemplate
     /**
      * Perform a POST call to the given path.
      *
-     * @param string            $path
-     * @param \JsonSerializable $body
+     * @param string $path
      *
      * @return string Response body
      */
-    public function post($path, \JsonSerializable $body = null)
+    public function post($path, ?JsonSerializable $body = null)
     {
         try {
             $response = $this->client->post($path, [
                 'headers' => $this->makeRequestHeaders(),
                 'json' => $body,
+            ]);
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            if (null === $response) {
+                throw $e;
+            }
+            $responseBody = $response->getBody()->getContents();
+            $message = sprintf('%s [body] %s', $e->getMessage(), $responseBody);
+            throw new ClientException($message, $e->getRequest(), $response);
+        }
+
+        return $response->getBody()->getContents();
+    }
+
+    public function delete($path, array $parameters = [])
+    {
+        try {
+            $response = $this->client->delete($path, [
+                'headers' => $this->makeRequestHeaders(),
+                'query' => $parameters,
             ]);
         } catch (ClientException $e) {
             $response = $e->getResponse()->getBody()->getContents();
@@ -103,6 +137,14 @@ class GuzzleRESTTemplate implements RESTTemplate
      */
     private function makeRequestHeaders()
     {
-        return ['Authorization' => 'Bearer '.$this->token];
+        $headers = [];
+        if (!empty($this->token)) {
+            $headers['Authorization'] = 'Bearer '.$this->token;
+        }
+        if (!empty($this->userAgent)) {
+            $headers['X-Api-User-Agent'] = $this->userAgent;
+        }
+
+        return $headers;
     }
 }

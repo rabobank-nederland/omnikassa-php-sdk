@@ -7,7 +7,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrderR
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
 
 /**
- * This interface describes the abstract calls you can make to the Rabobank OmniKassa.
+ * This interface describes the abstract calls you can make to the Rabo Smart Pay.
  */
 interface Connector
 {
@@ -57,4 +57,23 @@ interface Connector
      * Retrieve the iDEAL issuers.
      */
     public function getIDEALIssuers(): string;
+
+    /**
+     * Retrieve order details by orderId.
+     *
+     * @return string json response body
+     */
+    public function getOrderById($orderId): string;
+
+    /**
+     * Retrieve the stored cards of a shopper.
+     *
+     * @return string json response body
+     */
+    public function getStoredCards(string $shopperRef): string;
+
+    /**
+     * Delete a stored card of a shopper.
+     */
+    public function deleteStoredCard(string $shopperRef, string $storedCardRef): void;
 }

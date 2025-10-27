@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response;
 
+use JsonMapper_Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatureException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
@@ -11,7 +12,7 @@ class MerchantOrderStatusResponseBuilder
     /**
      * @return MerchantOrderStatusResponse
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      * @throws InvalidSignatureException
      */
     public static function newInstance()
@@ -22,7 +23,7 @@ class MerchantOrderStatusResponseBuilder
     /**
      * @return MerchantOrderStatusResponse
      *
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      * @throws InvalidSignatureException
      */
     public static function invalidSignatureInstance()

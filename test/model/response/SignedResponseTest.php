@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class SignedResponseTest extends TestCase
 {
-    //ROFE-348 Hide the signature key when the trace is printed
+    // ROFE-348 Hide the signature key when the trace is printed
     public function testThatInvalidSignatureDoesNotLogSignatureKey()
     {
         try {

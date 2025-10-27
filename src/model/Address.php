@@ -2,10 +2,13 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
+use InvalidArgumentException;
+use JsonSerializable;
+
 /**
  * Class Address.
  */
-class Address implements \JsonSerializable
+class Address implements JsonSerializable
 {
     /** @var string */
     private $firstName;
@@ -62,7 +65,7 @@ class Address implements \JsonSerializable
                 $address->$key = $data[(string) $key];
             } else {
                 $properties = implode(', ', array_keys(get_object_vars($address)));
-                throw new \InvalidArgumentException("Invalid property {$key} supplied. Valid properties for Address are: {$properties}");
+                throw new InvalidArgumentException("Invalid property {$key} supplied. Valid properties for Address are: {$properties}");
             }
         }
 
@@ -141,10 +144,7 @@ class Address implements \JsonSerializable
         return $this->countryCode;
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $json = [];
         foreach ($this as $key => $value) {

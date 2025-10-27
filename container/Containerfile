@@ -1,0 +1,27 @@
+ARG PHP_TAG=7.4-cli
+
+FROM docker.io/library/php:${PHP_TAG} AS base
+
+RUN apt-get -y update && \
+    apt-get -y install wget git unzip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=docker.io/library/composer:latest /usr/bin/composer /usr/bin/composer
+
+ARG XDEBUG_VERSION=3.1.6
+RUN pecl install xdebug-${XDEBUG_VERSION} \
+	&& docker-php-ext-enable xdebug
+
+COPY <<EOF /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+zend_extension=xdebug.so
+xdebug.var_display_max_children = 256
+xdebug.var_display_max_depth = 8
+xdebug.max_nesting_level = 256
+xdebug.cli_color = 2
+xdebug.output_dir = /tmp/xdebug
+xdebug.mode = develop,debug
+xdebug.start_with_request = yes
+EOF
+
+ENV PATH="$PATH:/sdk/vendor/bin"

@@ -2,9 +2,10 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model;
 
+use JsonSerializable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SignatureDataProvider;
 
-class Money implements \JsonSerializable, SignatureDataProvider
+class Money implements JsonSerializable, SignatureDataProvider
 {
     /** @var string */
     private $currency;
@@ -80,10 +81,7 @@ class Money implements \JsonSerializable, SignatureDataProvider
         return [$this->currency, $this->amount];
     }
 
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return ['currency' => $this->currency, 'amount' => $this->amount];
     }
