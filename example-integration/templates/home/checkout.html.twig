@@ -101,10 +101,10 @@
 
     <div class="actions">
         <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
-        <form method="post" action="{{ app.request.get('_route') == 'sample_checkout' ? path('sample_checkout_process') : path('manual_checkout_process') }}" style="display: inline;">
+        <form method="post" action="{{ path('sample_checkout_process') }}" style="display: inline;">
             <button class="btn btn-success" type="submit">Place Order</button>
         </form>
-        <form method="post" action="{{ app.request.get('_route') == 'sample_checkout' ? path('fast_checkout_process') : path('fast_manual_checkout_process') }}" style="display: inline;">
+        <form method="post" action="{{ path('fast_checkout_process') }}" style="display: inline;">
             <button class="btn btn-success" type="submit">fast checkout (iDEAL)</button>
         </form>
     </div>

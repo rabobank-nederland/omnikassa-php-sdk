@@ -7,6 +7,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementR
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\OrderDetails;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandInfo;
 
 interface OmniKassaClientInterface
 {
@@ -16,6 +17,7 @@ interface OmniKassaClientInterface
 
     public function getOrderById(string $orderId): OrderDetails;
 
+    /** @return PaymentBrandInfo[] */
     public function getAllPaymentBrands(): array;
 
     public function getAllIdealIssuers(): array;

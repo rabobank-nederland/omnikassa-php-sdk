@@ -42,8 +42,10 @@
                             <td>&euro; {{ (order.orderTotal / 100)|number_format(2) }}</td>
                             <td>{{ order.timestamp|date('Y-m-d H:i:s') }}</td>
                             <td>
-                                <a href="{{ path('order_status', {'orderId': order.omnikassaOrderId}) }}" class="btn btn-secondary">Check Status</a>
-                                <a href="{{ path('refund', {'orderId': order.omnikassaOrderId}) }}" class="btn btn-warning">Refund</a>
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{{ path('order_status', {'orderId': order.omnikassaOrderId}) }}" class="btn btn-secondary btn-sm">Check Status</a>
+                                    <a href="{{ path('refund', {'orderId': order.omnikassaOrderId}) }}" class="btn btn-warning btn-sm">Start Refund</a>
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}

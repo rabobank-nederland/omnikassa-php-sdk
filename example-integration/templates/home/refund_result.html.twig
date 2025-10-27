@@ -12,7 +12,7 @@
     </div>
 
     <div class="result-section">
-        <h2>Refund Summary</h2>
+        <h2>Refund Summary (MOCK! No PHP SDK Implementation yet)</h2>
         <div class="order-info">
             <p><strong>Order ID:</strong> {{ orderId }}</p>
             <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">Request Created</span></p>
@@ -20,10 +20,14 @@
     </div>
 
     <div class="result-section">
-        <h2>Refund Request Details</h2>
-        <div class="json-display">
-            <h3>InitiateRefundRequest JSON</h3>
-            <pre>{{ refundRequest }}</pre>
+        <h2>Refund Status</h2>
+        <div class="order-info">
+            <p><strong>Refund ID:</strong> {{ refundResult.refundId }}</p>
+            <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">{{ refundResult.status }}</span></p>
+            <p><strong>Amount:</strong> €{{ (refundResult.amount / 100)|number_format(2) }}</p>
+            <p><strong>Currency:</strong> {{ refundResult.currency }}</p>
+            <p><strong>Created At:</strong> {{ refundResult.createdAt }}</p>
+            <p><strong>Description:</strong> {{ refundResult.description }}</p>
         </div>
     </div>
 

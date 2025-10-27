@@ -12,9 +12,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class RefundController extends AbstractController
 {
     #[Route('/refund', name: 'refund')]
-    public function refund(): Response
+    public function refund(Request $request): Response
     {
-        return $this->render('home/refund.html.twig');
+        $orderId = $request->query->get('orderId');
+
+        return $this->render('home/refund.html.twig', [
+            'orderId' => $orderId,
+        ]);
     }
 
     #[Route('/refund/process', name: 'refund_process', methods: ['POST'])]
@@ -30,11 +34,20 @@ class RefundController extends AbstractController
             $money = Money::fromCents($currency, (int) $amount);
             $refundRequest = new InitiateRefundRequest($money, $description, $vatCategory);
 
-            $refundJson = json_encode($refundRequest, JSON_PRETTY_PRINT);
+            // For demo purposes, we'll simulate the API call
+            // In a real implementation, you would send this to the OmniKassa API
+            $refundResult = [
+                'refundId' => 'REFUND-'.substr($orderId, -8),
+                'status' => 'COMPLETED',
+                'amount' => $amount,
+                'currency' => $currency,
+                'description' => $description ?: 'Demo refund for testing purposes',
+                'createdAt' => date('Y-m-d H:i:s'),
+            ];
 
             return $this->render('home/refund_result.html.twig', [
                 'orderId' => $orderId,
-                'refundRequest' => $refundJson,
+                'refundResult' => $refundResult,
             ]);
         } catch (\Exception $e) {
             return $this->render('home/refund.html.twig', [

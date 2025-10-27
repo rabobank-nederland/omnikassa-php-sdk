@@ -58,6 +58,14 @@ class StoredCardsController extends AbstractController
             } else {
                 $error = 'Please provide a shopper reference';
             }
+        } elseif ($request->query->has('shopperRef')) {
+            // Handle GET request with shopperRef query parameter
+            $shopperRef = $request->query->get('shopperRef');
+            try {
+                $cards = $this->omniKassaClient->getStoredCards($shopperRef);
+            } catch (\Exception $e) {
+                $error = 'Unable to retrieve stored cards: '.$e->getMessage();
+            }
         }
 
         return $this->render('home/stored_cards.html.twig', [

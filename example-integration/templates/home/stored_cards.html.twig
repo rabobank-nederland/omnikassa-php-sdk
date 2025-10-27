@@ -53,15 +53,15 @@
         <div class="cards-grid">
         {% for card in cards %}
             <div class="card-item">
-                <div class="card-type">{{ card.getCardType() }}</div>
+                <div class="card-type">{{ card.getBrand() }}</div>
                 <div class="card-details">
-                    <div class="card-detail"><strong>Number:</strong> **** **** **** {{ card.getLastFourDigits() }}</div>
-                    <div class="card-detail"><strong>Expiry:</strong> {{ card.getExpiryMonth() }}/{{ card.getExpiryYear() }}</div>
-                    <div class="card-detail"><strong>Reference:</strong> {{ card.getStoredCardRef() }}</div>
+                    <div class="card-detail"><strong>Number:</strong> **** **** **** {{ card.last4Digits }}</div>
+                    <div class="card-detail"><strong>Expiry:</strong> {{ card.cardExpiry|slice(0, 2) }}/{{ '20' ~ card.cardExpiry|slice(2, 2) }}</div>
+                    <div class="card-detail"><strong>Reference:</strong> {{ card.id }}</div>
                 </div>
                 <form method="post" style="margin-top: 1em;">
                     <input type="hidden" name="shopperRef" value="{{ shopperRef }}">
-                    <input type="hidden" name="storedCardRef" value="{{ card.getStoredCardRef() }}">
+                    <input type="hidden" name="storedCardRef" value="{{ card.getId() }}">
                     <input type="hidden" name="action" value="delete">
                     <button type="submit" class="btn" style="background-color: #dc3545; color: white; border-color: #dc3545; padding: 0.5em 1em; font-size: 0.9em;">Delete Card</button>
                 </form>
