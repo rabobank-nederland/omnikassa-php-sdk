@@ -6,6 +6,7 @@ use JsonMapper_Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\ApiConnector;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\Connector;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\TokenProvider;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\InitiateRefundRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrderRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
@@ -14,6 +15,8 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrder
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\OrderDetails;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandsResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\RefundDetailsResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\TransactionRefundableDetailsResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\StoredCard;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\InvalidSignatureException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
@@ -104,6 +107,51 @@ class Endpoint
 
         return new MerchantOrderStatusResponse($announcementDataAsJson, $this->signingKey);
     }
+
+        /**
+         * This function will initiate refund transaction.
+         *
+         * @param InitiateRefundRequest $refundRequest The request for refund
+         * @param string                $transactionId The UUID of transaction for which the refund request is sent
+         * @param string                $requestId     The unique request ID (UUID) of this refund, for your own internal reference
+         *
+         * @return RefundDetailsResponse the response contains refund details, which can be used to update the refund with the latest status
+         */
+        public function initiateRefundTransaction(InitiateRefundRequest $refundRequest, string $transactionId, string $requestId): RefundDetailsResponse
+        {
+            $refundDetailsDataAsJson = $this->connector->postRefundRequest($refundRequest, $transactionId, $requestId);
+
+            return new RefundDetailsResponse($refundDetailsDataAsJson);
+        }
+
+        /**
+         * This function retrieves refund details.
+         *
+         * @param string $transactionId The UUID of transaction for which the refund request was sent
+         * @param string $refundId      The UUID of this refund
+         *
+         * @return RefundDetailsResponse the response contains refund details
+         */
+        public function fetchRefundTransaction(string $transactionId, string $refundId): RefundDetailsResponse
+        {
+            $refundDetailsDataAsJson = $this->connector->getRefundRequest($transactionId, $refundId);
+
+            return new RefundDetailsResponse($refundDetailsDataAsJson);
+        }
+
+        /**
+         * This function will get details for specific refund within transaction.
+         *
+         * @param string $transactionId The UUID of transaction for which the refund request is sent
+         *
+         * @return TransactionRefundableDetailsResponse the response contains refund options, which can be used to create a refund with initiateRefundTransaction()
+         */
+        public function fetchRefundableTransactionDetails(string $transactionId): TransactionRefundableDetailsResponse
+        {
+            $refundableDetailsDataAsJson = $this->connector->getRefundableDetails($transactionId);
+
+            return new TransactionRefundableDetailsResponse($refundableDetailsDataAsJson);
+        }
 
     /**
      * Retrieve the payment brands name and status.
