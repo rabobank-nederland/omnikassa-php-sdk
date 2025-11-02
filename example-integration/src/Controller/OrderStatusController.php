@@ -42,10 +42,9 @@ class OrderStatusController extends AbstractController
             $error = 'Please provide a valid order ID';
         }
 
-        // Get all cached orders
         try {
             $cachedOrders = $this->omniKassaClient->getAllCachedOrders();
-            // Sort by timestamp descending (most recent first)
+
             usort($cachedOrders, function ($a, $b) {
                 return $b['timestamp'] <=> $a['timestamp'];
             });

@@ -7,15 +7,11 @@
 {% block body %}
 <div class="issuers-container">
     <div class="issuers-header">
-        <h1>iDEAL Issuers</h1>
+        <h1 style="color: #c2185b">iDEAL Issuers</h1>
         <p>Available banks and payment providers for iDEAL payments</p>
     </div>
 
-    {% if error is defined and error %}
-    <div style="background-color: #f8d7da; color: #721c24; padding: 1em; border: 1px solid #f5c6cb; border-radius: 0.5em; margin-bottom: 2em;">
-        <strong>Error:</strong> {{ error }}
-    </div>
-    {% endif %}
+    {% include 'includes/error.html.twig' %}
 
     {% if issuers is not empty %}
         <div class="issuers-summary">

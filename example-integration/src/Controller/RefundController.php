@@ -4,6 +4,8 @@ namespace OmniKassa\ExampleIntegration\Controller;
 
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\InitiateRefundRequest;
+use OmniKassa\ExampleIntegration\Service\Service\Contract\OmniKassaClientInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,6 +13,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RefundController extends AbstractController
 {
+    public function __construct(OmniKassaClientInterface $omniKassaClient)
+    {
+        $this->omniKassaClient = $omniKassaClient;
+    }
+
     #[Route('/refund', name: 'refund')]
     public function refund(Request $request): Response
     {
@@ -34,15 +41,16 @@ class RefundController extends AbstractController
             $money = Money::fromCents($currency, (int) $amount);
             $refundRequest = new InitiateRefundRequest($money, $description, $vatCategory);
 
-            // For demo purposes, we'll simulate the API call
-            // In a real implementation, you would send this to the OmniKassa API
+            $requestId = Uuid::uuid4();
+            $refundResponse = $this->omniKassaClient->initiateRefundTransaction($refundRequest, $orderId, $requestId);
+
             $refundResult = [
-                'refundId' => 'REFUND-'.substr($orderId, -8),
-                'status' => 'COMPLETED',
-                'amount' => $amount,
-                'currency' => $currency,
-                'description' => $description ?: 'Demo refund for testing purposes',
-                'createdAt' => date('Y-m-d H:i:s'),
+                'refundId' => $refundResponse->getRefundId(),
+                'status' => $refundResponse->getStatus(),
+                'amount' => $refundResponse->getRefundMoney()->getAmount(),
+                'currency' => $refundResponse->getRefundMoney()->getCurrency(),
+                'description' => $refundResponse->getDescription(),
+                'createdAt' => $refundResponse->getCreatedAt()->format('c'),
             ];
 
             return $this->render('home/refund_result.html.twig', [
@@ -57,6 +65,60 @@ class RefundController extends AbstractController
                 'currency' => $currency,
                 'description' => $description,
                 'vatCategory' => $vatCategory,
+            ]);
+        }
+    }
+
+    #[Route('/refund/fetch/{transactionId}/{refundId}', name: 'fetch_refund_transaction', methods: ['GET'])]
+    public function fetchRefundDetails(string $transactionId, string $refundId): Response
+    {
+        try {
+            $refundDetails = $this->omniKassaClient->fetchRefundTransactionDetails($transactionId, $refundId);
+
+            $refundData = [
+                'refundId' => $refundDetails->getRefundId(),
+                'refundTransactionId' => $refundDetails->getRefundTransactionId(),
+                'createdAt' => $refundDetails->getCreatedAt()->format('c'),
+                'updatedAt' => $refundDetails->getUpdatedAt() ? $refundDetails->getUpdatedAt()->format('c') : null,
+                'amount' => $refundDetails->getRefundMoney()->getAmount(),
+                'currency' => $refundDetails->getRefundMoney()->getCurrency(),
+                'vatCategory' => $refundDetails->getVatCategory(),
+                'paymentBrand' => $refundDetails->getPaymentBrand(),
+                'status' => $refundDetails->getStatus(),
+                'description' => $refundDetails->getDescription(),
+                'transactionId' => $refundDetails->getTransactionId(),
+            ];
+
+            return $this->render('home/fetch_refund_details.html.twig', [
+                'refundData' => $refundData,
+            ]);
+        } catch (\Exception $e) {
+            return $this->render('home/fetch_refund_details.html.twig', [
+                'error' => $e->getMessage(),
+                'orderId' => $transactionId,
+            ]);
+        }
+    }
+
+    #[Route('/refund/fetch-refundable/{transactionId}', name: 'fetch_refundable_transaction_details')]
+    public function fetchRefundableTransactionDetails(string $transactionId): Response
+    {
+        try {
+            $refundableDetails = $this->omniKassaClient->fetchRefundableTransactionDetails($transactionId);
+
+            $refundableData = [
+                'transactionId' => $refundableDetails->getTransactionId(),
+                'refundableAmount' => $refundableDetails->getRefundableMoney()->getAmount(),
+                'refundableCurrency' => $refundableDetails->getRefundableMoney()->getCurrency(),
+                'expiryDatetime' => $refundableDetails->getExpiryDatetime()->format('c'),
+            ];
+
+            return $this->render('home/fetch_refundable_details.html.twig', [
+                'refundableData' => $refundableData,
+            ]);
+        } catch (\Exception $e) {
+            return $this->render('home/fetch_refundable_details.html.twig', [
+                'error' => $e->getMessage(),
             ]);
         }
     }

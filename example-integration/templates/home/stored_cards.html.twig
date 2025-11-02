@@ -7,7 +7,7 @@
 {% block body %}
 <div class="cards-container">
     <div class="cards-header">
-        <h1>Stored Cards</h1>
+        <h1 style="color: #343a40">Stored Cards</h1>
         <p>Retrieve stored payment cards for a shopper reference</p>
         {% if not getStoredCardsAvailable %}
         <div style="background-color: #fff3cd; color: #856404; padding: 1em; border: 1px solid #ffeaa7; border-radius: 0.5em; margin-top: 1em;">
@@ -21,11 +21,7 @@
         {% endif %}
     </div>
 
-    {% if error is defined and error %}
-    <div style="background-color: #f8d7da; color: #721c24; padding: 1em; border: 1px solid #f5c6cb; border-radius: 0.5em; margin-bottom: 2em;">
-        <strong>Error:</strong> {{ error }}
-    </div>
-    {% endif %}
+    {% include 'includes/error.html.twig' %}
 
     {% if success is defined and success %}
     <div style="background-color: #d4edda; color: #155724; padding: 1em; border: 1px solid #c3e6cb; border-radius: 0.5em; margin-bottom: 2em;">
@@ -39,7 +35,7 @@
                 <label for="shopperRef" class="form-label">Shopper Reference</label>
                 <input type="text" id="shopperRef" name="shopperRef" class="form-input" placeholder="Enter shopper reference" required>
             </div>
-            <button type="submit" class="btn-submit">Retrieve Stored Cards</button>
+            <button type="submit" class="btn btn-dark">Retrieve Stored Cards</button>
         </form>
     </div>
 

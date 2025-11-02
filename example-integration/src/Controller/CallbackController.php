@@ -28,14 +28,12 @@ class CallbackController extends AbstractController
         $status = $request->query->get('status');
         $signature = $request->query->get('signature');
 
-        // Retrieve the order ID that was stored in session during order announcement
         $sessionOrderId = $request->getSession()->get('omnikassaOrderId');
 
         $orderDetails = null;
         $announcementResponse = null;
         $error = null;
 
-        // Try to retrieve order details using the session order ID
         if ($sessionOrderId) {
             try {
                 $orderDetails = $this->omniKassaClient->getOrderById($sessionOrderId);
@@ -55,21 +53,6 @@ class CallbackController extends AbstractController
                     }
                 }
             }
-        } elseif ($orderId && $status && $signature) {
-            // Fallback to announcement if no session order ID
-            try {
-                $data = [
-                    'order_id' => $orderId,
-                    'status' => $status,
-                    'signature' => $signature,
-                ];
-                $announcement = new AnnouncementResponse(json_encode($data), new SigningKey($this->signingKey));
-                $announcementResponse = $this->omniKassaClient->retrieveAnnouncement($announcement);
-            } catch (\Exception $e) {
-                $error = 'Unable to retrieve announcement: '.$e->getMessage();
-            }
-        } else {
-            $error = 'Missing required parameters: order_id, status, signature';
         }
 
         return $this->render('home/callback.html.twig', [

@@ -11,11 +11,7 @@
         <p>Handling payment status callback</p>
     </div>
 
-    {% if error %}
-        <div class="error-message">
-            <strong>Error:</strong> {{ error }}
-        </div>
-    {% endif %}
+    {% include 'includes/error.html.twig' %}
 
 {#    <div class="callback-details">#}
 {#        <div class="callback-header-section">#}

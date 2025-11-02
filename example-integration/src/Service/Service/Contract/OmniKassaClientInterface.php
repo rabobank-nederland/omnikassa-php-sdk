@@ -2,12 +2,16 @@
 
 namespace OmniKassa\ExampleIntegration\Service\Service\Contract;
 
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\InitiateRefundRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\OrderDetails;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\PaymentBrandInfo;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\RefundDetailsResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\TransactionRefundableDetailsResponse;
+use Ramsey\Uuid\UuidInterface;
 
 interface OmniKassaClientInterface
 {
@@ -27,4 +31,10 @@ interface OmniKassaClientInterface
     public function deleteStoredCard(string $shopperRef, string $storedCardRef): void;
 
     public function getAllCachedOrders(): array;
+
+    public function initiateRefundTransaction(InitiateRefundRequest $refundRequest, string $transactionId, UuidInterface $requestId): RefundDetailsResponse;
+
+    public function fetchRefundTransactionDetails(string $transactionId, string $refundId): RefundDetailsResponse;
+
+    public function fetchRefundableTransactionDetails(string $transactionId): TransactionRefundableDetailsResponse;
 }

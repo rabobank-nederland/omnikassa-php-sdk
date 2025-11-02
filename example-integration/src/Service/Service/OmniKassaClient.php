@@ -4,15 +4,19 @@ namespace OmniKassa\ExampleIntegration\Service\Service;
 
 use Carbon\CarbonImmutable;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\endpoint\Endpoint;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\InitiateRefundRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\MerchantOrderStatusResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\OrderDetails;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\RefundDetailsResponse;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\TransactionRefundableDetailsResponse;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\signing\SigningKey;
 use OmniKassa\ExampleIntegration\Service\Provider\Contract\TokenProviderInterface;
 use OmniKassa\ExampleIntegration\Service\Service\Contract\OmniKassaClientInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Ramsey\Uuid\UuidInterface;
 
 class OmniKassaClient implements OmniKassaClientInterface
 {
@@ -29,7 +33,6 @@ class OmniKassaClient implements OmniKassaClientInterface
         );
     }
 
-    // Order Announcement
     public function announceOrder(MerchantOrder $merchantOrder): MerchantOrderResponse
     {
         $response = $this->endpoint->announce($merchantOrder);
@@ -50,7 +53,6 @@ class OmniKassaClient implements OmniKassaClientInterface
         return $response;
     }
 
-    // Order Status
     public function retrieveAnnouncement(AnnouncementResponse $announcementResponse): MerchantOrderStatusResponse
     {
         return $this->endpoint->retrieveAnnouncement($announcementResponse);
@@ -61,7 +63,6 @@ class OmniKassaClient implements OmniKassaClientInterface
         return $this->endpoint->getOrderById($orderId);
     }
 
-    // Payment Brands
     public function getAllPaymentBrands(): array
     {
         $response = $this->endpoint->retrievePaymentBrands();
@@ -69,7 +70,6 @@ class OmniKassaClient implements OmniKassaClientInterface
         return $response->getPaymentBrands();
     }
 
-    // iDEAL Issuers
     public function getAllIdealIssuers(): array
     {
         $response = $this->endpoint->retrieveIDEALIssuers();
@@ -77,7 +77,6 @@ class OmniKassaClient implements OmniKassaClientInterface
         return $response->getIssuers();
     }
 
-    // Stored Cards
     public function getStoredCards(string $shopperRef): array
     {
         return $this->endpoint->getStoredCards($shopperRef);
@@ -135,5 +134,20 @@ class OmniKassaClient implements OmniKassaClientInterface
             $indexCacheItem->set(array_values($index));
             $this->cacheItemPool->save($indexCacheItem);
         }
+    }
+
+    public function initiateRefundTransaction(InitiateRefundRequest $refundRequest, string $transactionId, UuidInterface $requestId): RefundDetailsResponse
+    {
+        return $this->endpoint->initiateRefundTransaction($refundRequest, $transactionId, $requestId->toString());
+    }
+
+    public function fetchRefundTransactionDetails(string $transactionId, string $refundId): RefundDetailsResponse
+    {
+        return $this->endpoint->fetchRefundTransaction($transactionId, $refundId);
+    }
+
+    public function fetchRefundableTransactionDetails(string $transactionId): TransactionRefundableDetailsResponse
+    {
+        return $this->endpoint->fetchRefundableTransactionDetails($transactionId);
     }
 }

@@ -11,11 +11,7 @@
         <p>Create a refund request using the InitiateRefundRequest model</p>
     </div>
 
-    {% if error is defined %}
-    <div class="error-message">
-        <strong>Error:</strong> {{ error }}
-    </div>
-    {% endif %}
+    {% include 'includes/error.html.twig' %}
 
     <div class="form-section">
         <h2>Refund Details</h2>

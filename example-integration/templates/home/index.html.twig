@@ -25,18 +25,18 @@
         </div>
 
         <div class="feature-card">
-            <h2 style="color: #28a745; margin-top: 0;">Manual Checkout</h2>
+            <h2 style="color: #007bff; margin-top: 0;">Manual Checkout</h2>
             <p style="margin-bottom: 1.5em;">
                 Fill in customer and shipping details manually to create a custom checkout experience.
                 Enter your own information and see how it integrates with the payment flow.
             </p>
-            <a href="{{ path('manual_checkout') }}" class="btn btn-success">
+            <a href="{{ path('manual_checkout') }}" class="btn btn-primary">
                 Try Manual Checkout →
             </a>
         </div>
 
         <div class="feature-card">
-            <h2 style="color: #dc3545; margin-top: 0;">Order Status</h2>
+            <h2 style="color: #dc3444; margin-top: 0;">Order Status</h2>
             <p style="margin-bottom: 1.5em;">
                 Check the status of your orders using the order ID. View transaction details,
                 payment status, and order information from the OmniKassa system.
@@ -47,36 +47,12 @@
         </div>
 
         <div class="feature-card">
-            <h2 style="color: #17a2b8; margin-top: 0;">Payment Brands</h2>
-            <p style="margin-bottom: 1.5em;">
-                View available payment methods and their current status. This demonstrates
-                how to check which payment brands are active for processing transactions.
-            </p>
-            <a href="{{ path('payment_brands') }}" class="btn btn-info">
-                View Payment Brands →
-            </a>
-        </div>
-
-        <div class="feature-card">
-            <h2 style="color: #c2185b; margin-top: 0;">iDEAL Issuers</h2>
-            <p style="margin-bottom: 1.5em;">
-                Browse available iDEAL banks and payment providers. This shows how to retrieve
-                and display the list of supported iDEAL issuers for customer selection.
-            </p>
-            <a href="{{ path('ideal_issuers') }}" class="btn" style="background-color: #c2185b; color: white; border-color: #c2185b;">
-                View iDEAL Issuers →
-            </a>
-        </div>
-
-
-
-        <div class="feature-card">
-            <h2 style="color: #17a2b8; margin-top: 0;">Stored Cards</h2>
+            <h2 style="color: #343a40; margin-top: 0;">Stored Cards</h2>
             <p style="margin-bottom: 1.5em;">
                 Retrieve stored payment cards for a shopper reference. This demonstrates
                 how to access saved payment methods for recurring transactions.
             </p>
-            <a href="{{ path('stored_cards') }}" class="btn btn-info">
+            <a href="{{ path('stored_cards') }}" class="btn btn-dark">
                 View Stored Cards →
             </a>
         </div>
@@ -89,6 +65,28 @@
             </p>
             <a href="{{ path('refund') }}" class="btn btn-warning">
                 Initiate Refund →
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <h2 style="color: #17a2b8; margin-top: 0;">Payment Brands</h2>
+            <p style="margin-bottom: 1.5em;">
+                View available payment methods and their current status. This demonstrates
+                how to check which payment brands are active for processing transactions.
+            </p>
+            <a href="{{ path('payment_brands') }}" class="btn btn-dark" style="background-color: #17a2b8">
+                View Payment Brands →
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <h2 style="color: #c2185b; margin-top: 0;">iDEAL Issuers</h2>
+            <p style="margin-bottom: 1.5em;">
+                Browse available iDEAL banks and payment providers. This shows how to retrieve
+                and display the list of supported iDEAL issuers for customer selection.
+            </p>
+            <a href="{{ path('ideal_issuers') }}" class="btn btn-secondary" style="background-color: #c2185b">
+                View iDEAL Issuers →
             </a>
         </div>
 

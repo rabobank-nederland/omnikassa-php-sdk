@@ -41,7 +41,6 @@ class ManualCheckoutController extends AbstractController
     #[Route('/manual-checkout/process', name: 'manual_checkout_process', methods: ['POST'])]
     public function processManualCheckout(Request $request): Response
     {
-        // Process form data
         $customer = new CustomerInformation(
             $request->request->get('email'),
             $request->request->get('dateOfBirth'),
@@ -51,7 +50,6 @@ class ManualCheckoutController extends AbstractController
             $request->request->get('fullName')
         );
 
-        // Handle shipping address
         $shipping = new Address(
             $request->request->get('shippingFirstName'),
             $request->request->get('shippingMiddleName'),
@@ -63,14 +61,11 @@ class ManualCheckoutController extends AbstractController
             $request->request->get('shippingHouseNumber')
         );
 
-        // Handle billing address
         $useShippingAsBilling = 'on' === $request->request->get('useShippingAsBilling');
 
         if ($useShippingAsBilling) {
-            // Use shipping address as billing address
             $billing = $shipping;
         } else {
-            // Use separate billing address
             $billing = new Address(
                 $request->request->get('billingFirstName'),
                 $request->request->get('billingMiddleName'),
@@ -83,7 +78,6 @@ class ManualCheckoutController extends AbstractController
             );
         }
 
-        // Process dynamic items
         $items = [];
         $subtotalAmount = 0;
         $itemsData = $request->request->all('items');
@@ -112,10 +106,6 @@ class ManualCheckoutController extends AbstractController
         $paymentBrand = $request->request->get('paymentBrand');
 
         $paymentBrandForce = null;
-        if (!empty($paymentBrand)) {
-            error_log($paymentBrand);
-            $paymentBrandForce = $request->request->get('paymentBrandForce');
-        }
 
         $initiatingParty = $request->request->get('initiatingParty');
         $enableCardOnFile = 'on' === $request->request->get('enableCardOnFile');
@@ -123,7 +113,6 @@ class ManualCheckoutController extends AbstractController
         $shopperReference = $request->request->get('shopperReference');
         $shopperBankStatementReference = $request->request->get('shopperBankStatementReference');
 
-        // Create shipping cost as Money object if provided
         $shippingCostMoney = null;
         if ($shippingCost > 0) {
             $shippingCostMoney = Money::fromCents('EUR', (int) ($shippingCost * 100));
@@ -164,7 +153,7 @@ class ManualCheckoutController extends AbstractController
         try {
             $result = $this->omniKassaClient->announceOrder($merchantOrder);
             $redirectUrl = $result->getRedirectUrl();
-            // Store order ID in session for potential later use
+            // Store order ID in session for later use
             $request->getSession()->set('omnikassaOrderId', $result->getOmnikassaOrderId());
 
             return new RedirectResponse($redirectUrl);

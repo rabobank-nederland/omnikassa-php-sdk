@@ -11,11 +11,7 @@
         <p>Available payment methods and their current status</p>
     </div>
 
-    {% if error is defined and error %}
-    <div style="background-color: #f8d7da; color: #721c24; padding: 1em; border: 1px solid #f5c6cb; border-radius: 0.5em; margin-bottom: 2em;">
-        <strong>Error:</strong> {{ error }}
-    </div>
-    {% endif %}
+    {% include 'includes/error.html.twig' %}
 
     {% if brands is not empty %}
         {% set activeCount = 0 %}

@@ -7,7 +7,7 @@
 {% block body %}
 <div class="status-container">
     <div class="status-header">
-        <h1>Order Status</h1>
+        <h1 style="color: #dc3444">Order Status</h1>
         <p>Check the status of your orders</p>
     </div>
 
@@ -18,7 +18,7 @@
                 <label for="orderId">Order ID</label>
                 <input type="text" id="orderId" name="orderId" value="{{ orderId ?: '' }}" placeholder="Enter order ID (e.g., a1b2c3d4e5f6789a)" required>
             </div>
-            <button type="submit" class="btn btn-primary">Check Status</button>
+            <button type="submit" class="btn btn-danger">Check Status</button>
         </form>
     </div>
 
@@ -55,11 +55,7 @@
         </div>
     {% endif %}
 
-    {% if error %}
-        <div class="error-message">
-            <strong>Error:</strong> {{ error }}
-        </div>
-    {% endif %}
+    {% include 'includes/error.html.twig' %}
 
     {% if orderDetails %}
         <div class="order-details">

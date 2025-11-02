@@ -10,6 +10,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class StoredCardsController extends AbstractController
 {
+    private const DELETE_SUCCESS_MESSAGE = 'Stored card deleted successfully';
+    private const FETCH_ERROR_MESSAGE = 'Unable to retrieve stored cards';
+    private const DELETE_ERROR_MESSAGE = 'Unable to delete stored card';
+    private const MISSING_REFERENCE_MESSAGE = 'Please provide a shopper reference';
+
     private OmniKassaClientInterface $omniKassaClient;
     private bool $getStoredCardsAvailable;
     private bool $deleteStoredCardAvailable;
@@ -17,64 +22,87 @@ class StoredCardsController extends AbstractController
     public function __construct(OmniKassaClientInterface $omniKassaClient)
     {
         $this->omniKassaClient = $omniKassaClient;
-        $this->getStoredCardsAvailable = true; // Assume available since it's in the interface
-        $this->deleteStoredCardAvailable = true; // Assume available since it's in the interface
+        $this->getStoredCardsAvailable = method_exists($omniKassaClient, 'getStoredCards');
+        $this->deleteStoredCardAvailable = method_exists($omniKassaClient, 'deleteStoredCard');
     }
 
     #[Route('/stored-cards', name: 'stored_cards', methods: ['GET', 'POST'])]
     public function storedCards(Request $request): Response
     {
-        $cards = null;
-        $error = null;
-        $success = null;
-        $shopperRef = null;
+        $data = [
+            'error' => null,
+            'success' => null,
+            'cards' => null,
+            'shopperRef' => $request->get('shopperRef') ?: $request->query->get('shopperRef'),
+        ];
 
         if ($request->isMethod('POST')) {
-            $shopperRef = $request->request->get('shopperRef');
-            $storedCardRef = $request->request->get('storedCardRef');
-            $action = $request->request->get('action');
-
-            if ('delete' === $action && !empty($shopperRef) && !empty($storedCardRef)) {
-                try {
-                    $this->omniKassaClient->deleteStoredCard($shopperRef, $storedCardRef);
-                    $success = 'Stored card deleted successfully';
-                    // Re-fetch cards after deletion
-                    $cards = $this->omniKassaClient->getStoredCards($shopperRef);
-                } catch (\Exception $e) {
-                    $error = 'Unable to delete stored card: '.$e->getMessage();
-                    // Still fetch cards on error
-                    try {
-                        $cards = $this->omniKassaClient->getStoredCards($shopperRef);
-                    } catch (\Exception $e2) {
-                        // Ignore
-                    }
-                }
-            } elseif (!empty($shopperRef)) {
-                try {
-                    $cards = $this->omniKassaClient->getStoredCards($shopperRef);
-                } catch (\Exception $e) {
-                    $error = 'Unable to retrieve stored cards: '.$e->getMessage();
-                }
-            } else {
-                $error = 'Please provide a shopper reference';
-            }
-        } elseif ($request->query->has('shopperRef')) {
-            // Handle GET request with shopperRef query parameter
-            $shopperRef = $request->query->get('shopperRef');
-            try {
-                $cards = $this->omniKassaClient->getStoredCards($shopperRef);
-            } catch (\Exception $e) {
-                $error = 'Unable to retrieve stored cards: '.$e->getMessage();
-            }
+            $data = $this->handlePostRequest($request, $data);
+        } else {
+            $this->handleGetRequest($request, $data);
         }
 
-        return $this->render('home/stored_cards.html.twig', [
-            'cards' => $cards,
-            'error' => $error,
-            'success' => $success,
-            'shopperRef' => $shopperRef,
+        return $this->render('home/stored_cards.html.twig', array_merge($data, [
             'getStoredCardsAvailable' => $this->getStoredCardsAvailable,
             'deleteStoredCardAvailable' => $this->deleteStoredCardAvailable,
-        ]);
+        ]));
+    }
+
+    private function handlePostRequest(Request $request, array $data): array
+    {
+        $action = $request->request->get('action');
+        $shopperRef = $request->request->get('shopperRef');
+        $storedCardRef = $request->request->get('storedCardRef');
+
+        if (!$shopperRef) {
+            $data['error'] = self::MISSING_REFERENCE_MESSAGE;
+
+            return $data;
+        }
+
+        if ('delete' === $action && $storedCardRef) {
+            return $this->handleDeleteAction($shopperRef, $storedCardRef, $data);
+        }
+
+        return $this->handleFetchAction($shopperRef, $data);
+    }
+
+    private function handleDeleteAction(string $shopperRef, string $storedCardRef, array $data): array
+    {
+        try {
+            $this->omniKassaClient->deleteStoredCard($shopperRef, $storedCardRef);
+            $data['success'] = self::DELETE_SUCCESS_MESSAGE;
+        } catch (\Exception $e) {
+            $data['error'] = sprintf('%s: %s', self::DELETE_ERROR_MESSAGE, $e->getMessage());
+        }
+
+        // Always try to refetch cards after delete attempt
+        try {
+            $data['cards'] = $this->omniKassaClient->getStoredCards($shopperRef);
+        } catch (\Exception $e) {
+            // Ignore fetch errors when deleting
+        }
+
+        return $data;
+    }
+
+    private function handleFetchAction(string $shopperRef, array $data): array
+    {
+        try {
+            $data['cards'] = $this->omniKassaClient->getStoredCards($shopperRef);
+        } catch (\Exception $e) {
+            $data['error'] = sprintf('%s: %s', self::FETCH_ERROR_MESSAGE, $e->getMessage());
+        }
+
+        return $data;
+    }
+
+    private function handleGetRequest(Request $request, array &$data): void
+    {
+        $shopperRef = $request->query->get('shopperRef');
+
+        if ($shopperRef) {
+            $this->handleFetchAction($shopperRef, $data);
+        }
     }
 }

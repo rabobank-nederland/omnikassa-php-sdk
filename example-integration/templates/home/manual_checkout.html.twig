@@ -6,24 +6,20 @@
 
 {% block javascripts %}
 <script>
-// iDEAL issuer toggle functionality
 function toggleIdealIssuer(paymentBrand) {
     const idealIssuerSelect = document.getElementById('idealIssuer');
-    console.log('toggleIdealIssuer called with:', paymentBrand);
+
     if (paymentBrand === 'IDEAL') {
         idealIssuerSelect.disabled = false;
-        console.log('Enabled iDEAL issuer dropdown');
     } else {
         idealIssuerSelect.disabled = true;
-        idealIssuerSelect.value = ''; // Clear selection when not iDEAL
-        console.log('Disabled iDEAL issuer dropdown');
+        idealIssuerSelect.value = '';
     }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
     let itemIndex = 2; // Start from 2 since we have 2 default items
 
-    // Function to calculate item total
     function calculateItemTotal(row) {
         const quantity = parseFloat(row.querySelector('input[name*="[quantity]"]').value) || 0;
         const unitPrice = parseFloat(row.querySelector('input[name*="[unitPrice]"]').value) || 0;
@@ -32,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return total;
     }
 
-    // Function to calculate grand total
     function calculateGrandTotal() {
         let subtotal = 0;
         document.querySelectorAll('.cart-item').forEach(row => {
@@ -47,15 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('total-amount').textContent = '€ ' + total.toFixed(2);
     }
 
-    // Add event listeners to existing inputs
     document.querySelectorAll('input[name*="[quantity]"], input[name*="[unitPrice]"]').forEach(input => {
         input.addEventListener('input', calculateGrandTotal);
     });
 
-    // Add event listener for shipping cost
     document.getElementById('shipping-cost').addEventListener('input', calculateGrandTotal);
 
-    // Add item button
     document.getElementById('add-item-btn').addEventListener('click', function() {
         const tbody = document.getElementById('cart-items');
         const subtotalRow = document.getElementById('subtotal-row');
@@ -82,7 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
         tbody.insertBefore(newRow, subtotalRow);
         itemIndex++;
 
-        // Add event listeners to new inputs
         newRow.querySelectorAll('input[name*="[quantity]"], input[name*="[unitPrice]"]').forEach(input => {
             input.addEventListener('input', calculateGrandTotal);
         });
@@ -90,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
         calculateGrandTotal();
     });
 
-    // Remove item functionality
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-item')) {
             e.target.closest('.cart-item').remove();
@@ -98,12 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Initial calculation
     calculateGrandTotal();
 
-    // Shipping address toggle functionality - REMOVED as we don't have this checkbox anymore
-
-    // Fill example data functionality
     const customerButton = document.getElementById('fill-customer-example-data');
     if (customerButton) {
         customerButton.addEventListener('click', function() {
@@ -118,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Customer example data button not found');
     }
 
-    // Fill shipping example data functionality
     const shippingButton = document.getElementById('fill-shipping-example-data');
     if (shippingButton) {
         shippingButton.addEventListener('click', function() {
@@ -135,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Shipping example data button not found');
     }
 
-    // Billing address toggle functionality
     const useShippingAsBillingCheckbox = document.getElementById('useShippingAsBilling');
     const billingAddressFields = document.getElementById('billingAddressFields');
 
@@ -159,11 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
     useShippingAsBillingCheckbox.addEventListener('change', toggleBillingFields);
 
 
-
-    // Initial state
     toggleBillingFields();
 
-    // Check initial state of iDEAL issuer dropdown
     const initialPaymentBrand = document.getElementById('paymentBrand').value;
     toggleIdealIssuer(initialPaymentBrand);
 });
@@ -173,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
 {% block body %}
 <div class="checkout-container">
     <div class="checkout-header">
-        <h1>Manual Checkout</h1>
+        <h1 style="color: #017bff">Manual Checkout</h1>
         <p>Fill in your customer and shipping details to proceed with the checkout</p>
     </div>
 

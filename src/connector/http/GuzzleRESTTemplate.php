@@ -146,7 +146,7 @@ class GuzzleRESTTemplate implements RESTTemplate
             $headers['X-Api-User-Agent'] = $this->userAgent;
         }
 
-        $headers['X-Request-ID'] = Uuid::uuid4()->toString();
+        $headers['Request-ID'] = Uuid::uuid4()->toString();
 
         return $headers;
     }
