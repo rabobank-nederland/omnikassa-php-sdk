@@ -158,6 +158,8 @@ document.addEventListener('DOMContentLoaded', function() {
         <p>Fill in your customer and shipping details to proceed with the checkout</p>
     </div>
 
+    {% include 'includes/error.html.twig' %}
+
     <form method="post" action="{{ path('manual_checkout_process') }}" id="checkout-form">
         <div class="cart-section">
             <h2>Shopping Cart</h2>

@@ -105,7 +105,10 @@ class ManualCheckoutController extends AbstractController
 
         $paymentBrand = $request->request->get('paymentBrand');
 
-        $paymentBrandForce = null;
+        $paymentBrandForce = $request->request->get('paymentBrandForce');
+        if (empty($paymentBrandForce)) {
+            $paymentBrandForce = null; // Default fallback
+        }
 
         $initiatingParty = $request->request->get('initiatingParty');
         $enableCardOnFile = 'on' === $request->request->get('enableCardOnFile');
@@ -158,18 +161,16 @@ class ManualCheckoutController extends AbstractController
 
             return new RedirectResponse($redirectUrl);
         } catch (\Exception $e) {
-            $subtotalFormatted = number_format($subtotalAmount / 100, 2);
-            $totalFormatted = number_format($totalAmount / 100, 2);
+            // Load payment brands and iDEAL issuers for form redisplay
+            $paymentBrands = $this->omniKassaClient->getAllPaymentBrands();
+            $idealIssuers = $this->omniKassaClient->getAllIdealIssuers();
 
-            return $this->render('home/checkout.html.twig', [
-                'items' => $items,
-                'customer' => $customer,
-                'shipping' => $shipping,
-                'subtotal' => $subtotalFormatted,
-                'shippingCost' => $shippingCost,
-                'total' => $totalFormatted,
+            return $this->render('home/manual_checkout.html.twig', [
                 'error' => 'Unable to process manual checkout: '.$e->getMessage(),
-            ]);
+                'paymentBrands' => $paymentBrands,
+                'idealIssuers' => $idealIssuers,
+                // Preserve form data for user corrections
+            ] + $request->request->all());
         }
     }
 }

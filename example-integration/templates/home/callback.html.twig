@@ -13,39 +13,6 @@
 
     {% include 'includes/error.html.twig' %}
 
-{#    <div class="callback-details">#}
-{#        <div class="callback-header-section">#}
-{#            <div class="callback-title">Callback Parameters</div>#}
-{#        </div>#}
-
-{#        <div class="callback-info">#}
-{#            <div class="info-item">#}
-{#                <div class="info-label">Order ID (from callback)</div>#}
-{#                <div class="info-value">{{ orderId ?: 'Not provided' }}</div>#}
-{#            </div>#}
-{#            <div class="info-item">#}
-{#                <div class="info-label">Order ID (from session)</div>#}
-{#                <div class="info-value">#}
-{#                    {% if sessionOrderId %}#}
-{#                        <a href="{{ path('order_status') }}?orderId={{ sessionOrderId }}" style="color: #007bff; text-decoration: none;">#}
-{#                            {{ sessionOrderId }}#}
-{#                        </a>#}
-{#                    {% else %}#}
-{#                        Not stored#}
-{#                    {% endif %}#}
-{#                </div>#}
-{#            </div>#}
-{#            <div class="info-item">#}
-{#                <div class="info-label">Status</div>#}
-{#                <div class="info-value">{{ status ?: 'Not provided' }}</div>#}
-{#            </div>#}
-{#            <div class="info-item">#}
-{#                <div class="info-label">Signature</div>#}
-{#                <div class="info-value">{{ signature ?: 'Not provided' }}</div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
-
     {% if orderDetails %}
         <div class="order-details">
             <div class="order-header">
@@ -133,7 +100,8 @@
     {% endif %}
 
     <div class="actions">
-        <a href="{{ path('home') }}" class="btn">← Back to Home</a>
+        <a href="{{ path('home') }}" class="btn btn-info">← Back to Home</a>
+        <a href="{{ path('order_status') }}" class="btn btn-danger">Order Status</a>
     </div>
 </div>
 {% endblock %}

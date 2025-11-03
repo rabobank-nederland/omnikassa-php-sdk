@@ -57,6 +57,7 @@ class OrderStatusController extends AbstractController
             'error' => $error,
             'orderId' => $orderId,
             'cachedOrders' => $cachedOrders,
+            'announcementResponse' => null,
         ]);
     }
 
@@ -84,6 +85,9 @@ class OrderStatusController extends AbstractController
         return $this->render('home/order_status.html.twig', [
             'announcementResponse' => $announcementResponse,
             'error' => $error,
+            'orderDetails' => null,
+            'orderId' => null,
+            'cachedOrders' => [],
         ]);
     }
 }

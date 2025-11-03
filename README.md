@@ -10,6 +10,11 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 
 ## Release notes
 
+### Version 1.18.0
+* Extended SDK to support Card On File functions
+* Merged missing refunds features (PR#27)
+* Added example integration with docker setup (separate README in example-integration).
+
 ### Version 1.17.0
 * Added support for setting the partnerReference id and user agent in the `X-Api-User-Agent` header.
 * Added new optional `shopperBankstatementReference` field to order announcement
@@ -45,3 +50,4 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 
 ### Version 1.9.0
 * Fixes in the documentation.
+

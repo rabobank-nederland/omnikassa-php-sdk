@@ -1,4 +1,4 @@
-{% if error %}
+{% if error is defined and error %}
 <div class="error-message">
     <strong>Error:</strong> {{ error }}
 </div>

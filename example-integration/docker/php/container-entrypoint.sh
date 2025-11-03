@@ -1,10 +1,8 @@
 #!/bin/sh
 set -e
 
-# Dump the current envvars to a file for better performance
-if [ ! -f .env.local.php ]; then
-  composer symfony:dump-env prod
-fi
+# Symfony loads environment variables directly from .env and .env.local files
+# No need to dump to PHP array format
 
 # Start PHP-FPM
 exec php-fpm

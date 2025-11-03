@@ -25,6 +25,10 @@ class RefundController extends AbstractController
 
         return $this->render('home/refund.html.twig', [
             'orderId' => $orderId,
+            'amount' => '',
+            'currency' => 'EUR',
+            'description' => '',
+            'vatCategory' => '',
         ]);
     }
 
