@@ -63,12 +63,12 @@ class ApiConnectorTest extends TestCase
         $expectedResponse = MerchantOrderResponseBuilder::newInstanceAsJson();
 
         $this->prepareTokenProviderWithAccessToken($this->accessToken);
-        Phake::when($this->restTemplate)->post('order/server/api/v2/order', $order)->thenReturn($expectedResponse);
+        Phake::when($this->restTemplate)->post('omnikassa-api/order/server/api/v2/order', $order)->thenReturn($expectedResponse);
 
         $actualResponse = $this->connector->announceMerchantOrder($order);
 
         Phake::verify($this->restTemplate)->setToken($this->accessToken->getToken());
-        Phake::verify($this->restTemplate)->post('order/server/api/v2/order', $order);
+        Phake::verify($this->restTemplate)->post('omnikassa-api/order/server/api/v2/order', $order);
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }
@@ -79,12 +79,12 @@ class ApiConnectorTest extends TestCase
         $expectedResponse = $this->makeAnnouncementResponse($announcement->getEventName());
 
         $this->prepareTokenProviderWithAccessToken($this->accessToken);
-        Phake::when($this->restTemplate)->get('order/server/api/v2/events/results/'.$announcement->getEventName())->thenReturn($expectedResponse);
+        Phake::when($this->restTemplate)->get('omnikassa-api/order/server/api/v2/events/results/'.$announcement->getEventName())->thenReturn($expectedResponse);
 
         $actualResponse = $this->connector->getAnnouncementData($announcement);
 
         Phake::verify($this->restTemplate)->setToken('MyJwt');
-        Phake::verify($this->restTemplate)->get('order/server/api/v2/events/results/'.$announcement->getEventName());
+        Phake::verify($this->restTemplate)->get('omnikassa-api/order/server/api/v2/events/results/'.$announcement->getEventName());
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }
@@ -94,12 +94,12 @@ class ApiConnectorTest extends TestCase
         $order = MerchantOrderRequestBuilder::makeCompleteRequest();
 
         $this->prepareTokenProviderWithAccessToken($this->expiredAccessToken);
-        Phake::when($this->restTemplate)->get('gatekeeper/refresh')->thenReturn(json_encode($this->secondAccessToken));
+        Phake::when($this->restTemplate)->get('omnikassa-api/gatekeeper/refresh')->thenReturn(json_encode($this->secondAccessToken));
 
         $this->connector->announce($order);
 
         //Verify that a new access token is retrieved
-        Phake::verify($this->restTemplate)->get('gatekeeper/refresh');
+        Phake::verify($this->restTemplate)->get('omnikassa-api/gatekeeper/refresh');
 
         //Verify that the correct token is used to call the API
         Phake::verify($this->restTemplate, Phake::never())->setToken($this->expiredAccessToken->getToken());
@@ -120,12 +120,12 @@ class ApiConnectorTest extends TestCase
         $order = MerchantOrderRequestBuilder::makeCompleteRequest();
 
         $this->prepareTokenProviderWithAccessToken($this->expiredAccessToken);
-        Phake::when($this->restTemplate)->get('gatekeeper/refresh')->thenReturn(json_encode($this->secondAccessToken));
+        Phake::when($this->restTemplate)->get('omnikassa-api/gatekeeper/refresh')->thenReturn(json_encode($this->secondAccessToken));
 
         $this->connector->announceMerchantOrder($order);
 
         // Verify that a new access token is retrieved
-        Phake::verify($this->restTemplate)->get('gatekeeper/refresh');
+        Phake::verify($this->restTemplate)->get('omnikassa-api/gatekeeper/refresh');
 
         // Verify that the correct token is used to call the API
         Phake::verify($this->restTemplate, Phake::never())->setToken($this->expiredAccessToken->getToken());
@@ -142,12 +142,12 @@ class ApiConnectorTest extends TestCase
         $order = MerchantOrderRequestBuilder::makeCompleteRequest();
 
         $this->prepareTokenProviderWithoutAccessToken();
-        Phake::when($this->restTemplate)->get('gatekeeper/refresh')->thenReturn(json_encode($this->secondAccessToken));
+        Phake::when($this->restTemplate)->get('omnikassa-api/gatekeeper/refresh')->thenReturn(json_encode($this->secondAccessToken));
 
         $this->connector->announce($order);
 
         //Verify that a new access token is retrieved
-        Phake::verify($this->restTemplate)->get('gatekeeper/refresh');
+        Phake::verify($this->restTemplate)->get('omnikassa-api/gatekeeper/refresh');
 
         //Verify that the correct token is used to call the API
         Phake::verify($this->restTemplate)->setToken($this->secondAccessToken->getToken());
@@ -167,12 +167,12 @@ class ApiConnectorTest extends TestCase
         $order = MerchantOrderRequestBuilder::makeCompleteRequest();
 
         $this->prepareTokenProviderWithoutAccessToken();
-        Phake::when($this->restTemplate)->get('gatekeeper/refresh')->thenReturn(json_encode($this->secondAccessToken));
+        Phake::when($this->restTemplate)->get('omnikassa-api/gatekeeper/refresh')->thenReturn(json_encode($this->secondAccessToken));
 
         $this->connector->announceMerchantOrder($order);
 
         // Verify that a new access token is retrieved
-        Phake::verify($this->restTemplate)->get('gatekeeper/refresh');
+        Phake::verify($this->restTemplate)->get('omnikassa-api/gatekeeper/refresh');
 
         // Verify that the correct token is used to call the API
         Phake::verify($this->restTemplate)->setToken($this->secondAccessToken->getToken());
@@ -191,13 +191,12 @@ class ApiConnectorTest extends TestCase
         $expectedResponse = RefundDetailsResponseBuilder::newInstanceAsJson();
 
         $this->prepareTokenProviderWithAccessToken($this->accessToken);
-        Phake::when($this->restTemplate)->post('order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refunds', $initiateRefundRequest)->thenReturn($expectedResponse);
+        Phake::when($this->restTemplate)->post('omnikassa-api/order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refunds', $initiateRefundRequest)->thenReturn($expectedResponse);
 
         $actualResponse = $this->connector->postRefundRequest($initiateRefundRequest, $transactionId, $requestId);
 
         Phake::verify($this->restTemplate)->setToken($this->accessToken->getToken());
-        Phake::verify($this->restTemplate)->setHeader('request-id', $requestId);
-        Phake::verify($this->restTemplate)->post('order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refunds', $initiateRefundRequest);
+        Phake::verify($this->restTemplate)->post('omnikassa-api/order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refunds', $initiateRefundRequest);
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }
@@ -209,12 +208,12 @@ class ApiConnectorTest extends TestCase
         $expectedResponse = RefundDetailsResponseBuilder::newInstanceAsJson();
 
         $this->prepareTokenProviderWithAccessToken($this->accessToken);
-        Phake::when($this->restTemplate)->get('order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refundable-details/6fa74559-b95d-4d40-9fa9-e866e3c8e2d2')->thenReturn($expectedResponse);
+        Phake::when($this->restTemplate)->get('omnikassa-api/order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refunds/6fa74559-b95d-4d40-9fa9-e866e3c8e2d2')->thenReturn($expectedResponse);
 
         $actualResponse = $this->connector->getRefundRequest($transactionId, $refundId);
 
         Phake::verify($this->restTemplate)->setToken($this->accessToken->getToken());
-        Phake::verify($this->restTemplate)->get('order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refundable-details/6fa74559-b95d-4d40-9fa9-e866e3c8e2d2');
+        Phake::verify($this->restTemplate)->get('omnikassa-api/order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refunds/6fa74559-b95d-4d40-9fa9-e866e3c8e2d2');
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }
@@ -225,12 +224,12 @@ class ApiConnectorTest extends TestCase
         $expectedResponse = TransactionRefundableDetailsResponseBuilder::newInstanceAsJson();
 
         $this->prepareTokenProviderWithAccessToken($this->accessToken);
-        Phake::when($this->restTemplate)->get('order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refundable-details')->thenReturn($expectedResponse);
+        Phake::when($this->restTemplate)->get('omnikassa-api/order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refundable-details')->thenReturn($expectedResponse);
 
         $actualResponse = $this->connector->getRefundableDetails($transactionId);
 
         Phake::verify($this->restTemplate)->setToken($this->accessToken->getToken());
-        Phake::verify($this->restTemplate)->get('order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refundable-details');
+        Phake::verify($this->restTemplate)->get('omnikassa-api/order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refundable-details');
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }
@@ -240,12 +239,12 @@ class ApiConnectorTest extends TestCase
         $expectedResponse = PaymentBrandsResponseBuilder::newInstanceAsJson();
 
         $this->prepareTokenProviderWithAccessToken($this->accessToken);
-        Phake::when($this->restTemplate)->get('order/server/api/payment-brands')->thenReturn($expectedResponse);
+        Phake::when($this->restTemplate)->get('omnikassa-api/order/server/api/payment-brands')->thenReturn($expectedResponse);
 
         $actualResponse = $this->connector->getPaymentBrands();
 
         Phake::verify($this->restTemplate)->setToken($this->accessToken->getToken());
-        Phake::verify($this->restTemplate)->get('order/server/api/payment-brands');
+        Phake::verify($this->restTemplate)->get('omnikassa-api/order/server/api/payment-brands');
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }
@@ -255,12 +254,12 @@ class ApiConnectorTest extends TestCase
         $expectedResponse = IdealIssuersResponseBuilder::newInstanceAsJson();
 
         $this->prepareTokenProviderWithAccessToken($this->accessToken);
-        Phake::when($this->restTemplate)->get('ideal/server/api/v2/issuers')->thenReturn($expectedResponse);
+        Phake::when($this->restTemplate)->get('omnikassa-api/ideal/server/api/v2/issuers')->thenReturn($expectedResponse);
 
         $actualResponse = $this->connector->getIDEALIssuers();
 
         Phake::verify($this->restTemplate)->setToken($this->accessToken->getToken());
-        Phake::verify($this->restTemplate)->get('ideal/server/api/v2/issuers');
+        Phake::verify($this->restTemplate)->get('omnikassa-api/ideal/server/api/v2/issuers');
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }

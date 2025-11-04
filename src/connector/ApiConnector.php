@@ -98,7 +98,7 @@ class ApiConnector implements Connector
         return $this->performAction(function () use (&$announcement) {
             $this->restTemplate->setToken($announcement->getAuthentication());
 
-            return $this->restTemplate->get(sprintf('%s/order/server/api/events/results/%s', self::OMNIKASSA_INFIX, $announcement->getEventName()));
+            return $this->restTemplate->get(sprintf('%s/order/server/api/v2/events/results/%s', self::OMNIKASSA_INFIX, $announcement->getEventName()));
         });
     }
 
