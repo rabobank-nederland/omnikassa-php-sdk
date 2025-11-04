@@ -102,18 +102,15 @@ class ApiConnector implements Connector
         });
     }
 
-
-    /** {@inheritDoc} */
     public function postRefundRequest(InitiateRefundRequest $refundRequest, string $transactionId, string $requestId): string
     {
-        return $this->performAction(function () use ($refundRequest, $transactionId, $requestId) {
+        return $this->performAction(function () use ($refundRequest, $transactionId) {
             $this->restTemplate->setToken($this->accessToken->getToken());
 
             return $this->restTemplate->post(sprintf('%s/order/server/api/v2/refund/transactions/%s/refunds', self::OMNIKASSA_INFIX, $transactionId), $refundRequest);
         });
     }
 
-    /** {@inheritDoc} */
     public function getRefundRequest(string $transactionId, string $refundId): string
     {
         return $this->performAction(function () use (&$transactionId, $refundId) {
@@ -123,7 +120,6 @@ class ApiConnector implements Connector
         });
     }
 
-    /** {@inheritDoc} */
     public function getRefundableDetails(string $transactionId): string
     {
         return $this->performAction(function () use (&$transactionId) {
@@ -247,9 +243,6 @@ class ApiConnector implements Connector
         $this->tokenProvider->setAccessToken($this->accessToken);
     }
 
-    /**
-     * @return AccessToken
-     */
     private function retrieveNewToken(): AccessToken
     {
         $refreshToken = $this->tokenProvider->getRefreshToken();

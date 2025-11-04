@@ -16,8 +16,8 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\Merchant
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\MerchantOrderStatusResponseBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\OrderDetailsBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\PaymentBrandsResponseBuilder;
-use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\StoredCardsBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\RefundDetailsResponseBuilder;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\StoredCardsBuilder;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\response\TransactionRefundableDetailsResponseBuilder;
 use Phake;
 use PHPUnit\Framework\TestCase;
@@ -53,8 +53,8 @@ class EndPointTest extends TestCase
     {
         $merchantOrder = MerchantOrderBuilder::makeCompleteOrder();
 
-        // Note: The connector internally already uses announce() as an alias
-        Phake::when($this->connector)->announce->thenReturn(MerchantOrderResponseBuilder::newInstanceAsJson());
+        // Mock the correct connector method with parameter matching
+        Phake::when($this->connector)->announceMerchantOrder(Phake::anyParameters())->thenReturn(MerchantOrderResponseBuilder::newInstanceAsJson());
 
         $result = $this->endpoint->announceMerchantOrder($merchantOrder);
 
@@ -65,7 +65,7 @@ class EndPointTest extends TestCase
     {
         $merchantOrder = MerchantOrderBuilder::makeCompleteOrder();
 
-        Phake::when($this->connector)->announce->thenReturn(MerchantOrderResponseBuilder::newInstanceAsJson());
+        Phake::when($this->connector)->announceMerchantOrder(Phake::anyParameters())->thenReturn(MerchantOrderResponseBuilder::newInstanceAsJson());
 
         $result = $this->endpoint->announce($merchantOrder);
 
@@ -181,5 +181,7 @@ class EndPointTest extends TestCase
         $storedCardRef = 'StoredCardRef123';
 
         $this->endpoint->deleteStoredCard($shopperRef, $storedCardRef);
+
+        Phake::verify($this->connector)->deleteStoredCard($shopperRef, $storedCardRef);
     }
 }

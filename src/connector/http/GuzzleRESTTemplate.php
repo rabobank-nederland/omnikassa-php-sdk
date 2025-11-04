@@ -133,9 +133,6 @@ class GuzzleRESTTemplate implements RESTTemplate
         return $response->getBody()->getContents();
     }
 
-    /**
-     * @return array
-     */
     private function makeRequestHeaders(): array
     {
         $headers = [];
