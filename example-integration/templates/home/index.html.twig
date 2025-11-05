@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}OmniKassa SDK Examples - Home{% endblock %}
+
+{% block body %}
+<div style="max-width: 1200px; margin: 0 auto; padding: 2em;">
+    <h1>Welcome to OmniKassa SDK Examples</h1>
+
+    <p style="font-size: 1.2em; margin-bottom: 2em; color: #6c757d;">
+        This application demonstrates various features of the Rabobank OmniKassa SDK for PHP.
+        Choose from the examples below to explore different payment integration scenarios.
+    </p>
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+            <h2 style="color: #28a745; margin-top: 0;">Sample Checkout</h2>
+            <p style="margin-bottom: 1.5em;">
+                View a complete shopping cart example with customer information, shipping details,
+                and order items. This demonstrates how to prepare order data for payment processing.
+            </p>
+            <a href="{{ path('sample_checkout') }}" class="btn btn-success">
+                View Sample Checkout →
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <h2 style="color: #007bff; margin-top: 0;">Manual Checkout</h2>
+            <p style="margin-bottom: 1.5em;">
+                Fill in customer and shipping details manually to create a custom checkout experience.
+                Enter your own information and see how it integrates with the payment flow.
+            </p>
+            <a href="{{ path('manual_checkout') }}" class="btn btn-primary">
+                Try Manual Checkout →
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <h2 style="color: #dc3444; margin-top: 0;">Order Status</h2>
+            <p style="margin-bottom: 1.5em;">
+                Check the status of your orders using the order ID. View transaction details,
+                payment status, and order information from the OmniKassa system.
+            </p>
+            <a href="{{ path('order_status') }}" class="btn btn-danger">
+                Check Order Status →
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <h2 style="color: #343a40; margin-top: 0;">Stored Cards</h2>
+            <p style="margin-bottom: 1.5em;">
+                Retrieve stored payment cards for a shopper reference. This demonstrates
+                how to access saved payment methods for recurring transactions.
+            </p>
+            <a href="{{ path('stored_cards') }}" class="btn btn-dark">
+                View Stored Cards →
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <h2 style="color: #ffc107; margin-top: 0;">Refund</h2>
+            <p style="margin-bottom: 1.5em;">
+                Initiate a refund for an existing order. Enter order details and refund amount
+                to process a refund using the InitiateRefundRequest.
+            </p>
+            <a href="{{ path('refund') }}" class="btn btn-warning">
+                Initiate Refund →
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <h2 style="color: #17a2b8; margin-top: 0;">Payment Brands</h2>
+            <p style="margin-bottom: 1.5em;">
+                View available payment methods and their current status. This demonstrates
+                how to check which payment brands are active for processing transactions.
+            </p>
+            <a href="{{ path('payment_brands') }}" class="btn btn-dark" style="background-color: #17a2b8">
+                View Payment Brands →
+            </a>
+        </div>
+
+        <div class="feature-card">
+            <h2 style="color: #c2185b; margin-top: 0;">iDEAL Issuers</h2>
+            <p style="margin-bottom: 1.5em;">
+                Browse available iDEAL banks and payment providers. This shows how to retrieve
+                and display the list of supported iDEAL issuers for customer selection.
+            </p>
+            <a href="{{ path('ideal_issuers') }}" class="btn btn-secondary" style="background-color: #c2185b">
+                View iDEAL Issuers →
+            </a>
+        </div>
+
+    </div>
+
+    <div class="about-section">
+        <h3 style="margin-top: 0; color: #495057;">About This Demo</h3>
+        <p style="margin-bottom: 0;">
+            These examples showcase the integration capabilities of the Rabobank OmniKassa SDK.
+            The SDK provides a comprehensive set of tools for handling payments, order management,
+            and various payment methods including iDEAL.
+        </p>
+    </div>
+</div>
+{% endblock %}

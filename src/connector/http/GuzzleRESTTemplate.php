@@ -5,6 +5,7 @@ namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use JsonSerializable;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Guzzle implementation of the RESTTemplate.
@@ -132,10 +133,7 @@ class GuzzleRESTTemplate implements RESTTemplate
         return $response->getBody()->getContents();
     }
 
-    /**
-     * @return array
-     */
-    private function makeRequestHeaders()
+    private function makeRequestHeaders(): array
     {
         $headers = [];
         if (!empty($this->token)) {
@@ -144,6 +142,8 @@ class GuzzleRESTTemplate implements RESTTemplate
         if (!empty($this->userAgent)) {
             $headers['X-Api-User-Agent'] = $this->userAgent;
         }
+
+        $headers['Request-ID'] = Uuid::uuid4()->toString();
 
         return $headers;
     }

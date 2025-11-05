@@ -8,6 +8,7 @@ use Exception;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\GuzzleRESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\connector\http\RESTTemplate;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\AccessToken;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\InitiateRefundRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrderRequest;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\response\AnnouncementResponse;
 
@@ -18,6 +19,7 @@ class ApiConnector implements Connector
 {
     public const VERSION = '1.17.0';
     public const SMARTPAY_USER_AGENT = 'RabobankOmnikassaPHPSDK/'.self::VERSION;
+    private const OMNIKASSA_INFIX = 'omnikassa-api';
 
     /** @var RESTTemplate */
     private $restTemplate;
@@ -82,7 +84,7 @@ class ApiConnector implements Connector
             $this->restTemplate->setToken($this->accessToken->getToken());
             $this->restTemplate->setUserAgent($this->getUserAgentString());
 
-            return $this->restTemplate->post('order/server/api/v2/order', $order);
+            return $this->restTemplate->post(sprintf('%s/order/server/api/v2/order', self::OMNIKASSA_INFIX), $order);
         });
     }
 
@@ -96,7 +98,34 @@ class ApiConnector implements Connector
         return $this->performAction(function () use (&$announcement) {
             $this->restTemplate->setToken($announcement->getAuthentication());
 
-            return $this->restTemplate->get('order/server/api/events/results/'.$announcement->getEventName());
+            return $this->restTemplate->get(sprintf('%s/order/server/api/v2/events/results/%s', self::OMNIKASSA_INFIX, $announcement->getEventName()));
+        });
+    }
+
+    public function postRefundRequest(InitiateRefundRequest $refundRequest, string $transactionId, string $requestId): string
+    {
+        return $this->performAction(function () use ($refundRequest, $transactionId) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->post(sprintf('%s/order/server/api/v2/refund/transactions/%s/refunds', self::OMNIKASSA_INFIX, $transactionId), $refundRequest);
+        });
+    }
+
+    public function getRefundRequest(string $transactionId, string $refundId): string
+    {
+        return $this->performAction(function () use (&$transactionId, $refundId) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->get(sprintf('%s/order/server/api/v2/refund/transactions/%s/refunds/%s', self::OMNIKASSA_INFIX, $transactionId, $refundId));
+        });
+    }
+
+    public function getRefundableDetails(string $transactionId): string
+    {
+        return $this->performAction(function () use (&$transactionId) {
+            $this->restTemplate->setToken($this->accessToken->getToken());
+
+            return $this->restTemplate->get(sprintf('%s/order/server/api/v2/refund/transactions/%s/refundable-details', self::OMNIKASSA_INFIX, $transactionId));
         });
     }
 
@@ -105,12 +134,12 @@ class ApiConnector implements Connector
      *
      * @return string json response body
      */
-    public function getPaymentBrands()
+    public function getPaymentBrands(): string
     {
         return $this->performAction(function () {
             $this->restTemplate->setToken($this->accessToken->getToken());
 
-            return $this->restTemplate->get('order/server/api/payment-brands');
+            return $this->restTemplate->get(sprintf('%s/order/server/api/payment-brands', self::OMNIKASSA_INFIX));
         });
     }
 
@@ -124,7 +153,7 @@ class ApiConnector implements Connector
         return $this->performAction(function () {
             $this->restTemplate->setToken($this->accessToken->getToken());
 
-            return $this->restTemplate->get('ideal/server/api/v2/issuers');
+            return $this->restTemplate->get(sprintf('%s/ideal/server/api/v2/issuers', self::OMNIKASSA_INFIX));
         });
     }
 
@@ -140,10 +169,11 @@ class ApiConnector implements Connector
         return $this->performAction(function () use ($orderId) {
             $this->restTemplate->setToken($this->accessToken->getToken());
 
-            return $this->restTemplate->get('/v2/orders/'.$orderId);
+            return $this->restTemplate->get(sprintf('/v2/orders/%s', $orderId));
         });
     }
 
+    /** Cards do not use omnikassa-api suffix. */
     public function getStoredCards(string $shopperRef): string
     {
         return $this->performAction(function () use ($shopperRef) {
@@ -182,7 +212,7 @@ class ApiConnector implements Connector
         return $action();
     }
 
-    private function validateToken()
+    private function validateToken(): void
     {
         try {
             if (null === $this->accessToken) {
@@ -197,10 +227,7 @@ class ApiConnector implements Connector
         }
     }
 
-    /**
-     * @return bool
-     */
-    private function isExpired(AccessToken $token)
+    private function isExpired(AccessToken $token): bool
     {
         $validUntil = $token->getValidUntil();
         $currentDate = new DateTime('now', new DateTimeZone('UTC'));
@@ -216,30 +243,27 @@ class ApiConnector implements Connector
         $this->tokenProvider->setAccessToken($this->accessToken);
     }
 
-    /**
-     * @return AccessToken
-     */
-    private function retrieveNewToken()
+    private function retrieveNewToken(): AccessToken
     {
         $refreshToken = $this->tokenProvider->getRefreshToken();
 
         $this->restTemplate->setToken($refreshToken);
-        $accessTokenJson = $this->restTemplate->get('gatekeeper/refresh');
+        $accessTokenJson = $this->restTemplate->get(sprintf('%s/gatekeeper/refresh', self::OMNIKASSA_INFIX));
 
         return AccessToken::fromJson($accessTokenJson);
     }
 
-    public function setUserAgent($userAgent)
+    public function setUserAgent($userAgent): void
     {
         $this->userAgent = $userAgent;
     }
 
-    public function getUserAgent()
+    public function getUserAgent(): string
     {
         return $this->userAgent;
     }
 
-    public function setPartnerReference($partnerReference)
+    public function setPartnerReference($partnerReference): void
     {
         $this->partnerReference = $partnerReference;
     }

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Refundable Transaction Details - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="result-container">
+    <div class="result-header">
+        <h1>Refundable Transaction Details</h1>
+        <p>Information about refundable amount for the transaction</p>
+    </div>
+
+    {% include 'includes/error.html.twig' %}
+
+    <div class="result-section">
+        <h2>Refundable Details</h2>
+        <div class="order-info">
+            <p><strong>Transaction ID:</strong> {{ refundableData.transactionId }}</p>
+            <p><strong>Refundable Amount:</strong> €{{ (refundableData.refundableAmount / 100)|number_format(2) }}</p>
+            <p><strong>Currency:</strong> {{ refundableData.refundableCurrency }}</p>
+            <p><strong>Expiry DateTime:</strong> {{ refundableData.expiryDatetime|date('Y-m-d H:i:s') }}</p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
+        <a href="{{ path('refund') }}" class="btn btn-secondary">Create Refund</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{
+    "name": "omnikassa/example-integration",
+    "type": "project",
+    "require": {
+        "php": ">=8.4",
+        "symfony/flex": "^2.2",
+        "symfony/framework-bundle": "^6.4",
+        "symfony/twig-bundle": "^6.4",
+        "symfony/runtime": "^6.4",
+        "symfony/yaml": "^6.4",
+        "symfony/dotenv": "^6.4",
+        "rabobank/omnikassa-sdk": "*",
+        "symfony/console": "^6.4",
+        "symfony/cache": "^7.3",
+        "snc/redis-bundle": "^4.10",
+        "ramsey/uuid": "^4.9",
+        "symfony/asset": "^7.3",
+        "nesbot/carbon": "^3.10"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "MIT",
+    "config": {
+        "bin-dir": "bin",
+        "allow-plugins": {
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "platform": {
+          "php": "8.4"
+        }
+    },
+
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "OmniKassa\\ExampleIntegration\\": "src/"
+        }
+    },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "composer",
+      "url": "https://packagist.org",
+      "exclude": ["rabobank/omnikassa-sdk"]
+    }
+  ],
+    "require-dev": {
+        "symfony/stopwatch": "^7.3",
+        "symfony/web-profiler-bundle": "^7.3",
+        "friendsofphp/php-cs-fixer": "^3.87"
+    }
+}

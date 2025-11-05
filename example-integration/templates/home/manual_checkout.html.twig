@@ -1,0 +1,422 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manual Checkout - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block javascripts %}
+<script>
+function toggleIdealIssuer(paymentBrand) {
+    const idealIssuerSelect = document.getElementById('idealIssuer');
+
+    if (paymentBrand === 'IDEAL') {
+        idealIssuerSelect.disabled = false;
+    } else {
+        idealIssuerSelect.disabled = true;
+        idealIssuerSelect.value = '';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    let itemIndex = 2; // Start from 2 since we have 2 default items
+
+    function calculateItemTotal(row) {
+        const quantity = parseFloat(row.querySelector('input[name*="[quantity]"]').value) || 0;
+        const unitPrice = parseFloat(row.querySelector('input[name*="[unitPrice]"]').value) || 0;
+        const total = quantity * unitPrice;
+        row.querySelector('.item-total').textContent = '€ ' + total.toFixed(2);
+        return total;
+    }
+
+    function calculateGrandTotal() {
+        let subtotal = 0;
+        document.querySelectorAll('.cart-item').forEach(row => {
+            subtotal += calculateItemTotal(row);
+        });
+
+        const shippingCost = parseFloat(document.getElementById('shipping-cost').value) || 0;
+        const total = subtotal + shippingCost;
+
+        document.getElementById('subtotal').textContent = '€ ' + subtotal.toFixed(2);
+        document.getElementById('shipping-display').textContent = '€ ' + shippingCost.toFixed(2);
+        document.getElementById('total-amount').textContent = '€ ' + total.toFixed(2);
+    }
+
+    document.querySelectorAll('input[name*="[quantity]"], input[name*="[unitPrice]"]').forEach(input => {
+        input.addEventListener('input', calculateGrandTotal);
+    });
+
+    document.getElementById('shipping-cost').addEventListener('input', calculateGrandTotal);
+
+    document.getElementById('add-item-btn').addEventListener('click', function() {
+        const tbody = document.getElementById('cart-items');
+        const subtotalRow = document.getElementById('subtotal-row');
+        const newRow = document.createElement('tr');
+        newRow.className = 'cart-item';
+        newRow.innerHTML = `
+            <td>
+                <input type="text" name="items[${itemIndex}][name]" placeholder="Item name" required style="width: 100%; border: none; background: transparent;">
+                <br><input type="text" name="items[${itemIndex}][description]" placeholder="Description" style="width: 100%; border: none; background: transparent; font-size: 0.9em; color: #6c757d;">
+            </td>
+            <td><input type="number" name="items[${itemIndex}][quantity]" value="1" min="1" required style="width: 60px; text-align: center;"></td>
+            <td><input type="number" name="items[${itemIndex}][unitPrice]" value="0.00" step="0.01" min="0" required style="width: 80px; text-align: right;"></td>
+                        <td>
+                            <select name="items[${itemIndex}][taxCategory]" style="width: 100px;">
+                                <option value="4" selected>NONE</option>
+                                <option value="1">HIGH</option>
+                                <option value="2">LOW</option>
+                                <option value="3">ZERO</option>
+                            </select>
+                        </td>
+            <td class="price item-total">€ 0.00</td>
+            <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
+        `;
+        tbody.insertBefore(newRow, subtotalRow);
+        itemIndex++;
+
+        newRow.querySelectorAll('input[name*="[quantity]"], input[name*="[unitPrice]"]').forEach(input => {
+            input.addEventListener('input', calculateGrandTotal);
+        });
+
+        calculateGrandTotal();
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-item')) {
+            e.target.closest('.cart-item').remove();
+            calculateGrandTotal();
+        }
+    });
+
+    calculateGrandTotal();
+
+    const customerButton = document.getElementById('fill-customer-example-data');
+    if (customerButton) {
+        customerButton.addEventListener('click', function() {
+            document.getElementById('fullName').value = 'John Doe';
+            document.getElementById('email').value = 'john.doe@example.com';
+            document.getElementById('phone').value = '+31 6 12345678';
+            document.getElementById('dateOfBirth').value = '15-05-1985';
+            document.getElementById('gender').value = 'M';
+            document.getElementById('initials').value = 'JD';
+        });
+    } else {
+        console.error('Customer example data button not found');
+    }
+
+    const shippingButton = document.getElementById('fill-shipping-example-data');
+    if (shippingButton) {
+        shippingButton.addEventListener('click', function() {
+            document.getElementById('shippingFirstName').value = 'John';
+            document.getElementById('shippingMiddleName').value = '';
+            document.getElementById('shippingLastName').value = 'Doe';
+            document.getElementById('shippingStreet').value = 'Main Street';
+            document.getElementById('shippingHouseNumber').value = '123';
+            document.getElementById('shippingPostalCode').value = '1234 AB';
+            document.getElementById('shippingCity').value = 'Amsterdam';
+            document.getElementById('shippingCountryCode').value = 'NL';
+        });
+    } else {
+        console.error('Shipping example data button not found');
+    }
+
+    const useShippingAsBillingCheckbox = document.getElementById('useShippingAsBilling');
+    const billingAddressFields = document.getElementById('billingAddressFields');
+
+    function toggleBillingFields() {
+        if (useShippingAsBillingCheckbox.checked) {
+            billingAddressFields.style.display = 'none';
+            // Clear billing address fields when using shipping info
+            document.querySelectorAll('#billingAddressFields input').forEach(input => {
+                input.required = false;
+                input.value = '';
+            });
+        } else {
+            billingAddressFields.style.display = 'block';
+            // Make billing address fields required when not using shipping info
+            document.querySelectorAll('#billingAddressFields input').forEach(input => {
+                input.required = true;
+            });
+        }
+    }
+
+    useShippingAsBillingCheckbox.addEventListener('change', toggleBillingFields);
+
+
+    toggleBillingFields();
+
+    const initialPaymentBrand = document.getElementById('paymentBrand').value;
+    toggleIdealIssuer(initialPaymentBrand);
+});
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="checkout-container">
+    <div class="checkout-header">
+        <h1 style="color: #017bff">Manual Checkout</h1>
+        <p>Fill in your customer and shipping details to proceed with the checkout</p>
+    </div>
+
+    {% include 'includes/error.html.twig' %}
+
+    <form method="post" action="{{ path('manual_checkout_process') }}" id="checkout-form">
+        <div class="cart-section">
+            <h2>Shopping Cart</h2>
+            <div style="margin-bottom: 1em;">
+                <button type="button" class="btn btn-secondary" id="add-item-btn">Add Item</button>
+            </div>
+            <table class="cart-table" id="cart-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Unit Price (€)</th>
+                        <th>Tax Category</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-items">
+                    <tr class="cart-item">
+                        <td>
+                            <input type="text" name="items[0][name]" value="Product X" required style="width: 100%; border: none; background: transparent;">
+                            <br><input type="text" name="items[0][description]" value="A useful product" placeholder="Description" style="width: 100%; border: none; background: transparent; font-size: 0.9em; color: #6c757d;">
+                        </td>
+                        <td><input type="number" name="items[0][quantity]" value="2" min="1" required style="width: 60px; text-align: center;"></td>
+                        <td><input type="number" name="items[0][unitPrice]" value="19.99" step="0.01" min="0" required style="width: 80px; text-align: right;"></td>
+                        <td>
+                            <select name="items[0][taxCategory]" style="width: 100px;">
+                                <option value="4" selected>NONE</option>
+                                <option value="1">HIGH</option>
+                                <option value="2">LOW</option>
+                                <option value="3">ZERO</option>
+                            </select>
+                        </td>
+                        <td class="price item-total">&euro; 39.98</td>
+                        <td><button type="button" class="btn btn-danger btn-sm remove-item">Remove</button></td>
+                    </tr>
+                    <tr id="subtotal-row" style="border-top: 2px solid #dee2e6; background-color: #f8f9fa;">
+                        <td colspan="4" style="text-align: right; font-weight: bold; padding: 1em;">Subtotal</td>
+                        <td class="price" style="font-weight: bold;" id="subtotal">&euro; 69.97</td>
+                        <td></td>
+                    </tr>
+                    <tr style="background-color: #f8f9fa;">
+                        <td colspan="4" style="text-align: right; padding: 1em;">
+                            <label for="shipping-cost" style="font-weight: bold; margin-right: 0.5em;">Shipping Cost:</label>
+                            <input type="number" id="shipping-cost" name="shippingCost" value="1.00" step="0.01" min="0" style="width: 80px; text-align: right; border: 1px solid #ced4da; border-radius: 0.25em; padding: 0.25em;">
+                            €
+                        </td>
+                        <td class="price" id="shipping-display">&euro; 1.00</td>
+                        <td></td>
+                    </tr>
+                    <tr style="border-top: 2px solid #dee2e6; background-color: #e9ecef;">
+                        <td colspan="4" style="text-align: right; font-weight: bold; padding: 1em;">Total Amount</td>
+                        <td class="price" style="font-weight: bold; font-size: 1.1em;" id="total-amount">&euro; 70.97</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="info-section">
+                    <h2>Customer Information</h2>
+                    <div style="margin-bottom: 1.5em;">
+                        <button type="button" class="btn btn-info" id="fill-customer-example-data">Fill with Example Customer Data</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth (dd-mm-YYYY)</label>
+                        <input type="text" id="dateOfBirth" name="dateOfBirth" class="form-control" placeholder="01-01-1980" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" class="form-control" style="font-size: 14px; padding: 8px;" required>
+                            <option value="">Select Gender</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="initials">Initials</label>
+                        <input type="text" id="initials" name="initials" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="info-section">
+                    <h2>Shipping Address</h2>
+                    <div style="margin-bottom: 1.5em;">
+                        <button type="button" class="btn btn-info" id="fill-shipping-example-data">Fill with Example Shipping Data</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="shippingFirstName">First Name</label>
+                        <input type="text" id="shippingFirstName" name="shippingFirstName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shippingMiddleName">Middle Name</label>
+                        <input type="text" id="shippingMiddleName" name="shippingMiddleName" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="shippingLastName">Last Name</label>
+                        <input type="text" id="shippingLastName" name="shippingLastName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shippingStreet">Street</label>
+                        <input type="text" id="shippingStreet" name="shippingStreet" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shippingHouseNumber">House Number</label>
+                        <input type="text" id="shippingHouseNumber" name="shippingHouseNumber" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shippingPostalCode">Postal Code</label>
+                        <input type="text" id="shippingPostalCode" name="shippingPostalCode" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shippingCity">City</label>
+                        <input type="text" id="shippingCity" name="shippingCity" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="shippingCountryCode">Country Code</label>
+                        <input type="text" id="shippingCountryCode" name="shippingCountryCode" class="form-control" value="NL" required>
+                    </div>
+                </div>
+
+                <div class="info-section" style="margin-top: 2em;">
+                    <h2>Billing Information</h2>
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center;">
+                            <input type="checkbox" id="useShippingAsBilling" name="useShippingAsBilling" checked style="margin-right: 0.5em;">
+                            Use shipping address as billing address
+                        </label>
+                    </div>
+                    <div id="billingAddressFields">
+                        <div class="form-group">
+                            <label for="billingFirstName">First Name</label>
+                            <input type="text" id="billingFirstName" name="billingFirstName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billingMiddleName">Middle Name</label>
+                            <input type="text" id="billingMiddleName" name="billingMiddleName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="billingLastName">Last Name</label>
+                            <input type="text" id="billingLastName" name="billingLastName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billingStreet">Street</label>
+                            <input type="text" id="billingStreet" name="billingStreet" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billingHouseNumber">House Number</label>
+                            <input type="text" id="billingHouseNumber" name="billingHouseNumber" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billingPostalCode">Postal Code</label>
+                            <input type="text" id="billingPostalCode" name="billingPostalCode" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billingCity">City</label>
+                            <input type="text" id="billingCity" name="billingCity" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="billingCountryCode">Country Code</label>
+                            <input type="text" id="billingCountryCode" name="billingCountryCode" class="form-control" value="NL" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="info-section">
+                    <h2>Payment Info</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="paymentBrand">Payment brand:</label>
+                                <select name="paymentBrand" id="paymentBrand" class="form-control" style="font-size: 14px; padding: 8px;" onchange="toggleIdealIssuer(this.value); console.log('Payment brand changed to:', this.value);">
+                                    <option value="">-- Select Payment Brand --</option>
+                                    {% if paymentBrands is defined and paymentBrands %}
+                                        {% for brand in paymentBrands %}
+                                            {% if brand.active %}
+                                                <option value="{{ brand.name }}">{{ brand.name }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="idealIssuer">iDEAL Issuer:</label>
+                                <select name="idealIssuer" id="idealIssuer" class="form-control" style="font-size: 14px; padding: 8px;" disabled>
+                                    <option value="">-- Select iDEAL Issuer --</option>
+                                    {% if idealIssuers is defined and idealIssuers %}
+                                        {% for issuer in idealIssuers %}
+                                            <option value="{{ issuer.id }}">{{ issuer.name }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentBrandForce">Payment brand force:</label>
+                                <select name="paymentBrandForce" id="paymentBrandForce" class="form-control" style="font-size: 14px; padding: 8px;">
+                                    <option value="FORCE_ONCE" selected>FORCE_ONCE</option>
+                                    <option value="FORCE_ALWAYS">FORCE_ALWAYS</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="initiatingParty">Initiating Party:</label>
+                                <input type="text" id="initiatingParty" name="initiatingParty" class="form-control" placeholder="e.g., CUSTOMER">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="enableCardOnFile" name="enableCardOnFile" style="margin-right: 0.5em;">
+                                    Enable Card on File
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" id="skipHppResultPage" name="skipHppResultPage" style="margin-right: 0.5em;">
+                                    Skip HPP Result Page
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="shopperReference">Shopper Reference (CoF):</label>
+                                <input type="text" id="shopperReference" name="shopperReference" class="form-control" placeholder="e.g., shopper123">
+                            </div>
+                            <div class="form-group">
+                                <label for="shopperBankStatementReference">Shopper bankstatement reference:</label>
+                                <input type="text" id="shopperBankStatementReference" name="shopperBankStatementReference" class="form-control" placeholder="e.g., Order #12345">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" type="button" onclick="window.history.back()">← Back</button>
+            <button class="btn btn-success" type="submit">Proceed to Checkout</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
