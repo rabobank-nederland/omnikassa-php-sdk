@@ -87,7 +87,6 @@ class Endpoint
         $request = new MerchantOrderRequest($merchantOrder);
 
         $responseAsJson = $this->connector->announceMerchantOrder($request);
-        print_r($responseAsJson);
 
         return new MerchantOrderResponse($responseAsJson);
     }
