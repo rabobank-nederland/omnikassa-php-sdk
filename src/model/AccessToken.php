@@ -40,10 +40,29 @@ class AccessToken implements \JsonSerializable
      * @param string $json
      *
      * @return AccessToken
+     *
+     * @throws \InvalidArgumentException
      */
     public static function fromJson($json)
     {
-        $result = json_decode($json, true);
+        static $requiredKeys = ['token' => true, 'validUntil' => true, 'durationInMillis' => true];
+
+        if (!is_string($json)) {
+            throw new \InvalidArgumentException('JSON data must be a string');
+        }
+
+        try {
+            $result = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \InvalidArgumentException('Invalid JSON data', 0, $e);
+        }
+
+        if (!is_array($result) || count(array_intersect_key($result, $requiredKeys)) !== count($requiredKeys)) {
+            throw new \InvalidArgumentException(sprintf(
+                'JSON data must be an array containing the keys: %s',
+                implode(', ', array_keys($requiredKeys))
+            ));
+        }
 
         return new AccessToken($result['token'], new \DateTime($result['validUntil']), $result['durationInMillis']);
     }
