@@ -41,6 +41,18 @@ class RefundController extends AbstractController
         $description = $request->request->get('description');
         $vatCategory = $request->request->get('vatCategory') ?: 'HIGH';
 
+        if (empty($transactionId)) {
+            return $this->render('home/refund.html.twig', [
+                'error' => 'Transaction ID is required.',
+            ] + $request->request->all());
+        }
+
+        if (!is_numeric($amount) || (int) $amount <= 0) {
+            return $this->render('home/refund.html.twig', [
+                'error' => 'Amount must be a positive number of cents.',
+            ] + $request->request->all());
+        }
+
         try {
             $money = Money::fromCents($currency, (int) $amount);
             $refundRequest = new InitiateRefundRequest($money, $description, $vatCategory);
@@ -78,8 +90,6 @@ class RefundController extends AbstractController
     {
         try {
             $refundDetails = $this->omniKassaClient->fetchRefundTransactionDetails($transactionId, $refundId);
-
-            dd($refundDetails);
 
             $refundData = [
                 'refundId' => $refundDetails->getRefundId(),
