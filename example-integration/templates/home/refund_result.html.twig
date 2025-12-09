@@ -16,7 +16,7 @@
     <div class="result-section">
         <h2>Refund Summary</h2>
         <div class="order-info">
-            <p><strong>Order ID:</strong> {{ orderId }}</p>
+            <p><strong>Transaction ID:</strong> {{ transactionId }}</p>
             <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">Request Created</span></p>
         </div>
     </div>
@@ -41,10 +41,10 @@
             <a href="{{ path('refund') }}" class="btn btn-secondary">Create Another Refund</a>
         </div>
         <div class="col-auto mb-2">
-            <a href="{{ path('fetch_refund_transaction', {transactionId: orderId, refundId: refundResult.refundId}) }}" class="btn btn-info">View Refund Details</a>
+            <a href="{{ path('fetch_refund_transaction', {transactionId: transactionId, refundId: refundResult.refundId}) }}" class="btn btn-info">View Refund Details</a>
         </div>
         <div class="col-auto mb-2">
-            <a href="{{ path('fetch_refundable_transaction_details', {transactionId: orderId}) }}" class="btn btn-info mr-0">View Refundable Details</a>
+            <a href="{{ path('fetch_refundable_transaction_details', {transactionId: transactionId}) }}" class="btn btn-info mr-0">View Refundable Details</a>
         </div>
     </div>
 </div>

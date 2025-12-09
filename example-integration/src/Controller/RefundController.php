@@ -21,32 +21,32 @@ class RefundController extends AbstractController
     #[Route('/refund', name: 'refund')]
     public function refund(Request $request): Response
     {
-        $orderId = $request->query->get('orderId');
+        $transactionId = $request->query->get('transactionId') ?? $request->query->get('orderId');
 
         return $this->render('home/refund.html.twig', [
-            'orderId' => $orderId,
+            'transactionId' => $transactionId,
             'amount' => '',
             'currency' => 'EUR',
             'description' => '',
-            'vatCategory' => '',
+            'vatCategory' => 'HIGH',
         ]);
     }
 
     #[Route('/refund/process', name: 'refund_process', methods: ['POST'])]
     public function processRefund(Request $request): Response
     {
-        $orderId = $request->request->get('orderId');
+        $transactionId = $request->request->get('transactionId');
         $amount = $request->request->get('amount');
         $currency = $request->request->get('currency', 'EUR');
         $description = $request->request->get('description');
-        $vatCategory = $request->request->get('vatCategory');
+        $vatCategory = $request->request->get('vatCategory') ?: 'HIGH';
 
         try {
             $money = Money::fromCents($currency, (int) $amount);
             $refundRequest = new InitiateRefundRequest($money, $description, $vatCategory);
 
             $requestId = Uuid::uuid4();
-            $refundResponse = $this->omniKassaClient->initiateRefundTransaction($refundRequest, $orderId, $requestId);
+            $refundResponse = $this->omniKassaClient->initiateRefundTransaction($refundRequest, $transactionId, $requestId);
 
             $refundResult = [
                 'refundId' => $refundResponse->getRefundId(),
@@ -58,13 +58,13 @@ class RefundController extends AbstractController
             ];
 
             return $this->render('home/refund_result.html.twig', [
-                'orderId' => $orderId,
+                'transactionId' => $transactionId,
                 'refundResult' => $refundResult,
             ]);
         } catch (\Exception $e) {
             return $this->render('home/refund.html.twig', [
                 'error' => $e->getMessage(),
-                'orderId' => $orderId,
+                'transactionId' => $transactionId,
                 'amount' => $amount,
                 'currency' => $currency,
                 'description' => $description,
@@ -79,6 +79,8 @@ class RefundController extends AbstractController
         try {
             $refundDetails = $this->omniKassaClient->fetchRefundTransactionDetails($transactionId, $refundId);
 
+            dd($refundDetails);
+
             $refundData = [
                 'refundId' => $refundDetails->getRefundId(),
                 'refundTransactionId' => $refundDetails->getRefundTransactionId(),
@@ -87,7 +89,7 @@ class RefundController extends AbstractController
                 'amount' => $refundDetails->getRefundMoney()->getAmount(),
                 'currency' => $refundDetails->getRefundMoney()->getCurrency(),
                 'vatCategory' => $refundDetails->getVatCategory(),
-                'paymentBrand' => $refundDetails->getPaymentBrand(),
+                'paymentBrand' => $refundDetails->getPaymentBrand() ? strtoupper($refundDetails->getPaymentBrand()) : null,
                 'status' => $refundDetails->getStatus(),
                 'description' => $refundDetails->getDescription(),
                 'transactionId' => $refundDetails->getTransactionId(),
@@ -99,7 +101,7 @@ class RefundController extends AbstractController
         } catch (\Exception $e) {
             return $this->render('home/fetch_refund_details.html.twig', [
                 'error' => $e->getMessage(),
-                'orderId' => $transactionId,
+                'transactionId' => $transactionId,
             ]);
         }
     }

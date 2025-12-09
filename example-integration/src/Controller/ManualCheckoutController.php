@@ -6,6 +6,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Address;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\CustomerInformation;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\OrderItem;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandForce;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandMetaData;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrder;
 use OmniKassa\ExampleIntegration\Service\Service\Contract\OmniKassaClientInterface;
@@ -107,7 +108,8 @@ class ManualCheckoutController extends AbstractController
 
         $paymentBrandForce = $request->request->get('paymentBrandForce');
         if (empty($paymentBrandForce)) {
-            $paymentBrandForce = null; // Default fallback
+            // If a payment brand is chosen, the API requires a force value; default to FORCE_ONCE to avoid 422
+            $paymentBrandForce = $paymentBrand ? PaymentBrandForce::FORCE_ONCE : null;
         }
 
         $initiatingParty = $request->request->get('initiatingParty');
