@@ -8,6 +8,7 @@ use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\Money;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\OrderItem;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrand;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandForce;
+use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\PaymentBrandMetaData;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request\MerchantOrder;
 use OmniKassa\ExampleIntegration\Service\Service\Contract\OmniKassaClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -78,6 +79,14 @@ class CheckoutController extends AbstractController
             'description' => 'Fast checkout order',
             'paymentBrand' => PaymentBrand::IDEAL,
             'paymentBrandForce' => PaymentBrandForce::FORCE_ALWAYS,
+            'paymentBrandMetaData' => PaymentBrandMetaData::createFrom([
+                'fastCheckout' => [
+                    'requiredCheckoutFields' => [
+                        'CUSTOMER_INFORMATION',
+                        'SHIPPING_ADDRESS',
+                    ],
+                ],
+            ]),
         ];
     }
 
@@ -111,7 +120,7 @@ class CheckoutController extends AbstractController
         ];
     }
 
-    private function createMerchantOrder(array $items, string $description, Address $shipping, Address $billing, CustomerInformation $customer, ?string $paymentBrand = null, ?string $paymentBrandForce = null): MerchantOrder
+    private function createMerchantOrder(array $items, string $description, Address $shipping, Address $billing, CustomerInformation $customer, ?string $paymentBrand = null, ?string $paymentBrandForce = null, ?PaymentBrandMetaData $paymentBrandMetaData = null): MerchantOrder
     {
         $total = array_reduce($items, function ($sum, $item) {
             return $sum + ($item->getAmount()->getAmount() * $item->getQuantity());
@@ -129,7 +138,10 @@ class CheckoutController extends AbstractController
             $paymentBrand,
             $paymentBrandForce,
             $customer,
-            $billing
+            $billing,
+            null,
+            false,
+            $paymentBrandMetaData
         );
     }
 
@@ -156,7 +168,8 @@ class CheckoutController extends AbstractController
             $orderData['billing'],
             $orderData['customer'],
             $orderData['paymentBrand'],
-            $orderData['paymentBrandForce']
+            $orderData['paymentBrandForce'],
+            $orderData['paymentBrandMetaData'] ?? null
         );
 
         try {

@@ -21,4 +21,22 @@ e.g. open a terminal in docker from a service container OR use the following com
 ` http://localhost:1234 `
 Good luck!
 
+## Troubleshooting: Windows line endings (CRLF)
+
+If you see unexpected line-ending changes or diffs on Windows, Git may be auto-converting files to CRLF. You can normalize line endings in this repo only:
+
+1. Check the current setting:
+```
+git config core.autocrlf
+```
+2. If it prints `true`, set it to `input` for this repo:
+```
+git config core.autocrlf input
+```
+3. Re-checkout files with normalized endings (will reset tracked files):
+```
+git rm --cached -r .
+git reset --hard
+```
+This prevents Git from silently rewriting files to CRLF on Windows.
 
