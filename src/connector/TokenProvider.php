@@ -2,6 +2,8 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\connector;
 
+use DateTime;
+use InvalidArgumentException;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\AccessToken;
 
 /**
@@ -25,7 +27,7 @@ abstract class TokenProvider
     /**
      * @return AccessToken
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     final public function getAccessToken()
     {
@@ -33,13 +35,13 @@ abstract class TokenProvider
         $validUntil = $this->getValue(static::ACCESS_TOKEN_VALID_UNTIL);
         $durationInMillis = $this->getValue(static::ACCESS_TOKEN_DURATION);
 
-        return new AccessToken($token, new \DateTime($validUntil), $durationInMillis);
+        return new AccessToken($token, new DateTime($validUntil), $durationInMillis);
     }
 
     final public function setAccessToken(AccessToken $accessToken)
     {
         $this->setValue(static::ACCESS_TOKEN, $accessToken->getToken());
-        $this->setValue(static::ACCESS_TOKEN_VALID_UNTIL, $accessToken->getValidUntil()->format(\DateTime::ATOM));
+        $this->setValue(static::ACCESS_TOKEN_VALID_UNTIL, $accessToken->getValidUntil()->format(DateTime::ATOM));
         $this->setValue(static::ACCESS_TOKEN_DURATION, $accessToken->getDurationInMillis());
         $this->flush();
     }

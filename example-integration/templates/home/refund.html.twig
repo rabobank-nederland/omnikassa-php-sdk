@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Refund - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="refund-container">
+    <div class="refund-header">
+        <h1>Initiate Refund</h1>
+        <p>Create a refund request using the InitiateRefundRequest model</p>
+    </div>
+
+    {% include 'includes/error.html.twig' %}
+
+    <div class="form-section">
+        <h2>Refund Details</h2>
+        <form action="{{ path('refund_process') }}" method="post">
+            <div class="form-group">
+                <label for="transactionId">Transaction ID</label>
+                <input type="text" class="form-control" id="transactionId" name="transactionId" value="{{ transactionId|default('') }}" placeholder="Enter the transaction ID to refund" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount (in cents)</label>
+                <input type="number" class="form-control" id="amount" name="amount" value="{{ amount|default('') }}" placeholder="Amount in cents (e.g., 1000 for €10.00)" required>
+            </div>
+            <div class="form-group">
+                <label for="currency">Currency</label>
+                <select class="form-control" id="currency" name="currency" style="font-size: 14px; padding: 8px;">
+                    <option value="EUR" {{ currency == 'EUR' ? 'selected' : '' }}>EUR</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">Description (Optional)</label>
+                <input type="text" class="form-control" id="description" name="description" value="{{ description|default('') }}" placeholder="Optional description for this refund">
+            </div>
+            <div class="form-group">
+                <label for="vatCategory">VAT Category</label>
+                <select class="form-control" id="vatCategory" name="vatCategory" style="font-size: 14px; padding: 8px;">
+                    <option value="HIGH" {{ vatCategory == 'HIGH' ? 'selected' : '' }}>HIGH</option>
+                    <option value="LOW" {{ vatCategory == 'LOW' ? 'selected' : '' }}>LOW</option>
+                    <option value="ZERO" {{ vatCategory == 'ZERO' ? 'selected' : '' }}>ZERO</option>
+                </select>
+            </div>
+            <div class="actions">
+                <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
+                <button type="submit" class="btn btn-warning">Initiate Refund</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+services:
+  php:
+    build:
+      dockerfile: docker/Dockerfile
+    volumes:
+      - ../:/var/www/html
+    working_dir: /var/www/html/example-integration
+    restart: unless-stopped
+    depends_on:
+      - valkey
+  nginx:
+    image: nginx:stable
+    ports:
+      - "1234:80"
+    volumes:
+      - .:/var/www/html/example-integration
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    restart: unless-stopped
+  valkey:
+    image: valkey/valkey:latest
+    ports:
+      - "6380:6379"
+    restart: unless-stopped

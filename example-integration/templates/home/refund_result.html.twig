@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Refund Result - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="result-container">
+    <div class="result-header">
+        <h1>Refund Initiated</h1>
+        <p>The refund request has been created successfully</p>
+    </div>
+
+    {% include 'includes/error.html.twig' %}
+
+    <div class="result-section">
+        <h2>Refund Summary</h2>
+        <div class="order-info">
+            <p><strong>Transaction ID:</strong> {{ transactionId }}</p>
+            <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">Request Created</span></p>
+        </div>
+    </div>
+
+    <div class="result-section">
+        <h2>Refund Status</h2>
+        <div class="order-info">
+            <p><strong>Refund ID:</strong> {{ refundResult.refundId }}</p>
+            <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">{{ refundResult.status }}</span></p>
+            <p><strong>Amount:</strong> €{{ (refundResult.amount / 100)|number_format(2) }}</p>
+            <p><strong>Currency:</strong> {{ refundResult.currency }}</p>
+{#            <p><strong>Created At:</strong> {{ refundResult.createdAt|date('Y-m-d H:i:s') }}</p>#}
+            <p><strong>Description:</strong> {{ refundResult.description }}</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-auto mb-2">
+            <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
+        </div>
+        <div class="col-auto mb-2">
+            <a href="{{ path('refund') }}" class="btn btn-secondary">Create Another Refund</a>
+        </div>
+        <div class="col-auto mb-2">
+            <a href="{{ path('fetch_refund_transaction', {transactionId: transactionId, refundId: refundResult.refundId}) }}" class="btn btn-info">View Refund Details</a>
+        </div>
+        <div class="col-auto mb-2">
+            <a href="{{ path('fetch_refundable_transaction_details', {transactionId: transactionId}) }}" class="btn btn-info mr-0">View Refundable Details</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

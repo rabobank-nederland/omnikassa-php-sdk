@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Refund Transaction Details - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="result-container">
+    <div class="result-header">
+        <h1>Refund Transaction Details</h1>
+        <p>Detailed information about the refund transaction</p>
+    </div>
+
+    {% include 'includes/error.html.twig' %}
+
+    <div class="result-section">
+        <h2>Refund Details</h2>
+        <div class="order-info">
+            <p><strong>Refund ID:</strong> {{ refundData.refundId }}</p>
+            <p><strong>Refund Transaction ID:</strong> {{ refundData.refundTransactionId ?: 'N/A' }}</p>
+            <p><strong>Transaction ID:</strong> {{ refundData.transactionId }}</p>
+            <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">{{ refundData.status }}</span></p>
+            <p><strong>Payment Brand:</strong> {{ refundData.paymentBrand }}</p>
+            <p><strong>Amount:</strong> €{{ (refundData.amount / 100)|number_format(2) }}</p>
+            <p><strong>Currency:</strong> {{ refundData.currency }}</p>
+            <p><strong>VAT Category:</strong> {{ refundData.vatCategory ?: 'None' }}</p>
+            <p><strong>Description:</strong> {{ refundData.description }}</p>
+            <p><strong>Created At:</strong> {{ refundData.createdAt|date('Y-m-d H:i:s') }}</p>
+            {% if refundData.updatedAt %}
+                <p><strong>Updated At:</strong> {{ refundData.updatedAt|date('Y-m-d H:i:s') }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
+        <a href="{{ path('refund') }}" class="btn btn-secondary">Create Another Refund</a>
+    </div>
+</div>
+{% endblock %}

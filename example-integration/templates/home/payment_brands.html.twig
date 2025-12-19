@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment Brands - OmniKassa SDK{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block body %}
+<div class="brands-container">
+    <div class="brands-header">
+        <h1>Payment Brands</h1>
+        <p>Available payment methods and their current status</p>
+    </div>
+
+    {% include 'includes/error.html.twig' %}
+
+    {% if brands is not empty %}
+        {% set activeCount = 0 %}
+        {% for brand in brands %}
+            {% if brand.getActive() %}
+                {% set activeCount = activeCount + 1 %}
+            {% endif %}
+        {% endfor %}
+
+        <div class="brands-summary">
+            <h3>Available Payment Methods</h3>
+            <div class="brands-count">{{ brands|length }}</div>
+            <div class="active-count">{{ activeCount }} active</div>
+            <p style="margin-top: 1em; color: #6c757d;">Choose from these payment brands for secure transactions</p>
+        </div>
+
+        <div class="brands-grid">
+        {% for brand in brands %}
+            <div class="brand-card">
+                <div class="brand-name">{{ brand.getName() }}</div>
+                <div class="brand-status {{ brand.getActive() ? 'status-active' : 'status-inactive' }}">
+                    {{ brand.getActive() ? 'Active' : 'Inactive' }}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-brands">
+            <h3>No Payment Brands Found</h3>
+            <p>Unable to retrieve the list of available payment brands at this time. Please try again later.</p>
+        </div>
+    {% endif %}
+
+    <div class="actions">
+        <a href="{{ path('home') }}" class="btn btn-primary">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

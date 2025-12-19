@@ -2,6 +2,7 @@
 
 namespace nl\rabobank\gict\payments_savings\omnikassa_sdk\model\request;
 
+use DateTime;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\ProductType;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\model\VatCategory;
 use nl\rabobank\gict\payments_savings\omnikassa_sdk\test\model\request\MerchantOrderRequestBuilder;
@@ -46,6 +47,7 @@ class MerchantOrderRequestTest extends TestCase
                 ['id' => '15', 'name' => 'Name', 'description' => 'Description', 'quantity' => 1, 'amount' => ['currency' => 'EUR', 'amount' => 100], 'tax' => ['currency' => 'EUR', 'amount' => 50], 'category' => ProductType::DIGITAL, 'vatCategory' => VatCategory::LOW],
             ],
             'amount' => ['currency' => 'EUR', 'amount' => 9999],
+            'shippingCost' => ['currency' => 'EUR', 'amount' => 1337],
             'shippingDetail' => ['firstName' => 'Jan', 'middleName' => 'van', 'lastName' => 'Veen', 'street' => 'Voorbeeldstraat', 'houseNumber' => '5', 'houseNumberAddition' => 'a', 'postalCode' => '1234AB', 'city' => 'Haarlem', 'countryCode' => 'NL'],
             'billingDetail' => ['firstName' => 'Piet', 'middleName' => 'van der', 'lastName' => 'Stoel', 'street' => 'Dorpsstraat', 'houseNumber' => '9', 'houseNumberAddition' => 'rood', 'postalCode' => '4321YZ', 'city' => 'Bennebroek', 'countryCode' => 'NL'],
             'customerInformation' => ['emailAddress' => 'jan.van.veen@gmail.com', 'dateOfBirth' => '20-03-1987', 'gender' => 'M', 'initials' => 'J.M.', 'telephoneNumber' => '0204971111', 'fullName' => 'Jan van Veen'],
@@ -56,7 +58,15 @@ class MerchantOrderRequestTest extends TestCase
             'skipHppResultPage' => false,
             'paymentBrandMetaData' => [
                 'issuerId' => 'RABONL2U',
+                'fastCheckout' => [
+                    'requiredCheckoutFields' => [
+                        'CUSTOMER_INFORMATION',
+                        'BILLING_ADDRESS',
+                    ],
+                ],
             ],
+            'enableCardOnFile' => true,
+            'shopperRef' => 'ShopperRef100',
             'shopperBankstatementReference' => 'bankstatementReference',
         ]);
 
@@ -180,7 +190,6 @@ class MerchantOrderRequestTest extends TestCase
     {
         $merchantOrderRequest = MerchantOrderRequestBuilder::makeMinimalRequestWithMetaData([
             0 => 'Test', // Only string keys allowed
-            'key1' => [], // Arrays are not allowed as value
             'key2' => new stdClass(), // Objects are not allowed as value
         ]);
         $merchantOrderRequest->setTimestamp($this->createTimestamp());
@@ -226,10 +235,10 @@ class MerchantOrderRequestTest extends TestCase
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
     private function createTimestamp()
     {
-        return new \DateTime('2016-12-21T14:13:56+01:00');
+        return new DateTime('2016-12-21T14:13:56+01:00');
     }
 }
