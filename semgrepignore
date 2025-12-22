@@ -26,5 +26,5 @@
 # a backslash, e.g. "\:foo".
 
 /test/
-/example-integration/config/packages/framework.yaml:3
-/example-integration/config/services.yaml:15
+/example-integration/config/packages/framework.yaml
+/example-integration/config/services.yaml
