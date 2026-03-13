@@ -77,14 +77,15 @@ class ApiConnectorTest extends TestCase
     {
         $announcement = AnnouncementResponseBuilder::newInstance();
         $expectedResponse = $this->makeAnnouncementResponse($announcement->getEventName());
+        $v1Endpoint = 'omnikassa-api/order/server/api/events/results/'.$announcement->getEventName();
 
         $this->prepareTokenProviderWithAccessToken($this->accessToken);
-        Phake::when($this->restTemplate)->get('omnikassa-api/order/server/api/v2/events/results/'.$announcement->getEventName())->thenReturn($expectedResponse);
+        Phake::when($this->restTemplate)->get($v1Endpoint)->thenReturn($expectedResponse);
 
         $actualResponse = $this->connector->getAnnouncementData($announcement);
 
         Phake::verify($this->restTemplate)->setToken('MyJwt');
-        Phake::verify($this->restTemplate)->get('omnikassa-api/order/server/api/v2/events/results/'.$announcement->getEventName());
+        Phake::verify($this->restTemplate)->get($v1Endpoint);
 
         $this->assertEquals($expectedResponse, $actualResponse);
     }
