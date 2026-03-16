@@ -39,7 +39,8 @@ class Money implements JsonSerializable, SignatureDataProvider
      */
     public static function fromDecimal($currency, $amount)
     {
-        $roundedAmountInCents = round($amount * 100);
+        // Avoid binary floating-point drift for values like 9.995 and 1.005.
+        $roundedAmountInCents = str_replace('.', '', number_format((float) $amount, 2, '.', ''));
 
         return self::fromCents($currency, $roundedAmountInCents);
     }
