@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['7.4', '8.1', '8.2', '8.3']
+        php-version: ['7.4', '8.1', '8.2', '8.3', '8.4', '8.5']
 
     steps:
     - name: Checkout code
@@ -44,3 +44,47 @@ jobs:
     - name: Check code style
       if: ${{ matrix.php-version == '7.4' }}
       run: vendor/bin/php-cs-fixer check -v src
+
+  windows-example-integration:
+    runs-on: windows-2022
+    timeout-minutes: 35
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Simulate Windows checkout and verify LF entrypoint
+      shell: pwsh
+      run: |
+        git config --local core.autocrlf true
+        git reset --hard HEAD
+        $eol = git ls-files --eol example-integration/docker/php/container-entrypoint.sh
+        Write-Output $eol
+        if ($eol -notmatch 'w/lf') { throw 'Expected LF checkout for example-integration/docker/php/container-entrypoint.sh under Windows autocrlf settings' }
+
+    - name: Print Docker versions
+      shell: pwsh
+      run: |
+        docker version
+        docker compose version
+
+    - name: Build and start example integration stack
+      shell: pwsh
+      run: |
+        docker compose -f example-integration/docker-compose.yml build
+        docker compose -f example-integration/docker-compose.yml up -d
+
+    - name: Install dependencies in php container
+      shell: pwsh
+      run: |
+        docker compose -f example-integration/docker-compose.yml exec -T php composer install -n
+
+    - name: Show compose logs on failure
+      if: failure()
+      shell: pwsh
+      run: docker compose -f example-integration/docker-compose.yml logs --no-color
+
+    - name: Stop example integration stack
+      if: always()
+      shell: pwsh
+      run: docker compose -f example-integration/docker-compose.yml down --remove-orphans
