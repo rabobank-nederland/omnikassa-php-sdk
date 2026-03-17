@@ -11,6 +11,15 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 ## Release notes
 
 ### Version 1.18.2
+* Improved release notes
+* Order status was reverted to /order/server/api/events/results/* 
+* Added GH Actions checks for PHP 8.4 and PHP 8.5
+* Added GH Actions windows line ending check
+
+### Version 1.18.1
+* Added a new SANDBOX_MODE environment variable
+
+### Version 1.18.0
 * Manual base URL configuration required. 
 Updates the SDK to use the new `api.pay.rabobank.nl` domain and now appends the required `omnikassa-api` path internally. 
 If you set the base URL yourself, ensure it contains only the domain (no path segments). See the examples below for the correct format.
@@ -22,14 +31,6 @@ If you set the base URL yourself, ensure it contains only the domain (no path se
 | Sandbox     | https://api.pay-sandbox.rabobank.nl/omnikassa-api-sandbox/     | https://api.pay-sandbox.rabobank.nl/ |
 
 * Using the old paths will result in invalid URLs and failed API calls.
-* Order status was reverted to /order/server/api/events/results/* 
-* Added GH Actions checks for PHP 8.4 and PHP 8.5
-* Added GH Actions windows line ending check
-
-### Version 1.18.1
-* Added a new SANDBOX_MODE environment variable
-
-### Version 1.18.0
 * Extended SDK to support Card On File functions
 * Merged missing refunds features (PR#27)
 * Added example integration with docker setup (separate README in example-integration).
