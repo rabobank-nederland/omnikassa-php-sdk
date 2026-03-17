@@ -5,38 +5,55 @@ It uses a (standard) Symfony Framework setup with docker.
 
 ## Setup
 
-###
-1. In your terminal, make sure you are in the correct folder/path: `example-integration`
-2. run the following two commands to create and spin up the docker container (with php,nginx,valkey): 
+1. Run all commands from repository root.
+2. Build and start services (`php`, `nginx`, `valkey`):
+```bash
+docker compose -f example-integration/docker-compose.yml build
+docker compose -f example-integration/docker-compose.yml up -d
 ```
-    docker compose build
-    docker compose up -d
+3. Install dependencies in the `php` container:
+```bash
+docker compose -f example-integration/docker-compose.yml exec php composer install -n
 ```
-3. Now we need to run `composer install` from within the docker container. 
-e.g. open a terminal in docker from a service container OR use the following command: 
-`docker compose exec php bash`
-
-4. Make sure you paste the right credentials in the `.env.local` file. The `env.local` is excluded from git so credentials will not be shared.
-5. The example-integration shop will now be accessible from:
-` http://localhost:1234 `
-Good luck!
+4. Add your credentials to `example-integration/.env.local`. This file is excluded from Git.
+5. Open: `http://localhost:1234`
 
 ## Troubleshooting: Windows line endings (CRLF)
 
-If you see unexpected line-ending changes or diffs on Windows, Git may be auto-converting files to CRLF. You can normalize line endings in this repo only:
+This repository enforces LF line endings through root `.gitattributes`.
+For fresh clones, no manual line-ending setup is needed.
 
-1. Check the current setting:
+CRLF in shell entrypoints causes Linux containers to fail with "not found" errors.
+Typical symptoms:
+```text
+sh: 1: /usr/local/bin/container-entrypoint: not found
+service "php" is not running
 ```
-git config core.autocrlf
-```
-2. If it prints `true`, set it to `input` for this repo:
-```
-git config core.autocrlf input
-```
-3. Re-checkout files with normalized endings (will reset tracked files):
-```
-git rm --cached -r .
-git reset --hard
-```
-This prevents Git from silently rewriting files to CRLF on Windows.
 
+If this is an existing Windows clone, run this once from repository root:
+
+1. Set local Git line ending behavior:
+```bash
+git config --local core.autocrlf false
+git config --local core.eol lf
+```
+2. Re-checkout tracked files (discards local changes in tracked files):
+```bash
+git reset --hard HEAD
+```
+3. Verify critical files are LF:
+```bash
+git ls-files --eol example-integration/docker/php/container-entrypoint.sh
+```
+Expected: `w/lf`.
+
+Then rebuild and restart:
+```bash
+docker compose -f example-integration/docker-compose.yml build --no-cache php
+docker compose -f example-integration/docker-compose.yml up -d
+```
+
+## Troubleshooting: "Cannot find omnikassa sdk/package"
+
+`composer.json` in this folder loads `rabobank/omnikassa-sdk` from local path `../`.
+So this example must run inside the full repository, not as a copied standalone `example-integration` folder.

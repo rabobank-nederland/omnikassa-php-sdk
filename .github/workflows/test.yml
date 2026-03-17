@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        php-version: ['7.4', '8.1', '8.2', '8.3']
+        php-version: ['7.4', '8.1', '8.2', '8.3', '8.4', '8.5']
 
     steps:
     - name: Checkout code
@@ -44,3 +44,20 @@ jobs:
     - name: Check code style
       if: ${{ matrix.php-version == '7.4' }}
       run: vendor/bin/php-cs-fixer check -v src
+
+  windows-line-endings:
+    runs-on: windows-2022
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Simulate Windows checkout and verify LF entrypoint
+      shell: pwsh
+      run: |
+        git config --local core.autocrlf true
+        git reset --hard HEAD
+        $eol = git ls-files --eol example-integration/docker/php/container-entrypoint.sh
+        Write-Output $eol
+        if ($eol -notmatch 'w/lf') { throw 'Expected LF checkout for example-integration/docker/php/container-entrypoint.sh under Windows autocrlf settings' }
