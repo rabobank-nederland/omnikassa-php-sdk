@@ -22,7 +22,6 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 * Order status was reverted to /order/server/api/events/results/* 
 * Added GH Actions checks for PHP 8.4 and PHP 8.5
 * Added GH Actions windows line ending check
-* Manual base URL configuration required**
 
 ### Version 1.18.1
 * Added a new SANDBOX_MODE environment variable
