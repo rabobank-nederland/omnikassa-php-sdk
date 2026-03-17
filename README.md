@@ -23,7 +23,7 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 * Manual base URL configuration required. 
 Updates the SDK to use the new `api.pay.rabobank.nl` domain and now appends the required `omnikassa-api` path internally. 
 If you set the base URL yourself, ensure it contains only the domain (no path segments). See the examples below for the correct format.
-* Correct vs. Incorrect Configuration Examples
+Correct vs. Incorrect Configuration Examples
 
 | Environment | ❌ Incorrect URL                                              | ✅ Correct URL                       |
 |-------------|----------------------------------------------------------------|--------------------------------------|
