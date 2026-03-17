@@ -20,7 +20,8 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 * Added a new SANDBOX_MODE environment variable
 
 ### Version 1.18.0
-* Manual base URL configuration required. 
+* ⚠️ Manual base URL configuration required.
+
 Updates the SDK to use the new `api.pay.rabobank.nl` domain and now appends the required `omnikassa-api` path internally. 
 If you set the base URL yourself, ensure it contains only the domain (no path segments). See the examples below for the correct format.
 
