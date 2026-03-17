@@ -1,0 +1,7 @@
+# Enforce LF for all text files across platforms.
+* text=auto eol=lf
+
+# Keep Windows-native script formats CRLF if they are added.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf

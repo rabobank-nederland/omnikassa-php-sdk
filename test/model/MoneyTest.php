@@ -20,6 +20,8 @@ class MoneyTest extends TestCase
         $this->assertMoneyFromDecimal(1000, 9.999);
         $this->assertMoneyFromDecimal(999, 9.991);
         $this->assertMoneyFromDecimal(1000, 9.995);
+        $this->assertMoneyFromDecimal(101, 1.005);
+        $this->assertMoneyFromDecimal(268, 2.675);
         $this->assertMoneyFromDecimal(3791, 37.91);
         $this->assertMoneyFromDecimal(6857, 68.57);
     }
