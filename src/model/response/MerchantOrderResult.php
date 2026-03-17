@@ -172,6 +172,22 @@ class MerchantOrderResult implements SignatureDataProvider
         $this->transactionInfo = $transactionInfo;
     }
 
+    /**
+     * @param array $transactions
+     */
+    public function setTransactions($transactions)
+    {
+        if (!is_array($transactions)) {
+            return;
+        }
+
+        $this->transactionInfo = [];
+
+        foreach ($transactions as $transaction) {
+            $this->transactionInfo[] = new TransactionInfo($transaction);
+        }
+    }
+
     public function getSignatureData()
     {
         $data = [

@@ -63,9 +63,21 @@ class MerchantOrderStatusResponseBuilder
                         'currency' => 'EUR',
                         'amount' => 100,
                     ],
+                    'transactions' => [
+                        [
+                            'id' => '791fdcda-65e4-4f81-8b45-988404da3a8d',
+                            'paymentBrand' => 'IDEAL',
+                            'type' => 'PAYMENT',
+                            'status' => 'SUCCESS',
+                            'amount' => ['currency' => 'EUR', 'amount' => 100],
+                            'confirmedAmount' => ['currency' => 'EUR', 'amount' => 100],
+                            'startTime' => '2026-02-17T11:15:29.244+01:00',
+                            'lastUpdateTime' => '2026-02-17T11:15:32.698+01:00',
+                        ],
+                    ],
                 ],
             ],
-            'signature' => 'ddad03e536719f988a46f7edaf5808446838109b1644a13cef9e0e0f74825a70df618d325f8ce6eb09d629a70b6a0728f99fb8e85f249ca76636d7c13d54b841',
+            'signature' => 'd2404e34db4f2cb65852a5e6b65cf53b72d262f660790f22bafa1c2c9c76ea237c0705352e0bb34bb09f9f83b3536fb3650e2bad36457ad34d2dad04094355ef',
         ];
     }
 
