@@ -18,6 +18,8 @@ class GuzzleRESTTemplate implements RESTTemplate
     private $token;
     /** @var string */
     private $userAgent;
+    /** @var string|null */
+    private $requestId;
 
     /**
      * GuzzleRESTTemplate constructor.
@@ -61,6 +63,11 @@ class GuzzleRESTTemplate implements RESTTemplate
     public function setUserAgent($userAgent)
     {
         $this->userAgent = $userAgent;
+    }
+
+    public function setRequestId($requestId)
+    {
+        $this->requestId = $requestId;
     }
 
     /**
@@ -143,7 +150,8 @@ class GuzzleRESTTemplate implements RESTTemplate
             $headers['X-Api-User-Agent'] = $this->userAgent;
         }
 
-        $headers['Request-ID'] = Uuid::uuid4()->toString();
+        $headers['Request-ID'] = $this->requestId ?? Uuid::uuid4()->toString();
+        $this->requestId = null;
 
         return $headers;
     }

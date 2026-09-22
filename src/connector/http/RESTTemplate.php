@@ -22,6 +22,13 @@ interface RESTTemplate
     public function setUserAgent($userAgent);
 
     /**
+     * Set the Request-ID header of the next request only. When none is set, a random UUID is sent.
+     *
+     * @param string|null $requestId
+     */
+    public function setRequestId($requestId);
+
+    /**
      * Perform a GET call to the given path.
      *
      * @param string $path

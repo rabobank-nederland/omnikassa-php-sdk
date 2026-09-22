@@ -197,6 +197,7 @@ class ApiConnectorTest extends TestCase
         $actualResponse = $this->connector->postRefundRequest($initiateRefundRequest, $transactionId, $requestId);
 
         Phake::verify($this->restTemplate)->setToken($this->accessToken->getToken());
+        Phake::verify($this->restTemplate)->setRequestId($requestId);
         Phake::verify($this->restTemplate)->post('omnikassa-api/order/server/api/v2/refund/transactions/da1e7696-b199-4c87-83c3-9b34e00ba48e/refunds', $initiateRefundRequest);
 
         $this->assertEquals($expectedResponse, $actualResponse);
