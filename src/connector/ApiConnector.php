@@ -104,8 +104,9 @@ class ApiConnector implements Connector
 
     public function postRefundRequest(InitiateRefundRequest $refundRequest, string $transactionId, string $requestId): string
     {
-        return $this->performAction(function () use ($refundRequest, $transactionId) {
+        return $this->performAction(function () use ($refundRequest, $transactionId, $requestId) {
             $this->restTemplate->setToken($this->accessToken->getToken());
+            $this->restTemplate->setRequestId($requestId);
 
             return $this->restTemplate->post(sprintf('%s/order/server/api/v2/refund/transactions/%s/refunds', self::OMNIKASSA_INFIX, $transactionId), $refundRequest);
         });

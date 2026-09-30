@@ -113,7 +113,7 @@ class Endpoint
      *
      * @param InitiateRefundRequest $refundRequest The request for refund
      * @param string                $transactionId The UUID of transaction for which the refund request is sent
-     * @param string                $requestId     The unique request ID (UUID) of this refund, for your own internal reference
+     * @param string                $requestId     The unique request ID (UUID) of this refund, sent as the Request-ID header. Smart Pay uses it to enforce idempotency: reuse it when retrying the same refund
      *
      * @return RefundDetailsResponse the response contains refund details, which can be used to update the refund with the latest status
      */
