@@ -10,6 +10,10 @@ Detailed developer documentation on how to use the PHP SDK as well as contact in
 
 ## Release notes
 
+### Version 1.18.3
+* Fixed a bug where Request-ID was ignored for refund requests. The value passed to Endpoint::initiateRefundTransaction() is now forwarded to the refund API and reused on retries.
+* Improved idempotency for refund operations and prevents duplicate processing after a timeout.
+
 ### Version 1.18.2
 * Improved release notes
 * Order status was reverted to /order/server/api/events/results/* 
